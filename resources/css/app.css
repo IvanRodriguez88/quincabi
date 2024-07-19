@@ -1,0 +1,79 @@
+.card-header{
+	padding: 10px 20px 5px 20px;
+}
+
+.card-body {
+	padding: 20px 40px 15px 20px;
+}
+
+label.required::after {
+	content: "*";
+	color: rgb(175, 37, 37);
+}
+
+thead {
+	background-color: #3b1617;
+	color: white;
+}
+
+.btn-danger {
+	background-color: #d45055;
+}
+
+.btn-primary {
+	background-color: #875c5d;
+	border:#875c5d;
+}
+
+.btn-primary:hover {
+	background-color: #54393a;
+}
+
+.paginate_button.page-item.active {
+	background-color: #875c5d;
+
+}
+.page-item.active .page-link {
+	background-color: #54393a;
+	border: #54393a
+}
+
+.main-sidebar {
+	background-color: #3b1617;
+}
+
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+	background-color: #54393a;
+}
+
+.form-control.form-control-sidebar{
+	background-color: white;
+	color: black;
+}
+
+body.dragging, body.dragging * {
+	cursor: move !important;
+}
+  
+.dragged {
+	position: absolute;
+	opacity: 0.5;
+	z-index: 2000;
+}
+
+ol.example li.placeholder {
+	position: relative;
+	/** More li styles **/
+}
+ol.example li.placeholder:before {
+	position: absolute;
+	/** Define arrowhead **/
+}
+
+.bg-info {
+	background-color: #875c5d !important;
+}
+
+.main-color {
+	color: #875c5d;
+}
