@@ -47,6 +47,7 @@ class CategoryController extends Controller
 	{
 		$status = true;
 		$subcategories = $request->subcategories;
+		$itemsDelete = $request->itemsDelete;
 		try {
 			$category->update([
 				'name' => $request->name,
@@ -58,9 +59,12 @@ class CategoryController extends Controller
 				// Actualiza el orden de los elementos existentes
 				CategoryItem::where('id', $subcategory)->update(['order' => $key + 1]);
 			}
-			// Elimina los registros que ya no están presentes en la nueva lista
-			CategoryItem::where('category_id', $category->id)->whereNotIn('id', $subcategories)->delete();
 
+			// Elimina los registros que ya no están presentes en la nueva lista
+			CategoryItem::where('category_id', $category->id)->where("category_item_id", null)->whereNotIn('id', $subcategories)->delete();
+			if (!is_null($itemsDelete)) {
+				CategoryItem::whereIn('id', $itemsDelete)->delete();
+			}
 
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;

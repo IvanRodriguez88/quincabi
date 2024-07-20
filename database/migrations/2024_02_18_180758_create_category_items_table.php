@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
 
             $table->smallInteger('category_id')->unsigned();            
-			$table->foreign('category_id')->references('id')->on('categories');
+			$table->foreign('category_id')->references('id')->on('categories')->onDelete("cascade");
 
 			$table->bigInteger('category_item_id')
 				->unsigned()
 				->nullable()
 				->comment('Id del item o subcategoría (si es nulo es nombre de subcategoría)');            
-			$table->foreign('category_item_id')->references('id')->on('category_items');
+			$table->foreign('category_item_id')->references('id')->on('category_items')->onDelete("cascade");
 
 			$table->string('name')->comment('Nombre de la subcategoría o del item');
 

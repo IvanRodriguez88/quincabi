@@ -1,4 +1,6 @@
 <input type="hidden" id="category_id" value="{{$data->id ?? ''}}">
+<input type="hidden" id="subcategory_id_selected" value="">
+
 <div class="row">
     <x-adminlte-input 
 		id="category_name"

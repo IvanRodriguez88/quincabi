@@ -43,6 +43,9 @@ Route::middleware('auth')->group(function () {
 	
 	Route::resource('categories', CategoryController::class);
 
+
+	Route::get('materials/getaddeditmodal/{id?}', [MaterialController::class, 'getAddEditModal'])->name('materials.getAddEditModal');
+
 	Route::resource('materials', MaterialController::class);
 });
 

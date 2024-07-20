@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-			$table->smallInteger('supplier_id')->unsigned();            
+			$table->smallInteger('supplier_id')->unsigned()->nullable();            
 			$table->foreign('supplier_id')->references('id')->on('suppliers');
 
 			$table->string('name')->comment('Nombre del material construido (en base a sus categorías)');

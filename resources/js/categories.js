@@ -1,13 +1,15 @@
 $(function () {
 	const dt = $('#categories-table').DataTable();
-	
+	let itemsDelete = []
+
 	window.save = () => {
 		const formCategories = $("#categoriesModal-form")
 		const action = formCategories.attr('action')
 		const method = $("#addEditModal").find('input[name="_method"]').val().toUpperCase()
 		let data = {
 			'name' : $("#category_name").val(),
-			'subcategories' : getSubcategoriesToUpdate()
+			'subcategories' : getSubcategoriesToUpdate(),
+			'itemsDelete' : itemsDelete
 		};
 
 
@@ -50,7 +52,6 @@ $(function () {
 		$("#subcategories_list").find('.subcategory-order').each(function() {
 			subcategories.push($(this).find('#subcategory_id').val());
 		})
-		console.log(subcategories);
 		return subcategories;
 	}
 
@@ -141,7 +142,7 @@ $(function () {
 			type: "GET",
 			url: `${getBaseUrl()}/categories/selectsubcategory/${category_id}`,
 			success: function (response) {
-				$("#subcategory_id").val(category_id)
+				$("#subcategory_id_selected").val(category_id)
 				$("#category-items").empty().append(response)
 				$("#category-items").hide().slideDown('slow')
 
@@ -157,10 +158,20 @@ $(function () {
 			$(this).remove();
 		});
 	}
+
+	window.deleteItem = (param) => {
+		$(param).closest('li').fadeOut(400, function() {
+			$(this).remove();
+		});
+
+		//Eliminar el registro
+		const item_id = $(param).closest("li").find("#item_id").first().val()
+		itemsDelete.push(item_id)
+	}
 	
 	window.addItem = () => {
 		const item = $("#item_name")
-		const subcategory_id = $("#subcategory_id").val()
+		const subcategory_id = $("#subcategory_id_selected").val()
 		if (item.val() != "") {
 			$.ajax({
 				type: "POST",
