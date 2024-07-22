@@ -1,7 +1,7 @@
 window.getErrorMessages = (errors) => {
 	let text = '';
 	for (let field in errors) {
-		text += (field + ': ' + errors[field]);
+		text += (`<b>${field}</b> : ${errors[field]} <br>`);
 	}
 
 	return `

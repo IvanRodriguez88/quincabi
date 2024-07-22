@@ -130,4 +130,9 @@ class CategoryController extends Controller
 		return view('categories.item', compact('id', 'item'))->render();
 
 	}
+
+	public function getSubcategories(Category $category) 
+	{
+		return view("materials.subcategories", compact("category"))->render();
+	}
 }

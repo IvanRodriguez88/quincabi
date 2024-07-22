@@ -23,5 +23,33 @@ class CategoryItemSeeder extends Seeder
 			'name' => 'Medidas', 
 			'order' => 2
 		]);
+
+		CategoryItem::create([
+			'category_id' => 1,
+			'category_item_id' => 1,
+			'name' => 'Rojo'
+		]);
+
+		CategoryItem::create([
+			'category_id' => 1,
+			'category_item_id' => 1, 
+			'name' => 'Azul', 
+		]);
+		CategoryItem::create([
+			'category_id' => 1,
+			'category_item_id' => 1, 
+			'name' => 'Verde', 
+		]);
+
+		CategoryItem::create([
+			'category_id' => 1,
+			'category_item_id' => 2, 
+			'name' => 'Mediano', 
+		]);
+		CategoryItem::create([
+			'category_id' => 1,
+			'category_item_id' => 2, 
+			'name' => 'Grande', 
+		]);
     }
 }

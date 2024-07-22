@@ -39,8 +39,8 @@ Route::middleware('auth')->group(function () {
 	Route::get('categories/selectsubcategory/{category}', [CategoryController::class, 'selectSubcategory'])->name('categories.selectSubcategory');
 
 	Route::post('categories/saveItem/{subcategory_id}', [CategoryController::class, 'saveItem'])->name('categories.saveItem');
+	Route::get('categories/getsubcategories/{category}', [CategoryController::class, 'getSubcategories'])->name('categories.getsubcategories');
 
-	
 	Route::resource('categories', CategoryController::class);
 
 
