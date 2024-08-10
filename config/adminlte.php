@@ -311,6 +311,11 @@ return [
             'url'  => 'clients',
             'icon' => 'fas fa-users',
         ],
+        [
+            'text' => 'Invoices',
+            'url'  => 'invoices',
+            'icon' => 'fas fa-file-invoice',
+        ],
 		[
             'text' => 'suppliers',
             'url'  => 'suppliers',
@@ -520,6 +525,7 @@ return [
             ],
         ],
     ],
+       
 
     /*
     |--------------------------------------------------------------------------

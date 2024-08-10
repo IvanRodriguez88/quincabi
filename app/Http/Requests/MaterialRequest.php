@@ -26,6 +26,7 @@ class MaterialRequest extends FormRequest
 			'cost' => 'required|numeric|min:0',
 			'price' => 'required|numeric|min:0',
 			'category_id' => 'required',
+            'supplier_id' => 'required',
 		];
     }
 }

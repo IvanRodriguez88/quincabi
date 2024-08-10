@@ -43,8 +43,12 @@ Route::middleware('auth')->group(function () {
 
 	Route::resource('categories', CategoryController::class);
 
+	Route::get('invoices/addmaterial', [InvoiceController::class, 'addMaterial'])->name('invoices.addMaterial');
+	Route::resource('invoices', InvoiceController::class);
 
+	Route::get('materials/getdataautocomplete', [MaterialController::class, 'getDataAutocomplete'])->name('materials.getDataAutocomplete');
 	Route::get('materials/getaddeditmodal/{id?}', [MaterialController::class, 'getAddEditModal'])->name('materials.getAddEditModal');
+	Route::get('materials/getbyid/{material}', [MaterialController::class, 'getById'])->name('materials.getById');
 
 	Route::resource('materials', MaterialController::class);
 });

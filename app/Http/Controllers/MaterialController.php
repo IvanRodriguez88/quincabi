@@ -9,6 +9,8 @@ use App\Http\Requests\MaterialRequest;
 use App\Models\Material;
 use App\Models\Category;
 use App\Models\CategoryMaterial;
+use App\Models\Supplier;
+use Illuminate\Support\Facades\DB;
 
 
 class MaterialController extends Controller
@@ -20,6 +22,7 @@ class MaterialController extends Controller
         $routeResource = $this->routeResource;
 
         $materials = Material::all();
+
         $heads = [
             'ID',
             'Name',
@@ -37,6 +40,8 @@ class MaterialController extends Controller
 				'name' => $request->name,
 				'cost' => $request->cost,
 				'price' => $request->price,
+				'supplier_id' => $request->supplier_id,
+				'extra_name' => $request->extra_name,
 				"created_by" => auth()->id(),
 				"updated_by" => auth()->id(),
 			]);
@@ -73,8 +78,11 @@ class MaterialController extends Controller
 				'name' => $request->name,
 				'cost' => $request->cost,
 				'price' => $request->price,
+				'supplier_id' => $request->supplier_id,
+				'extra_name' => $request->extra_name,
 				"updated_by" => auth()->id(),
 			]);
+
 
 			$material->categoryMaterials()->delete();
 			//Crear categoria
@@ -85,14 +93,15 @@ class MaterialController extends Controller
 
 			//Crear items de subcategorias
 			foreach ($request->subcategory as $key => $subcategory) {
-				$parent = CategoryMaterial::create([
-					"category_id" => $request->category_id,
-					"parent_category_material_id" => $parent->id,
-					"category_item_id" => $subcategory,
-					"material_id" => $material->id
-				]);
+				if ($subcategory != "Select an option...") {
+					$parent = CategoryMaterial::create([
+						"category_id" => $request->category_id,
+						"parent_category_material_id" => $parent->id,
+						"category_item_id" => $subcategory,
+						"material_id" => $material->id
+					]);
+				}
 			}
-
 
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
@@ -120,19 +129,44 @@ class MaterialController extends Controller
 			$material = Material::find($id);
             $data = [
                 "material" => $material,
-                "categories" => Category::where("is_active", 1)->get()
+                "categories" => Category::where("is_active", 1)->get(),
+				"suppliers" => Supplier::where("is_active",1)->pluck("name", "id")
             ];
 
 			$modal = new Modal($this->routeResource.'Modal', 'Edit material', $this->routeResource, $data, ['size' => 'xl']);
 			return $modal->getModalAddEdit(request()->type, $id);
 		}else{
 			$data = [
-                "categories" => Category::where("is_active", 1)->get()
+                "categories" => Category::where("is_active", 1)->get(),
+				"suppliers" => Supplier::where("is_active",1)->pluck("name", "id")
             ];
 			$modal = new Modal($this->routeResource.'Modal', 'Add material', $this->routeResource, $data);
 			return $modal->getModalAddEdit(request()->type);
 		}
 	}
+
+	public function getDataAutocomplete()
+    {
+        $materials = Material::select(
+            "id",
+            DB::raw("materials.name as name")
+        )->get();
+
+        $formattedMaterials = $materials->map(function ($material) {
+            return [
+                'id' => $material->id,
+                'name' => $material->name
+            ];
+        });
+
+        return response()->json($formattedMaterials);    
+    }
+
+	public function getById(Material $material)
+    {
+        return response()->json($material);    
+    }
+
 
 	
 }

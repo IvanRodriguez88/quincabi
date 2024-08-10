@@ -20,6 +20,8 @@ $(function () {
 		});
 	}
 
+	
+
 	window.save = () => {
 		const formMaterials = $("#materialsModal-form")
 		const action = formMaterials.attr('action')

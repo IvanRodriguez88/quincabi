@@ -25,3 +25,7 @@ window.getErrorMessages = (errors) => {
 window.getBaseUrl = function () {
 	return $("#app_url").val();
 }
+
+window.formatNumber = (value) => {
+	return parseFloat(value).toFixed(2);
+  }
