@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
 	Route::resource('categories', CategoryController::class);
 
+	Route::get('invoices/getclientinfo/{client}', [InvoiceController::class, 'getClientInfo'])->name('invoices.getClientInfo');
 	Route::get('invoices/addmaterial', [InvoiceController::class, 'addMaterial'])->name('invoices.addMaterial');
 	Route::resource('invoices', InvoiceController::class);
 

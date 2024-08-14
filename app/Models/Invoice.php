@@ -19,7 +19,18 @@ class Invoice extends Model
 
     public function invoiceRows()
     {
-        return $this->hasMany("App\Models\InvoiceRow");
+		return $this->hasMany('App\Models\InvoiceRow');
+
     }
+
+	public function getTotal()
+	{
+		$total = 0;
+		foreach ($this->invoiceRows as $invoiceRow) {
+			$total += $invoiceRow->amount * $invoiceRow->unit_price;
+		};
+
+		return $total;
+	}
 
 }

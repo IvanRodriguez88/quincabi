@@ -30,6 +30,21 @@ $(function () {
 		});
 	}
 
+	$("#client_id").on("change", function(){
+		$.ajax({
+			url: `${getBaseUrl()}/invoices/getclientinfo/${$(this).val()}`,
+			type: 'GET',
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+			},
+			success: function(response) {
+				$("#client_info").append(response)
+			},error: function(xhr, textStatus, errorThrown) {
+				errorMessage(xhr.status, errorThrown)
+			}
+		});
+	})
+
 	function updateTotal(){
 		const total = $("#amount").val()
 		const price = $("#unit_price").val()
@@ -53,12 +68,22 @@ $(function () {
 				},
 				success: function(response) {
 					$("#material-table tbody").append(response)
+					$("#total_invoice").text("$" + formatNumber(getTotalInvoice()))
+					clearInputs()
 					
 				},error: function(xhr, textStatus, errorThrown) {
 					errorMessage(xhr.status, errorThrown)
 				}
 			});
 		}
+	}
+
+	function clearInputs(){
+		$("#material_name").val("")
+		$("#material_id").val("")
+		$("#amount").val("1")
+		$("#unit_price").val("0")
+		$("#total_price").val("0")
 	}
 
 	function validateAddMaterial() {
@@ -101,6 +126,7 @@ $(function () {
 		if (amount.val() > 1) {
 			amount.val(parseInt(amount.val()) - 1)
 			amount.trigger("input")
+			
 		}
 	}
 	
@@ -114,15 +140,53 @@ $(function () {
 		const total = unit_price * amount
 		totalText.text("$"+formatNumber(total))
 		totalInput.val(total)
-		getTotalInvoice()
+		
+		$("#total_invoice").text("$" + formatNumber(getTotalInvoice()))
 	})
 
 	function getTotalInvoice() {
+		let total = 0
 		$("#material-table tbody tr").each(function() {
-			let total = $(this).find(".total_input")
-			console.log(total.val());
-			
+			total += parseFloat($(this).find(".total_input").val())
 		})
+		return total
+	}
+
+
+	function getAllRows() {
+		let rows = []
+		$("#material-table tbody tr").each(function() {
+			const material_id = $(this).find(".material_id").val()
+			const amount = $(this).find(".amount").val()
+			const price = $(this).find(".unit_price").val()
+
+			rows.push({material_id, amount, price})
+		})
+		return rows
+	}
+
+	window.saveInvoice = () => {
+		let data = {
+			"materials": getAllRows(),
+			"date_due": $("#date_due").val(),
+			"client_id": $("#client_id").val(),
+			"total": getTotalInvoice()
+		}
+		$.ajax({
+			url: `${getBaseUrl()}/invoices`,
+			type: 'POST',
+			data: data,
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+			},
+			success: function(response) {
+				console.log(response);
+				
+				
+			},error: function(xhr, textStatus, errorThrown) {
+				errorMessage(xhr.status, errorThrown)
+			}
+		});
 	}
 })
 

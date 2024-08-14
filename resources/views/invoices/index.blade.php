@@ -22,9 +22,10 @@
 					<tr>
 						<td>{{ $invoice->id }}</td>
 						<td>{{ $invoice->client->name }}</td>
+						<td>$ {{ number_format($invoice->getTotal(), 2, '.', ',') }}</td>
 						<td>{{ $invoice->date_issued }}</td>
 						<td>{{ $invoice->date_due }}</td>
-						<td>{{ $invoice->is_paid }}</td>
+						<td>{!! $invoice->is_paid == 1 ? "<span class='badge badge-success p-2 px-3'>Yes</span>" :  "<span class='badge badge-danger p-2 px-3'>No</span>" !!}</td>
 						<td class="text-center">
 							<a class="btn btn-primary" href="{{route('invoices.edit', $invoice->id)}}">
 								<i class="fas fa-edit"></i>

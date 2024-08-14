@@ -22,12 +22,16 @@
 	</div>
 
 	<div class="col-md-4">
-		<label for="due_date">Due date</label>
-		<input type="date" class="form-control" name="due_date" id="due_date" required
-				value="{{isset($invoice) ? date('d/m/Y', strtotime($invoice->due_date)) : date('d/m/Y', strtotime(now()))}}">
+		<label for="date_due">Due date</label>
+		<input type="date" class="form-control" name="date_due" id="date_due" required
+				value="{{isset($invoice) ? date('d/m/Y', strtotime($invoice->date_due)) : date('d/m/Y', strtotime(now()))}}">
 	</div>
-
 </div>
+
+<div id="client_info">
+	
+</div>
+
 <hr>
 <form id="material-form">
 	<div class="row">
@@ -90,7 +94,7 @@
 	<tfoot>
 		<tr>
 			<td colspan="3"></td>
-			<td id="total_invoice"></td>
+			<td><b id="total_invoice" style="font-size:18px"></b></td>
 		</tr>
 	</tfoot>
 </table>

@@ -16,6 +16,9 @@
 		<div class="card-body">
             <h4>Invoice #{{$lastIdInvoice + 1}}</h4>
 			@include("invoices.fields")
+			<div class="d-flex mt-3 justify-content-end">
+				<x-adminlte-button onclick="saveInvoice()"  theme="success" label="Save Invoice"/>
+			</div>
 		</div>
 	</x-adminlte-card>
 
