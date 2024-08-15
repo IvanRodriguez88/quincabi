@@ -7,7 +7,8 @@
 @stop
 
 @section('content')
-	<input type="hidden" id="type" value="create">
+	<input type="hidden" id="invoice_id" value="{{$invoice->id}}">
+	<input type="hidden" id="type" value="edit">
 
 	<div id="error-messages">
 
@@ -15,11 +16,11 @@
 	<x-adminlte-card>
 		<div class="card-header">
 			<div class="d-flex justify-content-between">
-				<h3>Add invoice</h3>
+				<h3>Edit invoice</h3>
 			</div>
 		</div>
 		<div class="card-body">
-            <h4>Invoice #{{$lastIdInvoice + 1}}</h4>
+            <h4>Invoice #{{$invoice->id}}</h4>
 			@include("invoices.fields")
 			<div class="d-flex mt-3 justify-content-end">
 				<x-adminlte-button onclick="saveInvoice()"  theme="success" label="Save Invoice"/>
@@ -27,7 +28,6 @@
 		</div>
 	</x-adminlte-card>
 
-	
 @stop
 
 @section('css')

@@ -20,16 +20,17 @@
 		<input type="text" class="form-control" name="date_issued" id="date_issued" readonly
 				value="{{isset($invoice) ? date('d/m/Y', strtotime($invoice->date_issued)) : date('d/m/Y', strtotime(now()))}}">
 	</div>
-
 	<div class="col-md-4">
 		<label for="date_due">Due date</label>
 		<input type="date" class="form-control" name="date_due" id="date_due" required
-				value="{{isset($invoice) ? date('d/m/Y', strtotime($invoice->date_due)) : date('d/m/Y', strtotime(now()))}}">
+				value="{{isset($invoice) ? date('Y-m-d', strtotime($invoice->date_due)) : ''}}">
 	</div>
 </div>
 
 <div id="client_info">
-	
+	@if (isset($invoice))
+		{!! $clientInfo !!}
+	@endif
 </div>
 
 <hr>
@@ -89,12 +90,22 @@
 		<th></th>
 	</thead>
 	<tbody>
-		
+		@if (isset($invoice))
+			@foreach ($invoice->invoiceRows as $invoiceRow)
+				@include("invoices.material-row", [
+					"uniqueId" => uniqid(),
+					"material" => $invoiceRow->material,
+					"amount" => $invoiceRow->amount,
+					"unit_price" => $invoiceRow->unit_price,
+					"total" => $invoiceRow->unit_price * $invoiceRow->amount,
+				])
+			@endforeach
+		@endif
 	</tbody>
 	<tfoot>
 		<tr>
 			<td colspan="3"></td>
-			<td><b id="total_invoice" style="font-size:18px"></b></td>
+			<td><b id="total_invoice" style="font-size:18px">${{number_format($invoice->getTotal(), 2, '.', ',') ?? ""}}</b></td>
 		</tr>
 	</tfoot>
 </table>

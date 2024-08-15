@@ -24,7 +24,9 @@ class InvoiceController extends Controller
         $heads = [
             'ID',
             'Client',
+			'Cost',
 			'Total',
+			'Profit',
             'Date Issued',
             'Due Date',
             'Is Paid',
@@ -40,10 +42,11 @@ class InvoiceController extends Controller
         return view('invoices.create', compact("clients", "lastIdInvoice"));
     }
 
-	public function store(Request $request)
+	public function store(InvoiceRequest $request)
 	{
 		$status = true;
 		$invoice = null;
+		
 		try {
             $invoice = Invoice::create([
 				'client_id' => $request->client_id,
@@ -76,6 +79,89 @@ class InvoiceController extends Controller
 
 		return response()->json([$status, 'invoice' => $invoice]);
 	}
+
+	public function update(InvoiceRequest $request, Invoice $invoice)
+	{
+		$status = true;
+		try {
+            $invoice->update([
+				'client_id' => $request->client_id,
+				'date_due' => $request->date_due,
+				"updated_by" => auth()->id(),
+				"updated_at" => now()
+			]);
+
+			$invoice->invoiceRows()->delete();
+
+			foreach ($request->materials as $key => $row) {
+				$material = Material::find($row["material_id"]);
+				$amount = $row["amount"];
+				$price = $row["price"];
+				InvoiceRow::create([
+					'invoice_id' => $invoice->id,
+					'material_id' => $material->id, 
+					'extra_name' => $material->extra_name, 
+					'amount' => $amount, 
+					'unit_cost' => $material->cost, 
+					'unit_price' => $price
+				]);
+			}
+        } catch (\Illuminate\Database\QueryException $e) {
+            $status = false;
+        }
+
+		return response()->json([$status, 'invoice' => $invoice]);
+	}
+
+
+	public function edit(Invoice $invoice)
+	{
+		$clients = Client::where("is_active", 1)->get();
+		$client = Client::find($invoice->client_id);
+		$clientInfo = $this->getClientInfo($client);
+        return view('invoices.edit', compact("invoice", "clients", "clientInfo"));
+    }
+
+	public function show(Invoice $invoice)
+	{
+        return view('invoices.show', compact("invoice"));
+    }
+
+	public function destroy(Invoice $invoice)
+	{
+		$status = true;
+        try {
+			$invoice->invoiceRows()->delete();
+            $invoice->delete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            $status = false;
+        }
+
+		return response()->json([$status]);
+	}
+
+	public function payInvoice(Invoice $invoice)
+	{
+		$status = true;
+		try {
+			$invoice->update([
+				"is_paid" => 1,
+				"updated_by" => auth()->id(),
+				"updated_at" => now()
+			]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $status = false;
+        }
+
+		return response()->json([$status, 'invoice' => $invoice]);
+	}
+
+	public function getButtons(Invoice $invoice)
+	{
+		return view("invoices.buttons", compact("invoice"))->render();		
+	}
+
+
 
     public function addMaterial(Request $request)
     {

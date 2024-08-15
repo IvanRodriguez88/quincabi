@@ -11,7 +11,7 @@ class InvoiceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class InvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-        ];
+			'client_id' => 'required',
+            'date_due' => 'required',
+		];
     }
 }

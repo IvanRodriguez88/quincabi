@@ -1,6 +1,6 @@
 $(function () {
 	
-	
+
 	$.ajax({
 		url: `${getBaseUrl()}/materials/getdataautocomplete`,
 		type: 'GET',
@@ -111,6 +111,7 @@ $(function () {
 		confirm.then((result) => {
 			if (result) {
 				$(param).closest("tr").remove()
+				$("#total_invoice").text("$" + formatNumber(getTotalInvoice()))
 			}
 		})
 	}
@@ -172,21 +173,43 @@ $(function () {
 			"client_id": $("#client_id").val(),
 			"total": getTotalInvoice()
 		}
-		$.ajax({
-			url: `${getBaseUrl()}/invoices`,
-			type: 'POST',
-			data: data,
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-			},
-			success: function(response) {
-				console.log(response);
-				
-				
-			},error: function(xhr, textStatus, errorThrown) {
-				errorMessage(xhr.status, errorThrown)
-			}
-		});
+
+		const type = $("#type").val()
+		let method = "POST"
+		let url = `${getBaseUrl()}/invoices`
+
+		if (type == "edit") {
+			method = "PUT"
+			url = `${getBaseUrl()}/invoices/${$("#invoice_id").val()}`
+		}
+		
+		if (data["materials"].length > 0) {
+			$.ajax({
+				url: url,
+				type: method,
+				data: data,
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+				},
+				success: function(response) {
+					if (type == "edit") {
+						toastr.success(`Invoice has been updated successfully`, 'Invoice updated')
+					}else {
+						toastr.success(`Invoice has been created successfully`, 'Invoice created')
+					}
+					window.location.href = (`${getBaseUrl()}/invoices`)
+					
+				},error: function(xhr, textStatus, errorThrown) {
+					$("#error-messages").hide();
+					$("#error-messages").empty().append(getErrorMessages(xhr.responseJSON.errors));
+					$("#error-messages").slideDown("fast");
+				}
+			});
+		}else {
+			simpleAlert("Not enought materials", "It is necessary to add at least one material.", "warning")
+		}
 	}
+
+	
 })
 

@@ -22,17 +22,14 @@
 					<tr>
 						<td>{{ $invoice->id }}</td>
 						<td>{{ $invoice->client->name }}</td>
+						<td>$ {{ number_format($invoice->getCost(), 2, '.', ',') }}</td>
 						<td>$ {{ number_format($invoice->getTotal(), 2, '.', ',') }}</td>
-						<td>{{ $invoice->date_issued }}</td>
-						<td>{{ $invoice->date_due }}</td>
+						<td>$ {{ number_format($invoice->getProfit(), 2, '.', ',') }}</td>
+						<td>{{ date("d/m/Y", strtotime($invoice->date_issued)) }}</td>
+						<td>{{ date("d/m/Y", strtotime($invoice->date_due)) }}</td>
 						<td>{!! $invoice->is_paid == 1 ? "<span class='badge badge-success p-2 px-3'>Yes</span>" :  "<span class='badge badge-danger p-2 px-3'>No</span>" !!}</td>
 						<td class="text-center">
-							<a class="btn btn-primary" href="{{route('invoices.edit', $invoice->id)}}">
-								<i class="fas fa-edit"></i>
-							</a>
-							<a class="btn btn-danger" onclick="showDelete({{$invoice->id}}, '{{$invoice->name}}')">
-								<i class="fas fa-trash"></i>
-							</a>
+							@include("invoices.buttons")
 						</td>
 					</tr>
 				@endforeach
@@ -50,5 +47,5 @@
 @stop
 
 @section('js')
-	@vite(['resources/js/generalFunctions.js', 'resources/js/sweetAlert.js'])
+	@vite(['resources/js/generalFunctions.js', 'resources/js/sweetAlert.js', 'resources/js/invoicesIndex.js'])
 @stop

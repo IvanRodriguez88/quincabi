@@ -33,4 +33,19 @@ class Invoice extends Model
 		return $total;
 	}
 
+	public function getCost()
+	{
+		$cost = 0;
+		foreach ($this->invoiceRows as $invoiceRow) {
+			$cost += $invoiceRow->amount * $invoiceRow->unit_cost;
+		};
+
+		return $cost;
+	}
+
+	public function getProfit()
+	{
+		return $this->getTotal() - $this->getCost();
+	}
+
 }
