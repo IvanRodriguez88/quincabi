@@ -8,17 +8,18 @@
 
 @section('content')
 	<x-adminlte-card>
-		<div class="card-header">
+		<div class="card-header pb-3">
+			<h2 style="color: #54393a"><b>QuinCabinetry</b></h2>
 			<div class="d-flex justify-content-between">
 				<div>
-					<h3>Invoice #{{$invoice->id}}</h3>
+					<h4>Invoice #{{$invoice->id}}</h4>
 					<p class="mb-0">Invoice Date: {{date("d/m/Y", strtotime($invoice->date_issued))}}</p>
 					<p class="mb-0">Due Date: {{date("d/m/Y", strtotime($invoice->date_due))}}</p>
 				</div>
-				<img src="" alt="" srcset="">
+				<img style="width:60px" src="{{asset('vendor/adminlte/dist/img/logo-black.png')}}" alt="">
 			</div>
 		</div>
-		<div class="card-body ">
+		<div class="card-body">
 			<div class="d-flex justify-content-between">
 				<div>
 					<p class="mb-0">916 Woodland St Channelview, TX 77530</p>
@@ -34,31 +35,28 @@
 				</div>
 			</div>
 			<hr>
-			<h4>Materials</h4>
 			<table id="material-table" class="table-invoice mt-3">
 				<thead>
-					<th>Material</th>
+					<th>Description</th>
 					<th>Qty.</th>
-					<th>Unit Price</th>
-					<th>Total</th>
+					<th class="text-right">Unit Price</th>
+					<th class="text-right">Total</th>
 				</thead>
 				<tbody>
 					@foreach ($invoice->invoiceRows as $invoiceRow)
 						<tr>
-							<td>{{$invoiceRow->material->name}}</td>
+							<td>{{$invoiceRow->name}}</td>
 							<td>{{$invoiceRow->amount}}</td>
-							<td>${{number_format($invoiceRow->unit_price, 2, '.', ',')}}</td>
-							<td class="total">${{number_format($invoiceRow->unit_price * $invoiceRow->amount, 2, '.', ',')}}</td>
+							<td class="text-right">${{number_format($invoiceRow->unit_price, 2, '.', ',')}}</td>
+							<td class="total text-right">${{number_format($invoiceRow->unit_price * $invoiceRow->amount, 2, '.', ',')}}</td>
 						</tr>
 					@endforeach
 				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="3"></td>
-						<td><b id="total_invoice" style="font-size:18px">${{number_format($invoice->getTotal(), 2, '.', ',') ?? ""}}</b></td>
-					</tr>
-				</tfoot>
+				
 			</table>
+			<div class="d-flex justify-content-end mt-3">
+				<h4>BALANCE DUE: ${{number_format($invoice->getTotal(), 2, '.', ',') ?? ""}}</h4>
+			</div>
 			<p class="mt-2 text-center">Thank you for your business!</p>
 		</div>
 	

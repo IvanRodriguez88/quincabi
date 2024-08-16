@@ -1,5 +1,5 @@
 $(function () {
-	
+	let freeMaterial = false
 
 	$.ajax({
 		url: `${getBaseUrl()}/materials/getdataautocomplete`,
@@ -209,6 +209,19 @@ $(function () {
 			simpleAlert("Not enought materials", "It is necessary to add at least one material.", "warning")
 		}
 	}
+
+	$("#free_check").on("change", function() {
+		if ($(this).prop("checked")) {
+			$("#free_material").removeClass("d-none")
+			$("#search_material").addClass("d-none")
+			freeMaterial = true
+		}else{
+			$("#free_material").addClass("d-none")
+			$("#search_material").removeClass("d-none")
+			freeMaterial = false
+		}
+		
+	})
 
 	
 })

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Helpers\Modal;
 use App\Http\Requests\InvoiceRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use App\Models\Invoice;
 use App\Models\Client;
@@ -65,7 +66,7 @@ class InvoiceController extends Controller
 				InvoiceRow::create([
 					'invoice_id' => $invoice->id,
 					'material_id' => $material->id, 
-					'extra_name' => $material->extra_name, 
+					'name' => $material->name." ".$material->extra_name, 
 					'amount' => $amount, 
 					'unit_cost' => $material->cost, 
 					'unit_price' => $price
@@ -100,7 +101,7 @@ class InvoiceController extends Controller
 				InvoiceRow::create([
 					'invoice_id' => $invoice->id,
 					'material_id' => $material->id, 
-					'extra_name' => $material->extra_name, 
+					'name' => $material->name." ".$material->extra_name, 
 					'amount' => $amount, 
 					'unit_cost' => $material->cost, 
 					'unit_price' => $price
@@ -176,5 +177,14 @@ class InvoiceController extends Controller
 	public function getClientInfo(Client $client)
 	{
 		return view("invoices.client-info", compact("client"))->render();
+	}
+
+	public function pdf(Invoice $invoice)
+	{
+		$data = [
+			"invoice" => $invoice
+		];
+		$pdf = Pdf::loadView('invoices.pdf', $data);
+    	return $pdf->stream();
 	}
 }

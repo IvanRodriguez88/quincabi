@@ -23,7 +23,7 @@ return new class extends Migration
 				->comment('Si es nulo es porque se agregó un row sin existencia en materials');          
 			$table->foreign('material_id')->references('id')->on('materials');
 
-			$table->string('extra_name')
+			$table->string('name')
 				->nullable()
 				->comment('Nombre del material o producto creado en el momento (sin registro en la bd)');
 

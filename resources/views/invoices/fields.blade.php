@@ -35,11 +35,24 @@
 
 <hr>
 <form id="material-form">
+	<input id="free_check" type="checkbox"> Free name
 	<div class="row">
 		<div class="col-md-5">
-			<label for="material_name">Material name</label><br>
-			<input id="material_name" class="form-control" name="material_name">
-			<input type="hidden" name="material_id" id="material_id">
+			<div id="search_material">
+				<label for="material_name">Material name</label><br>
+				<input id="material_name" class="form-control" name="material_name">
+				<input type="hidden" name="material_id" id="material_id">
+			</div>
+			<div id="free_material" class="d-none">
+				<x-adminlte-input 
+					name="free_material" 
+					label="Name" 
+					type="text" 
+					placeholder="Name"
+					disable-feedback
+					min=1
+				/>
+			</div>
 		</div>
 
 		<x-adminlte-input 
@@ -105,7 +118,12 @@
 	<tfoot>
 		<tr>
 			<td colspan="3"></td>
-			<td><b id="total_invoice" style="font-size:18px">${{number_format($invoice->getTotal(), 2, '.', ',') ?? ""}}</b></td>
+			@if (isset($invoice))
+				<td><b id="total_invoice" style="font-size:18px">${{number_format($invoice->getTotal(), 2, '.', ',')}}</b></td>
+			@else
+				<td><b id="total_invoice" style="font-size:18px">${{number_format(0, 2, '.', ',')}}</b></td>
+			@endif
+
 		</tr>
 	</tfoot>
 </table>

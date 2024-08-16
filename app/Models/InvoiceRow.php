@@ -10,7 +10,7 @@ class InvoiceRow extends Model
     use HasFactory;
 
 	protected $table = 'invoice_rows';
-	protected $fillable = ['invoice_id', 'material_id', 'extra_name', 'amount', 'unit_cost', 'unit_price', 'is_active', 'created_by', 'updated_by'];
+	protected $fillable = ['invoice_id', 'material_id', 'name', 'amount', 'unit_cost', 'unit_price', 'is_active', 'created_by', 'updated_by'];
 
 	public function invoice()
     {

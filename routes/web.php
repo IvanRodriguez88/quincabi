@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
 	Route::get('invoices/addmaterial', [InvoiceController::class, 'addMaterial'])->name('invoices.addMaterial');
 	Route::put('invoices/payinvoice/{invoice}', [InvoiceController::class, 'payInvoice'])->name('invoices.payInvoice');
 	Route::get('invoices/getbuttons/{invoice}', [InvoiceController::class, 'getButtons'])->name('invoices.getButtons');
+	Route::get('invoices/pdf/{invoice}', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
 
 	Route::resource('invoices', InvoiceController::class);
 
