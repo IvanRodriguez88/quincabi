@@ -28,6 +28,7 @@ class InvoiceController extends Controller
 			'Cost',
 			'Total',
 			'Profit',
+			'Total payments',
             'Date Issued',
             'Due Date',
             'Is Paid',
@@ -60,15 +61,21 @@ class InvoiceController extends Controller
 
 			//Crear items de subcategorias
 			foreach ($request->materials as $key => $row) {
-				$material = Material::find($row["material_id"]);
+				$material = null;
+				if ($row["material_id"] != null) {
+					$material = Material::find($row["material_id"]);
+					$material_name = $material->name." ".$material->extra_name;
+				}else{
+					$material_name = $row["material_name"];
+				}
 				$amount = $row["amount"];
 				$price = $row["price"];
 				InvoiceRow::create([
 					'invoice_id' => $invoice->id,
-					'material_id' => $material->id, 
-					'name' => $material->name." ".$material->extra_name, 
+					'material_id' => $material->id ?? null, 
+					'name' => $material_name, 
 					'amount' => $amount, 
-					'unit_cost' => $material->cost, 
+					'unit_cost' => $row["cost"], 
 					'unit_price' => $price
 				]);
 			}
@@ -95,15 +102,21 @@ class InvoiceController extends Controller
 			$invoice->invoiceRows()->delete();
 
 			foreach ($request->materials as $key => $row) {
-				$material = Material::find($row["material_id"]);
+				$material = null;
+				if ($row["material_id"] != null) {
+					$material = Material::find($row["material_id"]);
+					$material_name = $material->name." ".$material->extra_name;
+				}else{
+					$material_name = $row["material_name"];
+				}
 				$amount = $row["amount"];
 				$price = $row["price"];
 				InvoiceRow::create([
 					'invoice_id' => $invoice->id,
-					'material_id' => $material->id, 
-					'name' => $material->name." ".$material->extra_name, 
+					'material_id' => $material->id ?? null, 
+					'name' => $material_name, 
 					'amount' => $amount, 
-					'unit_cost' => $material->cost, 
+					'unit_cost' => $row["cost"], 
 					'unit_price' => $price
 				]);
 			}
@@ -141,6 +154,18 @@ class InvoiceController extends Controller
 		return response()->json([$status]);
 	}
 
+	public function showPayments(Invoice $invoice)
+	{
+        $heads = [
+            'ID',
+            'Payment Type',
+			'Amount',
+			'Date',
+			'Actions'
+        ];
+        return view('invoices.payments', compact("invoice", "heads"));
+    }
+
 	public function payInvoice(Invoice $invoice)
 	{
 		$status = true;
@@ -167,11 +192,19 @@ class InvoiceController extends Controller
     public function addMaterial(Request $request)
     {
         $uniqueId = uniqid();
-        $material = Material::find($request->material_id);
+		$material = null;
+		$free_material = null;
+		if ($request->material_id != null) {
+			$material = Material::find($request->material_id);
+		}else {
+			$free_material = $request->free_material_input;
+		}
         $amount = $request->amount;
         $unit_price = $request->unit_price;
+		$unit_cost = $request->unit_cost;
         $total = $unit_price * $amount;
-        return view("invoices.material-row", compact("material", "amount", "unit_price", "total", "uniqueId"))->render();
+
+        return view("invoices.material-row", compact("material", "free_material", "amount", "unit_price", "unit_cost", "total", "uniqueId"))->render();
     }
 
 	public function getClientInfo(Client $client)

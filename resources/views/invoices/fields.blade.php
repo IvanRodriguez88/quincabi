@@ -35,9 +35,12 @@
 
 <hr>
 <form id="material-form">
-	<input id="free_check" type="checkbox"> Free name
+	<div>
+		<input id="free_check" type="checkbox">
+		<label for="free_check" class="me-2">Free name</label>
+	</div>
 	<div class="row">
-		<div class="col-md-5">
+		<div class="col-md-4">
 			<div id="search_material">
 				<label for="material_name">Material name</label><br>
 				<input id="material_name" class="form-control" name="material_name">
@@ -45,7 +48,7 @@
 			</div>
 			<div id="free_material" class="d-none">
 				<x-adminlte-input 
-					name="free_material" 
+					name="free_material_input" 
 					label="Name" 
 					type="text" 
 					placeholder="Name"
@@ -61,6 +64,17 @@
 			label="Amount" 
 			type="number" 
 			placeholder="Amount"
+			fgroup-class="col-md-1" 
+			disable-feedback
+			min=1
+		/>
+
+		<x-adminlte-input 
+			value="" 
+			name="unit_cost" 
+			label="Unit cost" 
+			type="number" 
+			placeholder="Unit cost"
 			fgroup-class="col-md-2" 
 			disable-feedback
 			min=1
@@ -96,8 +110,9 @@
 
 <table id="material-table" class="table-invoice">
 	<thead>
-		<th>Material</th>
-		<th>Qty.</th>
+		<th>Description</th>
+		<th>Qty.</th>		
+		<th>Unit Cost</th>
 		<th>Unit Price</th>
 		<th>Total</th>
 		<th></th>
@@ -108,7 +123,9 @@
 				@include("invoices.material-row", [
 					"uniqueId" => uniqid(),
 					"material" => $invoiceRow->material,
+					"free_material" => $invoiceRow->name,
 					"amount" => $invoiceRow->amount,
+					"unit_cost" => $invoiceRow->unit_cost,
 					"unit_price" => $invoiceRow->unit_price,
 					"total" => $invoiceRow->unit_price * $invoiceRow->amount,
 				])

@@ -25,6 +25,7 @@
 						<td>$ {{ number_format($invoice->getCost(), 2, '.', ',') }}</td>
 						<td>$ {{ number_format($invoice->getTotal(), 2, '.', ',') }}</td>
 						<td>$ {{ number_format($invoice->getProfit(), 2, '.', ',') }}</td>
+						<td>$ {{ number_format($invoice->getTotalPayments(), 2, '.', ',') }}</td>
 						<td>{{ date("d/m/Y", strtotime($invoice->date_issued)) }}</td>
 						<td>{{ date("d/m/Y", strtotime($invoice->date_due)) }}</td>
 						<td>{!! $invoice->is_paid == 1 ? "<span class='badge badge-success p-2 px-3'>Yes</span>" :  "<span class='badge badge-danger p-2 px-3'>No</span>" !!}</td>

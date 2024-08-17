@@ -7,6 +7,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\InvoicePaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,12 @@ Route::middleware('auth')->group(function () {
 	Route::put('invoices/payinvoice/{invoice}', [InvoiceController::class, 'payInvoice'])->name('invoices.payInvoice');
 	Route::get('invoices/getbuttons/{invoice}', [InvoiceController::class, 'getButtons'])->name('invoices.getButtons');
 	Route::get('invoices/pdf/{invoice}', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
+
+	Route::get('invoices/showPayments/{invoice}', [InvoiceController::class, 'showPayments'])->name('invoices.showPayments');
+
+	Route::resource('payments', InvoicePaymentController::class);
+	Route::get('payments/getaddeditmodal/{invoice}/{id?}', [InvoicePaymentController::class, 'getAddEditModal'])->name('payments.getAddEditModal');
+
 
 	Route::resource('invoices', InvoiceController::class);
 

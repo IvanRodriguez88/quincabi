@@ -20,7 +20,11 @@ class Invoice extends Model
     public function invoiceRows()
     {
 		return $this->hasMany('App\Models\InvoiceRow');
+    }
 
+	public function invoicePayments()
+    {
+		return $this->hasMany('App\Models\InvoicePayment');
     }
 
 	public function getTotal()
@@ -48,4 +52,13 @@ class Invoice extends Model
 		return $this->getTotal() - $this->getCost();
 	}
 
+	public function getTotalPayments()
+	{
+		$total = 0;
+		foreach ($this->invoicePayments as $invoicePayment) {
+			$total += $invoicePayment->amount;
+		};
+
+		return $total;
+	}
 }
