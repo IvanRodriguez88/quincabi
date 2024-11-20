@@ -97,7 +97,7 @@ $(function () {
 			simpleAlert("Invalid amount", "The minimum value is 0", "warning")
 			return false
 		}
-		if ($("#unit_price").val() < 1) {
+		if (!$("#unit_price").val() > 0) {
 			simpleAlert("Invalid price", "The minimum value is 0", "warning")
 			return false
 		}
