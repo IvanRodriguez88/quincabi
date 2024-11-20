@@ -28,4 +28,14 @@ window.getBaseUrl = function () {
 
 window.formatNumber = (value) => {
 	return parseFloat(value).toFixed(2);
-  }
+}
+
+window.formatDate = (inputDate) => {
+    // Dividir la fecha de entrada en componentes
+    const [year, month, day] = inputDate.split('-');
+    
+    // Crear una nueva fecha como cadena en el formato deseado
+    const formattedDate = `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+    
+    return formattedDate;
+}

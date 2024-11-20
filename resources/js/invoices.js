@@ -23,6 +23,7 @@ $(function () {
 			},
 			success: function(response) {
 				$("#unit_price").val(response.price)
+				$("#unit_cost").val(response.cost)
 				updateTotal()
 			},error: function(xhr, textStatus, errorThrown) {
 				errorMessage(xhr.status, errorThrown)
@@ -38,7 +39,7 @@ $(function () {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
 			},
 			success: function(response) {
-				$("#client_info").append(response)
+				$("#client_info").empty().append(response)
 			},error: function(xhr, textStatus, errorThrown) {
 				errorMessage(xhr.status, errorThrown)
 			}
@@ -59,6 +60,8 @@ $(function () {
 	window.addMaterial = () => {
 		if (validateAddMaterial()) {
 			const data = $("#material-form").serialize()
+			console.log(data);
+			
 			$.ajax({
 				url: `${getBaseUrl()}/invoices/addmaterial`,
 				type: 'GET',
@@ -83,16 +86,24 @@ $(function () {
 		$("#material_id").val("")
 		$("#amount").val("1")
 		$("#unit_price").val("0")
+		$("#unit_cost").val("0")
 		$("#total_price").val("0")
 	}
 
 	function validateAddMaterial() {
-		console.log($("#amount").val());
 		
-		if ($("#material_id").val() == "") {
-			simpleAlert("No material selected", "It is necessary to select a material", "warning")
-			return false
+		if (!freeMaterial) {
+			if ($("#material_id").val() == "") {
+				simpleAlert("No material selected", "It is necessary to select a material", "warning")
+				return false
+			}
+		}else{
+			if ($("#free_material_input").val() == "") {
+				simpleAlert("Invalid name", "The name cannot be empty", "warning")
+				return false
+			}
 		}
+		
 		if ($("#amount").val() < 1) {
 			simpleAlert("Invalid amount", "The minimum value is 0", "warning")
 			return false
@@ -158,10 +169,12 @@ $(function () {
 		let rows = []
 		$("#material-table tbody tr").each(function() {
 			const material_id = $(this).find(".material_id").val()
+			const material_name = $(this).find(".material_name").val()
 			const amount = $(this).find(".amount").val()
+			const cost = $(this).find(".unit_cost").val()
 			const price = $(this).find(".unit_price").val()
 
-			rows.push({material_id, amount, price})
+			rows.push({material_id,material_name, amount, cost,price})
 		})
 		return rows
 	}
@@ -214,10 +227,12 @@ $(function () {
 		if ($(this).prop("checked")) {
 			$("#free_material").removeClass("d-none")
 			$("#search_material").addClass("d-none")
+			clearInputs()
 			freeMaterial = true
 		}else{
 			$("#free_material").addClass("d-none")
 			$("#search_material").removeClass("d-none")
+			$("#free_material_input").val("")
 			freeMaterial = false
 		}
 		

@@ -13,7 +13,7 @@
 </a>
 
 @if ($invoice->is_paid == 0)
-<a class="btn btn-success" style="width: 40px" onclick="payInvoice({{$invoice->id}})">
+<a class="btn btn-success" style="width: 40px"  href="{{route('invoices.showPayments', $invoice->id)}}">
     <i class="fas fa-money-bill"></i>
 </a>
 @endif
