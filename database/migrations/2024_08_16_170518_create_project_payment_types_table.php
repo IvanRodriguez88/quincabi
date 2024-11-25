@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoice_payment_types', function (Blueprint $table) {
+        Schema::create('project_payment_types', function (Blueprint $table) {
             $table->id();
 
 			$table->string('name')->comment('Nombre del tipo de pago');
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoice_payment_types');
+        Schema::dropIfExists('project_payment_types');
     }
 };

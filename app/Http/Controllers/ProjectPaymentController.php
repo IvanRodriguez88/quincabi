@@ -4,26 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\InvoicePayment;
-use App\Models\InvoicePaymentType;
+use App\Models\ProyectPayment;
+use App\Models\ProjectPaymentType;
 use App\Models\Invoice;
 
-use App\Http\Requests\InvoicePaymentRequest;
+use App\Http\Requests\ProjectPaymentRequest;
 
 use App\Http\Helpers\Modal;
 
-class InvoicePaymentController extends Controller
+class ProjectPaymentController extends Controller
 {
     protected $routeResource = 'payments';
 
-	public function store(InvoicePaymentRequest $request)
+	public function store(ProjectPaymentRequest $request)
 	{
 		$status = true;
 		$payment = null;
 		$invoice = Invoice::find($request->invoice_id);
 
 		try {
-            $payment = InvoicePayment::create([
+            $payment = ProyectPayment::create([
 				"invoice_id" => $request->invoice_id,
 				'invoice_payment_type_id' => $request->invoice_payment_type_id,
 				"amount" => $request->amount,
@@ -39,10 +39,10 @@ class InvoicePaymentController extends Controller
             $status = false;
         }
 
-		return response()->json([$status, 'payment' => $payment->load(["invoicePaymentType"])]);
+		return response()->json([$status, 'payment' => $payment->load(["projectPaymentType"])]);
 	}
 
-	public function update(InvoicePaymentRequest $request, InvoicePayment $payment)
+	public function update(ProjectPaymentRequest $request, ProyectPayment $payment)
 	{
 		$status = true;
 		$invoice = Invoice::find($request->invoice_id);
@@ -62,10 +62,10 @@ class InvoicePaymentController extends Controller
             $status = false;
         }
 
-		return response()->json([$status, 'payment' => $payment->load(["invoicePaymentType"])]);
+		return response()->json([$status, 'payment' => $payment->load(["projectPaymentType"])]);
 	}
 
-	public function destroy(InvoicePayment $payment)
+	public function destroy(ProyectPayment $payment)
 	{
 		$status = true;
         try {
@@ -80,13 +80,13 @@ class InvoicePaymentController extends Controller
     public function getAddEditModal(Invoice $invoice, $id = null)
 	{
 		if ($id !== 'undefined'){
-			$payment = InvoicePayment::find($id);
-			$paymentTypes = InvoicePaymentType::all();
-			$modal = new Modal($this->routeResource.'Modal', 'Edit InvoicePayment', $this->routeResource, ["invoice" => $invoice, "payment" => $payment, "paymentTypes" => $paymentTypes]);
+			$payment = ProyectPayment::find($id);
+			$paymentTypes = ProjectPaymentType::all();
+			$modal = new Modal($this->routeResource.'Modal', 'Edit ProyectPayment', $this->routeResource, ["invoice" => $invoice, "payment" => $payment, "paymentTypes" => $paymentTypes]);
 			return $modal->getModalAddEdit(request()->type, $id);
 		}else{
-			$paymentTypes = InvoicePaymentType::all();
-			$modal = new Modal($this->routeResource.'Modal', 'Add InvoicePayment', $this->routeResource, ["invoice" => $invoice, "paymentTypes" => $paymentTypes]);
+			$paymentTypes = ProjectPaymentType::all();
+			$modal = new Modal($this->routeResource.'Modal', 'Add ProyectPayment', $this->routeResource, ["invoice" => $invoice, "paymentTypes" => $paymentTypes]);
 			return $modal->getModalAddEdit(request()->type);
 		}
 

@@ -11,20 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoice_payments', function (Blueprint $table) {
-            $table->id();
+        Schema::create('workers', function (Blueprint $table) {
+			$table->id();
 
-			$table->bigInteger('invoice_id')->unsigned();            
-			$table->foreign('invoice_id')->references('id')->on('invoices');
+			$table->string("name")->comment("nombre del invoice");
+			$table->string("phone")->nullable();
+			$table->string("email")->nullable();
 
-            $table->bigInteger('invoice_payment_type_id')->unsigned();            
-			$table->foreign('invoice_payment_type_id')->references('id')->on('invoice_payment_types');
+			$table->float('hourly_pay')->comment('pago por hora');
 
-            $table->datetime('date')->comment('Fecha de pago');
-
-			$table->float('amount')->unsigned()->comment('Cantidad que pagó');
-
-			//Datos de creación y modificación
+           	//Datos de creación y modificación
 			$table->string('notes', 1024)->nullable()->comment('Notas');
 			$table->boolean('is_active')->default(1)->comment('Muestra si la fila está activa');
 			$table->smallInteger('created_by')->unsigned()->nullable()->comment('Usuario que creó');
@@ -41,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoice_payments');
+        Schema::dropIfExists('workers');
     }
 };

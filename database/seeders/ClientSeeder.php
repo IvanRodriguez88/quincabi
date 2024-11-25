@@ -4,20 +4,17 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\InvoicePaymentType;
+use App\Models\Client;
 
-class InvoicePaymentTypeSeeder extends Seeder
+class ClientSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        InvoicePaymentType::create([
-            "name" => "Cash",
-        ]);
-        InvoicePaymentType::create([
-            "name" => "Card",
+        Client::create([
+            "name" => "Client 1",
         ]);
     }
 }

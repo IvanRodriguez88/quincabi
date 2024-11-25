@@ -28,7 +28,7 @@
 				@foreach($invoice->invoicePayments as $payment)
 					<tr>
 						<td>{{ $payment->id }}</td>
-						<td>{{ $payment->invoicePaymentType->name }}</td>
+						<td>{{ $payment->projectPaymentType->name }}</td>
 						<td>$ {{ number_format($payment->amount, 2, '.', ',') }}</td>
 						<td>{{ date("d/m/Y", strtotime($payment->date)) }}</td>
                         <td class="text-center">

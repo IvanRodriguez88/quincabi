@@ -311,15 +311,35 @@ return [
             'url'  => 'clients',
             'icon' => 'fas fa-users',
         ],
-        [
-            'text' => 'Invoices',
-            'url'  => 'invoices',
-            'icon' => 'fas fa-file-invoice',
-        ],
+		[
+			'text'    => 'Projects',
+			'icon' => 'fas fa-tools',
+			'submenu' => [
+				[
+					'text'    => 'Projects',
+					'shift'   => 'ml-3',
+					'route' => 'projects.index',
+					'icon' => 'fas fa-tools',
+
+				],
+				[
+					'text'    => 'Invoices',
+					'shift'   => 'ml-3',
+					'route' => 'invoices.index',
+					'icon' => 'fas fa-file-invoice',
+
+				],
+			],
+		],
 		[
             'text' => 'suppliers',
             'url'  => 'suppliers',
             'icon' => 'fas fa-box',
+        ],
+		[
+            'text' => 'Workers',
+            'url'  => 'workers',
+            'icon' => 'fas fa-hard-hat',
         ],
 		[
 			'text'    => 'materials',

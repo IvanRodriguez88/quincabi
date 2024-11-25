@@ -24,14 +24,11 @@ class InvoiceController extends Controller
 
         $heads = [
             'ID',
-            'Client',
+			'Name',
 			'Cost',
 			'Total',
-			'Profit',
-			'Total payments',
             'Date Issued',
             'Due Date',
-            'Is Paid',
 			'Actions'
         ];
         return view('invoices.index', compact('heads', 'invoices', 'routeResource'));
@@ -51,12 +48,14 @@ class InvoiceController extends Controller
 		
 		try {
             $invoice = Invoice::create([
+				'name' => $request->name,
 				'client_id' => $request->client_id,
 				'date_issued' => now(),
 				'date_due' => $request->date_due,
 				"created_by" => auth()->id(),
 				"updated_by" => auth()->id(),
 			]);
+
 
 
 			//Crear items de subcategorias
@@ -85,7 +84,7 @@ class InvoiceController extends Controller
             $status = false;
         }
 
-		return response()->json([$status, 'invoice' => $invoice]);
+		return response()->json(["status" => $status, 'invoice' => $invoice]);
 	}
 
 	public function update(InvoiceRequest $request, Invoice $invoice)
@@ -93,6 +92,7 @@ class InvoiceController extends Controller
 		$status = true;
 		try {
             $invoice->update([
+				'name' => $request->name,
 				'client_id' => $request->client_id,
 				'date_due' => $request->date_due,
 				"updated_by" => auth()->id(),
@@ -124,16 +124,13 @@ class InvoiceController extends Controller
             $status = false;
         }
 
-		return response()->json([$status, 'invoice' => $invoice]);
+		return response()->json(["status" => $status, 'invoice' => $invoice]);
 	}
 
 
 	public function edit(Invoice $invoice)
 	{
-		$clients = Client::where("is_active", 1)->get();
-		$client = Client::find($invoice->client_id);
-		$clientInfo = $this->getClientInfo($client);
-        return view('invoices.edit', compact("invoice", "clients", "clientInfo"));
+        return view('invoices.edit', compact("invoice"));
     }
 
 	public function show(Invoice $invoice)

@@ -16,7 +16,11 @@ class DatabaseSeeder extends Seeder
 			UserSeeder::class,
 			CategorySeeder::class,
 			CategoryItemSeeder::class,
-      InvoicePaymentTypeSeeder::class,
+      		ProjectPaymentTypeSeeder::class,
+			SupplierSeeder::class,
+			ClientSeeder::class,
+			MaterialSeeder::class,
+
 		]);
     }
 }
