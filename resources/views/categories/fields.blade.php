@@ -1,7 +1,7 @@
 <div class="row">
     <x-adminlte-input 
 		value="{{($data->name) ?? ''}}" 
-		name="name" 
+		name="category_name" 
 		label="Name" 
 		placeholder="Name of the category"
         fgroup-class="col-md-12" 

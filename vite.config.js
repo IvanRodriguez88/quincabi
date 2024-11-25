@@ -18,6 +18,7 @@ export default defineConfig({
                 'resources/js/invoices.js',
                 'resources/js/invoicesIndex.js',
                 'resources/js/payments.js',
+                'resources/js/materials.js',
 
 				'resources/js/jquery-sortable.js',
 
