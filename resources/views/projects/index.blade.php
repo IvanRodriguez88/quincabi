@@ -10,34 +10,30 @@
 	<x-adminlte-card>
 		<div class="card-header">
 			<div class="d-flex justify-content-between">
-				<h3>Invoices</h3>
-				<a href="{{route('invoices.create')}}" class="btn btn-default bg-teal px-4">
+				<h3>Projects</h3>
+				<a href="{{route('projects.create')}}" class="btn btn-default bg-teal px-4">
 					<i class="fas fa-plus" style="margin-top:6px"></i> Add 
 				</a>
 			</div>
 		</div>
 		<div class="card-body">
 			<x-adminlte-datatable id="{{$routeResource}}-table" :heads="$heads" striped hoverable with-buttons>
-				@foreach($invoices as $invoice)
+				@foreach($projects as $proiect)
 					<tr>
-						<td>{{ $invoice->id }}</td>
-						<td>{{ $invoice->name }}</td>
-						<td>$ {{ number_format($invoice->getCost(), 2, '.', ',') }}</td>
-						<td>$ {{ number_format($invoice->getTotal(), 2, '.', ',') }}</td>
-						<td>{{ date("m/d/Y", strtotime($invoice->date_issued)) }}</td>
-						<td>{{ date("m/d/Y", strtotime($invoice->date_due)) }}</td>
+						<td>{{ $proiect->id }}</td>
+						<td>{{ $proiect->name }}</td>
+						<td>{{ $proiect->client->name }}</td>
+						<td>{{ $proiect->cost_real }}</td>
+						<td>{{ $proiect->total_real }}</td>
+						<td>{{ $proiect->profit }}</td>
 						<td class="text-center">
-							@include("invoices.buttons")
+							@include("projects.buttons")
 						</td>
 					</tr>
 				@endforeach
 			</x-adminlte-datatable>
 		</div>
 	</x-adminlte-card>
-
-	<div id="addEditModal">
-		{{-- Aquí se llena el modal por ajax --}}
-	</div>
 @stop
 
 @section('css')

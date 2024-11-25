@@ -10,7 +10,7 @@ class Invoice extends Model
     use HasFactory;
 
     protected $table = 'invoices';
-	protected $fillable = ['client_id', 'date_issued', 'date_due', 'is_paid', 'is_active', 'created_by', 'updated_by'];
+	protected $fillable = ['name', 'date_issued', 'date_due', 'is_active', 'created_by', 'updated_by'];
 
     public function client()
     {
@@ -20,11 +20,6 @@ class Invoice extends Model
     public function invoiceRows()
     {
 		return $this->hasMany('App\Models\InvoiceRow');
-    }
-
-	public function invoicePayments()
-    {
-		return $this->hasMany('App\Models\InvoicePayment');
     }
 
 	public function getTotal()
@@ -45,20 +40,5 @@ class Invoice extends Model
 		};
 
 		return $cost;
-	}
-
-	public function getProfit()
-	{
-		return $this->getTotal() - $this->getCost();
-	}
-
-	public function getTotalPayments()
-	{
-		$total = 0;
-		foreach ($this->invoicePayments as $invoicePayment) {
-			$total += $invoicePayment->amount;
-		};
-
-		return $total;
 	}
 }

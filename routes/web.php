@@ -7,7 +7,9 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\InvoicePaymentController;
+use App\Http\Controllers\ProjectPaymentController;
+use App\Http\Controllers\WorkerController;
+use App\Http\Controllers\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,8 +54,8 @@ Route::middleware('auth')->group(function () {
 
 	Route::get('invoices/showPayments/{invoice}', [InvoiceController::class, 'showPayments'])->name('invoices.showPayments');
 
-	Route::resource('payments', InvoicePaymentController::class);
-	Route::get('payments/getaddeditmodal/{invoice}/{id?}', [InvoicePaymentController::class, 'getAddEditModal'])->name('payments.getAddEditModal');
+	Route::resource('payments', ProjectPaymentController::class);
+	Route::get('payments/getaddeditmodal/{invoice}/{id?}', [ProjectPaymentController::class, 'getAddEditModal'])->name('payments.getAddEditModal');
 
 
 	Route::resource('invoices', InvoiceController::class);
@@ -63,6 +65,12 @@ Route::middleware('auth')->group(function () {
 	Route::get('materials/getbyid/{material}', [MaterialController::class, 'getById'])->name('materials.getById');
 
 	Route::resource('materials', MaterialController::class);
+
+	Route::get('workers/getaddeditmodal/{id?}', [WorkerController::class, 'getAddEditModal'])->name('workers.getAddEditModal');
+	Route::resource('workers', WorkerController::class);
+
+	Route::resource('projects', ProjectController::class);
+
 });
 
 

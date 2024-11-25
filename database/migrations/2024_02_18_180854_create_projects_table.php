@@ -11,14 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoices', function (Blueprint $table) {
-            $table->id();
+        Schema::create('projects', function (Blueprint $table) {
+			$table->id();
 
-			$table->string("name")->comment("nombre del invoice");
-			$table->date('date_issued')->useCurrent()->comment('Fecha emitida');
-			$table->date('date_due')->nullable()->comment('Fecha de entrega');
+			$table->smallInteger('client_id')->unsigned();            
+			$table->foreign('client_id')->references('id')->on('clients');
 
-           	//Datos de creación y modificación
+			$table->string("name")->comment("nombre del proyecto");
+			$table->text("description")->comment("descripcion del proyecto");
+
+			$table->float("cost_real")->nullable()->comment("cuanto costó al final");
+			$table->float("total_real")->nullable()->comment("cuanto se cobró al final");
+
+			$table->float("profit")->nullable()->comment("Total - costo - pago a trabajadores");
+
+			$table->date('initial_date')->nullable()->comment('Fecha de inicio');
+			$table->date('end_date')->nullable()->comment('Fecha de finalizacion');
+
+			//Datos de creación y modificación
 			$table->string('notes', 1024)->nullable()->comment('Notas');
 			$table->boolean('is_active')->default(1)->comment('Muestra si la fila está activa');
 			$table->smallInteger('created_by')->unsigned()->nullable()->comment('Usuario que creó');
@@ -35,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoices');
+        Schema::dropIfExists('projects');
     }
 };

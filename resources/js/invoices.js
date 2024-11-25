@@ -108,7 +108,7 @@ $(function () {
 			simpleAlert("Invalid amount", "The minimum value is 0", "warning")
 			return false
 		}
-		if ($("#unit_price").val() < 1) {
+		if (!$("#unit_price").val() > 0) {
 			simpleAlert("Invalid price", "The minimum value is 0", "warning")
 			return false
 		}
@@ -182,6 +182,7 @@ $(function () {
 	window.saveInvoice = () => {
 		let data = {
 			"materials": getAllRows(),
+			"name": $("#name").val(),
 			"date_due": $("#date_due").val(),
 			"client_id": $("#client_id").val(),
 			"total": getTotalInvoice()
@@ -205,13 +206,16 @@ $(function () {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
 				},
 				success: function(response) {
-					if (type == "edit") {
-						toastr.success(`Invoice has been updated successfully`, 'Invoice updated')
-					}else {
-						toastr.success(`Invoice has been created successfully`, 'Invoice created')
+					if (response.status) {
+						if (type == "edit") {
+							toastr.success(`Invoice has been updated successfully`, 'Invoice updated')
+						}else {
+							toastr.success(`Invoice has been created successfully`, 'Invoice created')
+						}
+						window.location.href = (`${getBaseUrl()}/invoices`)
+					}else{
+						toastr.error("An error occurred", "Error")
 					}
-					window.location.href = (`${getBaseUrl()}/invoices`)
-					
 				},error: function(xhr, textStatus, errorThrown) {
 					$("#error-messages").hide();
 					$("#error-messages").empty().append(getErrorMessages(xhr.responseJSON.errors));

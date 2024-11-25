@@ -46,8 +46,9 @@
         <h2><b>QuinCabinetry</b></h2>
         <div style="float: left; width: 90%">
             <h4>Invoice #{{$invoice->id}}</h4>
-            <p>Invoice Date: {{date("d/m/Y", strtotime($invoice->date_issued))}}</p>
-            <p>Due Date: {{date("d/m/Y", strtotime($invoice->date_due))}}</p>
+			<h4 style="text-align: center">{{$invoice->name}}</h4>
+            <p>Invoice Date: {{date("m/d/Y", strtotime($invoice->date_issued))}}</p>
+            <p>Due Date: {{date("m/d/Y", strtotime($invoice->date_due))}}</p>
         </div>
         <img style="width:60px; margin-top: -50px" src="{{public_path('vendor/adminlte/dist/img/logo-black.png')}}" alt="Logo">
     </div>
@@ -65,10 +66,10 @@
             </div>
             <div style="font-size: 14px">
                 <p><b>BILL TO</b></p>
-                <p>{{$invoice->client->name}}</p>
-                <p>{{$invoice->client->address}}</p>
-                <p>{{$invoice->client->phone}}</p>
-                <p>{{$invoice->client->email}}</p>
+                {{-- <p>{{$invoice->project->client->name}}</p>
+                <p>{{$invoice->project->client->address}}</p>
+                <p>{{$invoice->project->client->phone}}</p>
+                <p>{{$invoice->project->client->email}}</p> --}}
             </div>
         </div>
         <br>

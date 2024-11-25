@@ -1,24 +1,13 @@
 <div class="row">
-	@if (isset($invoice))
-		<x-adminlte-select id="client_id" name="client_id" label="Client" fgroup-class="col-md-4" required>
-			<option disabled>Select a client...</option>
-			@foreach ($clients as $client)
-				<option value="{{$client->id}}" {{$client->id == $invoice->client_id ? "selected" : ""}}>{{$client->name}}</option>
-			@endforeach
-		</x-adminlte-select>
-	@else
-		<x-adminlte-select id="client_id" name="client_id" label="Client" fgroup-class="col-md-4" required>
-			<option disabled selected>Select a client...</option>
-			@foreach ($clients as $client)
-				<option value="{{$client->id}}">{{$client->name}}</option>
-			@endforeach
-		</x-adminlte-select>
-	@endif
-
+	<div class="col-md-4">
+		<label for="date_issued">Name (shown in invoice)</label>
+		<input type="text" class="form-control" name="name" id="name"
+				value="{{ $invoice->name ?? '' }} ">
+	</div>
 	<div class="col-md-4">
 		<label for="date_issued">Date issued</label>
 		<input type="text" class="form-control" name="date_issued" id="date_issued" readonly
-				value="{{isset($invoice) ? date('d/m/Y', strtotime($invoice->date_issued)) : date('d/m/Y', strtotime(now()))}}">
+				value="{{isset($invoice) ? date('m/d/Y', strtotime($invoice->date_issued)) : date('m/d/Y', strtotime(now()))}}">
 	</div>
 	<div class="col-md-4">
 		<label for="date_due">Due date</label>
@@ -27,11 +16,7 @@
 	</div>
 </div>
 
-<div id="client_info">
-	@if (isset($invoice))
-		{!! $clientInfo !!}
-	@endif
-</div>
+
 
 <hr>
 <form id="material-form">

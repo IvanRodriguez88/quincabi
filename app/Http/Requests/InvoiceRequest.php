@@ -22,8 +22,8 @@ class InvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'client_id' => 'required',
             'date_due' => 'required',
+			'name' => 'required',
 		];
     }
 }
