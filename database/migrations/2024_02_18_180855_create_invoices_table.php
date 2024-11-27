@@ -18,6 +18,9 @@ return new class extends Migration
 			$table->date('date_issued')->useCurrent()->comment('Fecha emitida');
 			$table->date('date_due')->nullable()->comment('Fecha de entrega');
 
+            $table->bigInteger('project_id')->nullable()->unsigned();            
+			$table->foreign('project_id')->references('id')->on('projects');
+
            	//Datos de creación y modificación
 			$table->string('notes', 1024)->nullable()->comment('Notas');
 			$table->boolean('is_active')->default(1)->comment('Muestra si la fila está activa');

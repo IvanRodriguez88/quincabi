@@ -10,11 +10,16 @@ class Invoice extends Model
     use HasFactory;
 
     protected $table = 'invoices';
-	protected $fillable = ['name', 'date_issued', 'date_due', 'is_active', 'created_by', 'updated_by'];
+	protected $fillable = ['name', 'project_id',  'date_issued', 'date_due', 'is_active', 'created_by', 'updated_by'];
 
     public function client()
     {
         return $this->belongsTo("App\Models\Client", "client_id", "id");
+    }
+
+	public function project()
+    {
+        return $this->belongsTo("App\Models\Project", "project_id", "id");
     }
 
     public function invoiceRows()

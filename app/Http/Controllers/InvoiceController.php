@@ -11,6 +11,7 @@ use App\Models\Invoice;
 use App\Models\Client;
 use App\Models\Material;
 use App\Models\InvoiceRow;
+use App\Models\Project;
 
 class InvoiceController extends Controller
 {
@@ -41,6 +42,12 @@ class InvoiceController extends Controller
         return view('invoices.create', compact("clients", "lastIdInvoice"));
     }
 
+	public function createInProject(Project $project)
+	{
+        $lastIdInvoice = Invoice::orderBy("id", "desc")->first()->id ?? 0;
+        return view('invoices.create', compact("project", "lastIdInvoice"));
+    }
+
 	public function store(InvoiceRequest $request)
 	{
 		$status = true;
@@ -50,6 +57,7 @@ class InvoiceController extends Controller
             $invoice = Invoice::create([
 				'name' => $request->name,
 				'client_id' => $request->client_id,
+				'project_id' => $request->project_id,
 				'date_issued' => now(),
 				'date_due' => $request->date_due,
 				"created_by" => auth()->id(),
@@ -94,6 +102,7 @@ class InvoiceController extends Controller
             $invoice->update([
 				'name' => $request->name,
 				'client_id' => $request->client_id,
+				'project_id' => $request->project_id,
 				'date_due' => $request->date_due,
 				"updated_by" => auth()->id(),
 				"updated_at" => now()
@@ -133,6 +142,11 @@ class InvoiceController extends Controller
         return view('invoices.edit', compact("invoice"));
     }
 
+	public function editInProject(Invoice $invoice, Project $project)
+	{
+        return view('invoices.edit', compact("invoice", "project"));
+    }
+
 	public function show(Invoice $invoice)
 	{
         return view('invoices.show', compact("invoice"));
@@ -149,39 +163,6 @@ class InvoiceController extends Controller
         }
 
 		return response()->json([$status]);
-	}
-
-	public function showPayments(Invoice $invoice)
-	{
-        $heads = [
-            'ID',
-            'Payment Type',
-			'Amount',
-			'Date',
-			'Actions'
-        ];
-        return view('invoices.payments', compact("invoice", "heads"));
-    }
-
-	public function payInvoice(Invoice $invoice)
-	{
-		$status = true;
-		try {
-			$invoice->update([
-				"is_paid" => 1,
-				"updated_by" => auth()->id(),
-				"updated_at" => now()
-			]);
-        } catch (\Illuminate\Database\QueryException $e) {
-            $status = false;
-        }
-
-		return response()->json([$status, 'invoice' => $invoice]);
-	}
-
-	public function getButtons(Invoice $invoice)
-	{
-		return view("invoices.buttons", compact("invoice"))->render();		
 	}
 
 
@@ -203,11 +184,6 @@ class InvoiceController extends Controller
 
         return view("invoices.material-row", compact("material", "free_material", "amount", "unit_price", "unit_cost", "total", "uniqueId"))->render();
     }
-
-	public function getClientInfo(Client $client)
-	{
-		return view("invoices.client-info", compact("client"))->render();
-	}
 
 	public function pdf(Invoice $invoice)
 	{

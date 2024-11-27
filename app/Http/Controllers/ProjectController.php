@@ -7,6 +7,7 @@ use App\Http\Requests\ProjectRequest;
 
 use App\Models\Project;
 use App\Models\Client;
+use App\Http\Helpers\Modal;
 
 class ProjectController extends Controller
 {
@@ -33,10 +34,28 @@ class ProjectController extends Controller
         return view('projects.index', compact('heads', 'projects', 'routeResource'));
     }
 
-	public function create()
+	private function getInvoicesTable(Project $project = null)
+	{
+		$routeResource = "project-invoices";
+
+        $heads = [
+            'ID',
+            'Name',
+			'Due Date',
+			'Actions'
+        ];
+        return view('projects.invoices-table', compact('heads', 'project', 'routeResource'));
+	}
+
+	public function edit(Project $project)
 	{
         $clients = Client::where("is_active", 1)->get();
-        return view('projects.create', compact("clients"));
+		$client = Client::find($project->client_id);
+		$clientInfo = $this->getClientInfo($client);
+
+		$invoicesTable = $this->getInvoicesTable($project);
+
+        return view('projects.edit', compact("clients", "project", "clientInfo", "invoicesTable"));
     }
 
 	public function store(ProjectRequest $request)
@@ -46,9 +65,11 @@ class ProjectController extends Controller
 		try {
             $project = Project::create([
 				'name' => $request->name,
-				"phone" => $request->phone,
-				"hourly_pay" => $request->hourly_pay,
-				"email" => $request->email,
+				'client_id' => $request->client_id,
+				'initial_date' => $request->initial_date,
+				'end_date' => $request->end_date,
+				'cost_real' => $request->cost_real,
+				'total_real' => $request->total_real,
 				"created_by" => auth()->id(),
 				"updated_by" => auth()->id(),
 			]);
@@ -65,9 +86,13 @@ class ProjectController extends Controller
 		try {
             $project->update([
 				'name' => $request->name,
-				"phone" => $request->phone,
-				"hourly_pay" => $request->hourly_pay,
-				"email" => $request->email,
+				'client_id' => $request->client_id,
+				'initial_date' => $request->initial_date,
+				'end_date' => $request->end_date,
+				'cost_real' => $request->cost_real,
+				'total_real' => $request->total_real,
+				'profit' => $request->total_real - $request->cost_real,
+				'description' => $request->description,
 				"updated_by" => auth()->id(),
 				"updated_at" => now()
 			]);
@@ -88,6 +113,21 @@ class ProjectController extends Controller
         }
 
 		return response()->json([$status]);
+	}
+
+	public function getClientInfo(Client $client)
+	{
+		return view("projects.client-info", compact("client"))->render();
+	}
+
+	public function getAddEditModal($id = null)
+	{
+		$data = [
+			"clients" => Client::where("is_active", 1)->get()
+		];
+		//Solo add
+		$modal = new Modal($this->routeResource.'Modal', 'Add Project', $this->routeResource, $data);
+		return $modal->getModalAddEdit(request()->type);
 	}
 
 }

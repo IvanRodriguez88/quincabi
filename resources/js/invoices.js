@@ -31,21 +31,6 @@ $(function () {
 		});
 	}
 
-	$("#client_id").on("change", function(){
-		$.ajax({
-			url: `${getBaseUrl()}/invoices/getclientinfo/${$(this).val()}`,
-			type: 'GET',
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-			},
-			success: function(response) {
-				$("#client_info").empty().append(response)
-			},error: function(xhr, textStatus, errorThrown) {
-				errorMessage(xhr.status, errorThrown)
-			}
-		});
-	})
-
 	function updateTotal(){
 		const total = $("#amount").val()
 		const price = $("#unit_price").val()
@@ -185,6 +170,7 @@ $(function () {
 			"name": $("#name").val(),
 			"date_due": $("#date_due").val(),
 			"client_id": $("#client_id").val(),
+			"project_id": $("#project_id").val(),
 			"total": getTotalInvoice()
 		}
 
@@ -206,13 +192,19 @@ $(function () {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
 				},
 				success: function(response) {
+					console.log(response);
+					
 					if (response.status) {
 						if (type == "edit") {
 							toastr.success(`Invoice has been updated successfully`, 'Invoice updated')
 						}else {
 							toastr.success(`Invoice has been created successfully`, 'Invoice created')
 						}
-						window.location.href = (`${getBaseUrl()}/invoices`)
+						if (data["project_id"] == null) {
+							window.location.href = (`${getBaseUrl()}/invoices`)
+						}else[
+							window.location.href = (`${getBaseUrl()}/projects/${response.invoice.project_id}/edit`)
+						]
 					}else{
 						toastr.error("An error occurred", "Error")
 					}

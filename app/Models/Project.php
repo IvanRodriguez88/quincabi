@@ -17,4 +17,16 @@ class Project extends Model
         return $this->belongsTo("App\Models\Client", "client_id", "id");
     }
 
+    public function invoices()
+    {
+        return $this->hasMany("App\Models\Invoice");
+    }
+
+    public function workers()
+    {
+        return $this->belongsToMany(Worker::class, 'project_workers')
+                    ->withPivot('hourly_pay', 'worked_hours')
+                    ->withTimestamps();
+    }
+
 }

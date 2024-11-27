@@ -9,6 +9,7 @@
 @section('content')
 	<input type="hidden" id="invoice_id" value="{{$invoice->id}}">
 	<input type="hidden" id="type" value="edit">
+	<input type="hidden" id="project_id" value="{{$project->id ?? 0}}">
 
 	<div id="error-messages">
 
@@ -16,7 +17,12 @@
 	<x-adminlte-card>
 		<div class="card-header">
 			<div class="d-flex justify-content-between">
-				<h3>Edit invoice</h3>
+				@if (isset($project))
+					<h3>Edit invoice for project - <b>{{$project->name}}</b></h3>
+					<a href="{{route('projects.edit', $project->id)}}">Back</a>
+				@else
+					<h3>Edit invoice</h3>
+				@endif
 			</div>
 		</div>
 		<div class="card-body">

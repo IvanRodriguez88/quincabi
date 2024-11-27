@@ -12,6 +12,8 @@ export default defineConfig({
                 'resources/sass/invoices.scss',
 
                 'resources/js/app.js',
+                'resources/js/tinymce.js',
+
 				'resources/js/clients.js',
 				'resources/js/suppliers.js',
 				'resources/js/categories.js',
@@ -19,6 +21,8 @@ export default defineConfig({
                 'resources/js/invoicesIndex.js',
                 'resources/js/payments.js',
                 'resources/js/materials.js',
+                'resources/js/workers.js',
+                'resources/js/projectsIndex.js',
 
 				'resources/js/jquery-sortable.js',
 

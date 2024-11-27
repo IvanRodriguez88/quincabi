@@ -16,6 +16,15 @@
 	</div>
 </div>
 
+@if (isset($project))
+	<div class="card p-2 mt-2">
+		<p class="m-0"><b>Name: </b> {{$project->client->name}}</p>
+		<p class="m-0"><b>Phone: </b> {{$project->client->phone ?? ""}}</p>
+		<p class="m-0"><b>Address: </b> {{$project->client->address ?? ""}}</p>
+		<p class="m-0"><b>Email: </b> {{$project->client->email ?? ""}}</p>
+	</div>
+@endif
+
 
 
 <hr>

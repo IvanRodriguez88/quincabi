@@ -46,7 +46,10 @@ Route::middleware('auth')->group(function () {
 
 	Route::resource('categories', CategoryController::class);
 
-	Route::get('invoices/getclientinfo/{client}', [InvoiceController::class, 'getClientInfo'])->name('invoices.getClientInfo');
+	
+	Route::get('invoices/createInProject/{project}', [InvoiceController::class, 'createInProject'])->name('invoices.createInProject');
+	Route::get('invoices/editInProject/{invoice}/{project}', [InvoiceController::class, 'editInProject'])->name('invoices.editInProject');
+
 	Route::get('invoices/addmaterial', [InvoiceController::class, 'addMaterial'])->name('invoices.addMaterial');
 	Route::put('invoices/payinvoice/{invoice}', [InvoiceController::class, 'payInvoice'])->name('invoices.payInvoice');
 	Route::get('invoices/getbuttons/{invoice}', [InvoiceController::class, 'getButtons'])->name('invoices.getButtons');
@@ -69,6 +72,8 @@ Route::middleware('auth')->group(function () {
 	Route::get('workers/getaddeditmodal/{id?}', [WorkerController::class, 'getAddEditModal'])->name('workers.getAddEditModal');
 	Route::resource('workers', WorkerController::class);
 
+	Route::get('projects/getclientinfo/{client}', [ProjectController::class, 'getClientInfo'])->name('projects.getClientInfo');
+	Route::get('projects/getaddeditmodal/{id?}', [ProjectController::class, 'getAddEditModal'])->name('projects.getAddEditModal');
 	Route::resource('projects', ProjectController::class);
 
 });

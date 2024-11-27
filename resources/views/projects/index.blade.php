@@ -11,21 +11,19 @@
 		<div class="card-header">
 			<div class="d-flex justify-content-between">
 				<h3>Projects</h3>
-				<a href="{{route('projects.create')}}" class="btn btn-default bg-teal px-4">
-					<i class="fas fa-plus" style="margin-top:6px"></i> Add 
-				</a>
+				<x-adminlte-button onclick="getAddEditModal('add')" icon="fas fa-plus" label="Add" data-toggle="modal" class="bg-teal px-4"/>
 			</div>
 		</div>
 		<div class="card-body">
 			<x-adminlte-datatable id="{{$routeResource}}-table" :heads="$heads" striped hoverable with-buttons>
-				@foreach($projects as $proiect)
+				@foreach($projects as $project)
 					<tr>
-						<td>{{ $proiect->id }}</td>
-						<td>{{ $proiect->name }}</td>
-						<td>{{ $proiect->client->name }}</td>
-						<td>{{ $proiect->cost_real }}</td>
-						<td>{{ $proiect->total_real }}</td>
-						<td>{{ $proiect->profit }}</td>
+						<td>{{ $project->id }}</td>
+						<td>{{ $project->name }}</td>
+						<td>{{ $project->client->name }}</td>
+						<td>{{ $project->cost_real }}</td>
+						<td>{{ $project->total_real }}</td>
+						<td>{{ $project->profit }}</td>
 						<td class="text-center">
 							@include("projects.buttons")
 						</td>
@@ -34,6 +32,10 @@
 			</x-adminlte-datatable>
 		</div>
 	</x-adminlte-card>
+
+	<div id="addEditModal">
+		{{-- Aquí se llena el modal por ajax --}}
+	</div>
 @stop
 
 @section('css')
@@ -41,5 +43,5 @@
 @stop
 
 @section('js')
-	@vite(['resources/js/generalFunctions.js', 'resources/js/sweetAlert.js', 'resources/js/invoicesIndex.js'])
+	@vite(['resources/js/generalFunctions.js', 'resources/js/sweetAlert.js', 'resources/js/projectsIndex.js'])
 @stop

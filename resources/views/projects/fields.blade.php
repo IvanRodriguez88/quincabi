@@ -1,5 +1,5 @@
 <div class="row mb-2">
-	<div class="col-md-4">
+	<div class="mb-2 col-md-4">
 		<label for="name">Project name</label>
 		<input type="text" class="form-control" name="name" id="name"
 				value="{{ $project->name ?? '' }} ">
@@ -16,24 +16,52 @@
 	</div>
 </div>
 
-@if (isset($project))
-	<x-adminlte-select id="client_id" name="client_id" label="Client" fgroup-class="col-md-4 p-0" required>
-		<option disabled>Select a client...</option>
-		@foreach ($clients as $client)
-			<option value="{{$client->id}}" {{$client->id == $project->client_id ? "selected" : ""}}>{{$client->name}}</option>
-		@endforeach
-	</x-adminlte-select>
-@else
-	<x-adminlte-select id="client_id" name="client_id" label="Client" fgroup-class="col-md-4 p-0" required>
+<div class="row">
+
+	<x-adminlte-select id="client_id" name="client_id" label="Client" required fgroup-class="col-md-4">
 		<option disabled selected>Select a client...</option>
-		@foreach ($clients as $client)
+		@foreach ($data["clients"] as $client)
 			<option value="{{$client->id}}">{{$client->name}}</option>
 		@endforeach
 	</x-adminlte-select>
-@endif
 
-<div id="client_info">
-	@if (isset($project))
-		{!! $clientInfo !!}
-	@endif
+	
+
+	<x-adminlte-input 
+		value="{{($data->cost_real) ?? ''}}" 
+		name="cost_real" 
+		label="Real Cost" 
+		placeholder="Real cost of the proyect"
+		fgroup-class="col-md-4" 
+		disable-feedback
+		type="number"
+	/>
+	<x-adminlte-input 
+		value="{{($data->total_real) ?? ''}}" 
+		name="total_real" 
+		label="Real total price" 
+		placeholder="Real total price"
+		fgroup-class="col-md-4" 
+		disable-feedback
+		type="number"
+	/>
 </div>
+<div id="client_info">
+</div>	
+
+<script>
+	$("#client_id").on("change", function(){
+        $.ajax({
+            url: `${getBaseUrl()}/projects/getclientinfo/${$(this).val()}`,
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: function(response) {
+                $("#client_info").empty().append(response)
+            },error: function(xhr, textStatus, errorThrown) {
+                errorMessage(xhr.status, errorThrown)
+            }
+        });
+    })
+</script>

@@ -18,7 +18,7 @@ return new class extends Migration
 			$table->foreign('client_id')->references('id')->on('clients');
 
 			$table->string("name")->comment("nombre del proyecto");
-			$table->text("description")->comment("descripcion del proyecto");
+			$table->text("description")->nullable()->comment("descripcion del proyecto");
 
 			$table->float("cost_real")->nullable()->comment("cuanto costó al final");
 			$table->float("total_real")->nullable()->comment("cuanto se cobró al final");
