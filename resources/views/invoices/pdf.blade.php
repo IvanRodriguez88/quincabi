@@ -66,10 +66,10 @@
             </div>
             <div style="font-size: 14px">
                 <p><b>BILL TO</b></p>
-                {{-- <p>{{$invoice->project->client->name}}</p>
-                <p>{{$invoice->project->client->address}}</p>
-                <p>{{$invoice->project->client->phone}}</p>
-                <p>{{$invoice->project->client->email}}</p> --}}
+                <p>{{$invoice->client->name}}</p>
+                <p>{{$invoice->client->address}}</p>
+                <p>{{$invoice->client->phone}}</p>
+                <p>{{$invoice->client->email}}</p>
             </div>
         </div>
         <br>

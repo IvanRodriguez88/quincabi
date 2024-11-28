@@ -47,6 +47,18 @@ class ProjectController extends Controller
         return view('projects.invoices-table', compact('heads', 'project', 'routeResource'));
 	}
 
+	private function getWorkersTable(Project $project = null)
+	{
+		$routeResource = "project-workers";
+
+        $heads = [
+            'ID',
+            'Name',
+			'Actions'
+        ];
+        return view('projects.workers-table', compact('heads', 'project', 'routeResource'));
+	}
+
 	public function edit(Project $project)
 	{
         $clients = Client::where("is_active", 1)->get();
@@ -54,8 +66,9 @@ class ProjectController extends Controller
 		$clientInfo = $this->getClientInfo($client);
 
 		$invoicesTable = $this->getInvoicesTable($project);
+		$workersTable = $this->getWorkersTable($project);
 
-        return view('projects.edit', compact("clients", "project", "clientInfo", "invoicesTable"));
+        return view('projects.edit', compact("clients", "project", "clientInfo", "invoicesTable", "workersTable"));
     }
 
 	public function store(ProjectRequest $request)
@@ -96,6 +109,8 @@ class ProjectController extends Controller
 				"updated_by" => auth()->id(),
 				"updated_at" => now()
 			]);
+
+			$project->invoices()->update(["client_id" => $request->client_id]);
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
         }

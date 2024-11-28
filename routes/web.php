@@ -10,6 +10,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProjectPaymentController;
 use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectWorkerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,7 @@ Route::middleware('auth')->group(function () {
 	
 	Route::get('invoices/createInProject/{project}', [InvoiceController::class, 'createInProject'])->name('invoices.createInProject');
 	Route::get('invoices/editInProject/{invoice}/{project}', [InvoiceController::class, 'editInProject'])->name('invoices.editInProject');
+	Route::get('invoices/showInProject/{invoice}/{project}', [InvoiceController::class, 'showInProject'])->name('invoices.showInProject');
 
 	Route::get('invoices/addmaterial', [InvoiceController::class, 'addMaterial'])->name('invoices.addMaterial');
 	Route::put('invoices/payinvoice/{invoice}', [InvoiceController::class, 'payInvoice'])->name('invoices.payInvoice');
@@ -74,6 +76,12 @@ Route::middleware('auth')->group(function () {
 
 	Route::get('projects/getclientinfo/{client}', [ProjectController::class, 'getClientInfo'])->name('projects.getClientInfo');
 	Route::get('projects/getaddeditmodal/{id?}', [ProjectController::class, 'getAddEditModal'])->name('projects.getAddEditModal');
+	
+	Route::get('project_workers/getaddeditmodal/{id?}', [ProjectWorkerController::class, 'getAddEditModal'])->name('project_workers.getAddEditModal');
+	Route::post('project_workers/store', [ProjectWorkerController::class, 'store'])->name('project_workers.store');
+	Route::put('project_workers/update', [ProjectWorkerController::class, 'update'])->name('project_workers.update');
+
+
 	Route::resource('projects', ProjectController::class);
 
 });

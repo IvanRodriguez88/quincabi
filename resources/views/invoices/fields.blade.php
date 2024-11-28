@@ -17,11 +17,39 @@
 </div>
 
 @if (isset($project))
+	<input type="hidden" name="client_id" id="client_id" value="{{$project->client->id}}">
 	<div class="card p-2 mt-2">
 		<p class="m-0"><b>Name: </b> {{$project->client->name}}</p>
 		<p class="m-0"><b>Phone: </b> {{$project->client->phone ?? ""}}</p>
 		<p class="m-0"><b>Address: </b> {{$project->client->address ?? ""}}</p>
 		<p class="m-0"><b>Email: </b> {{$project->client->email ?? ""}}</p>
+	</div>
+@else
+	<div class="row mt-2">
+		@if (isset($invoice))
+			<x-adminlte-select id="client_id" name="client_id" label="Client" required fgroup-class="col-md-4">
+				<option disabled>Select a client...</option>
+				@foreach ($clients as $client)
+					<option value="{{$client->id}}" {{$invoice->client_id == $client->id ? "selected" : ""}}>{{$client->name}}</option>
+				@endforeach
+			</x-adminlte-select>	
+			<div class="col-8">
+				<div id="client_info">
+					{!! $clientInfo !!}
+				</div>
+			</div>
+		@else
+			<x-adminlte-select id="client_id" name="client_id" label="Client" required fgroup-class="col-md-4">
+				<option disabled selected>Select a client...</option>
+				@foreach ($clients as $client)
+					<option value="{{$client->id}}">{{$client->name}}</option>
+				@endforeach
+			</x-adminlte-select>	
+			<div class="col-8">
+				<div id="client_info">
+				</div>
+			</div>
+		@endif
 	</div>
 @endif
 

@@ -9,6 +9,9 @@
 @section('content')
 	<x-adminlte-card>
 		<div class="card-header pb-3">
+			@if (isset($project))
+				<a href="{{route('projects.edit', $project->id)}}">Back</a>
+			@endif
 			<h2 style="color: #54393a"><b>QuinCabinetry</b></h2>
 			<h4 class="text-center">{{$invoice->name}}</h4>
 			<div class="d-flex justify-content-between">
@@ -29,10 +32,10 @@
 				</div>
 				<div>
 					<p class="mb-0"><b>BILL TO</b></p>
-					{{-- <p class="mb-0">{{$invoice->project->client->name}}</p>
-					<p class="mb-0">{{$invoice->project->client->address}}</p>
-					<p class="mb-0">{{$invoice->project->client->phone}}</p>
-					<p class="mb-0">{{$invoice->project->client->email}}</p> --}}
+					<p class="mb-0">{{$invoice->client->name}}</p>
+					<p class="mb-0">{{$invoice->client->address}}</p>
+					<p class="mb-0">{{$invoice->client->phone}}</p>
+					<p class="mb-0">{{$invoice->client->email}}</p>
 				</div>
 			</div>
 			<hr>

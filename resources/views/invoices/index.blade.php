@@ -22,6 +22,7 @@
 					<tr>
 						<td>{{ $invoice->id }}</td>
 						<td>{{ $invoice->name }}</td>
+						<td>{{ $invoice->client->name }}</td>
 						<td>$ {{ number_format($invoice->getCost(), 2, '.', ',') }}</td>
 						<td>$ {{ number_format($invoice->getTotal(), 2, '.', ',') }}</td>
 						<td>{{ date("m/d/Y", strtotime($invoice->date_issued)) }}</td>

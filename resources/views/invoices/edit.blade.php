@@ -9,7 +9,7 @@
 @section('content')
 	<input type="hidden" id="invoice_id" value="{{$invoice->id}}">
 	<input type="hidden" id="type" value="edit">
-	<input type="hidden" id="project_id" value="{{$project->id ?? 0}}">
+	<input type="hidden" id="project_id" value="{{$project->id ?? ''}}">
 
 	<div id="error-messages">
 

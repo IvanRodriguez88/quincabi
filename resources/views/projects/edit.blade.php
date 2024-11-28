@@ -103,6 +103,9 @@
 					<div class="col-md-6">
 						{!! $invoicesTable !!}
 					</div>
+					<div class="col-md-6">
+						{!! $workersTable !!}
+					</div>
 				</div>
 
 				<div class="d-flex mt-3 justify-content-end">
@@ -112,6 +115,9 @@
 		</div>
 	</x-adminlte-card>
 
+	<div id="addEditModal">
+		{{-- Aquí se llena el modal por ajax --}}
+	</div>
 	
 @stop
 

@@ -26,6 +26,7 @@ class InvoiceController extends Controller
         $heads = [
             'ID',
 			'Name',
+			'Client',
 			'Cost',
 			'Total',
             'Date Issued',
@@ -52,7 +53,6 @@ class InvoiceController extends Controller
 	{
 		$status = true;
 		$invoice = null;
-		
 		try {
             $invoice = Invoice::create([
 				'name' => $request->name,
@@ -63,7 +63,6 @@ class InvoiceController extends Controller
 				"created_by" => auth()->id(),
 				"updated_by" => auth()->id(),
 			]);
-
 
 
 			//Crear items de subcategorias
@@ -90,6 +89,8 @@ class InvoiceController extends Controller
 
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
+			dd($e);
+
         }
 
 		return response()->json(["status" => $status, 'invoice' => $invoice]);
@@ -136,10 +137,17 @@ class InvoiceController extends Controller
 		return response()->json(["status" => $status, 'invoice' => $invoice]);
 	}
 
+	public function getClientInfo(Client $client)
+	{
+		return view("projects.client-info", compact("client"))->render();
+	}
 
 	public function edit(Invoice $invoice)
 	{
-        return view('invoices.edit', compact("invoice"));
+		$clients = Client::where("is_active", 1)->get();
+		$client = Client::find($invoice->client_id);
+		$clientInfo = $this->getClientInfo($client);
+        return view('invoices.edit', compact("invoice", "clients", "clientInfo"));
     }
 
 	public function editInProject(Invoice $invoice, Project $project)
@@ -150,6 +158,11 @@ class InvoiceController extends Controller
 	public function show(Invoice $invoice)
 	{
         return view('invoices.show', compact("invoice"));
+    }
+
+	public function showInProject(Invoice $invoice, Project $project)
+	{
+        return view('invoices.show', compact("invoice", "project"));
     }
 
 	public function destroy(Invoice $invoice)

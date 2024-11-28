@@ -8,7 +8,7 @@
 
 @section('content')
 	<input type="hidden" id="type" value="create">
-	<input type="hidden" id="project_id" value="{{$project->id ?? 0}}">
+	<input type="hidden" id="project_id" value="{{$project->id ?? ''}}">
 
 	<div id="error-messages">
 

@@ -2,7 +2,7 @@
     <a class="btn btn-primary" style="width: 40px" href="{{route('invoices.editInProject', [$invoice->id,  $project->id])}}">
         <i class="fas fa-edit"></i>
     </a>
-    <a class="btn btn-secondary" style="width: 40px" href="{{route('invoices.show', $invoice->id)}}">
+    <a class="btn btn-secondary" style="width: 40px" href="{{route('invoices.showInProject', [$invoice->id,  $project->id])}}">
         <i class="far fa-eye"></i>
     </a>
 

@@ -21,6 +21,9 @@ return new class extends Migration
             $table->bigInteger('project_id')->nullable()->unsigned();            
 			$table->foreign('project_id')->references('id')->on('projects');
 
+            $table->smallInteger('client_id')->unsigned();            
+			$table->foreign('client_id')->references('id')->on('clients');
+
            	//Datos de creación y modificación
 			$table->string('notes', 1024)->nullable()->comment('Notas');
 			$table->boolean('is_active')->default(1)->comment('Muestra si la fila está activa');

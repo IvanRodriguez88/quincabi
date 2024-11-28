@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('project_workers', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->foreignId('worker_id')->constrained()->onDelete('cascade');
+            $table->bigInteger('project_id')->unsigned();            
+			$table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+
+            $table->smallInteger('worker_id')->unsigned();            
+			$table->foreign('worker_id')->references('id')->on('workers')->onDelete('cascade');
 
             $table->float("hourly_pay");
             $table->float("worked_hours")->default(0);

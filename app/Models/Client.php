@@ -12,4 +12,11 @@ class Client extends Model
     protected $table = 'clients';
 	protected $fillable = ['name', 'address', 'phone', 'email', 'notes', 'is_active', 'created_by', 'updated_by', 'created_at', 'updated_at'];
 
+    public function getClientInfo()
+    {
+        $client = $this;
+        return view("projects.client-info", compact("client"))->render();
+    }
+
+
 }

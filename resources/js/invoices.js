@@ -200,7 +200,8 @@ $(function () {
 						}else {
 							toastr.success(`Invoice has been created successfully`, 'Invoice created')
 						}
-						if (data["project_id"] == null) {
+						
+						if (data["project_id"] == "") {
 							window.location.href = (`${getBaseUrl()}/invoices`)
 						}else[
 							window.location.href = (`${getBaseUrl()}/projects/${response.invoice.project_id}/edit`)
@@ -233,6 +234,22 @@ $(function () {
 		}
 		
 	})
+
+	$("#client_id").on("change", function(){
+        $.ajax({
+            url: `${getBaseUrl()}/projects/getclientinfo/${$(this).val()}`,
+            type: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+            success: function(response) {
+                $("#client_info").empty().append(response)
+            },error: function(xhr, textStatus, errorThrown) {
+                errorMessage(xhr.status, errorThrown)
+            }
+        });
+    })
+
 
 	
 })
