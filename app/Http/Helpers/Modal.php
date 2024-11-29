@@ -37,6 +37,7 @@ class Modal
 			'id' => $this->id,
 			'title' => $this->title,
 			'size' => $this->config['size'] ?? "lg",
+            'function' => $this->config['function'] ?? "save()",
 			'action' => $action,
 			'method' => $method,
 			'idEdit' => $idEdit,

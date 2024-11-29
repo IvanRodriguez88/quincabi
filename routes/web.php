@@ -59,8 +59,8 @@ Route::middleware('auth')->group(function () {
 
 	Route::get('invoices/showPayments/{invoice}', [InvoiceController::class, 'showPayments'])->name('invoices.showPayments');
 
-	Route::resource('payments', ProjectPaymentController::class);
-	Route::get('payments/getaddeditmodal/{invoice}/{id?}', [ProjectPaymentController::class, 'getAddEditModal'])->name('payments.getAddEditModal');
+	Route::resource('project_payments', ProjectPaymentController::class);
+	Route::get('project_payments/getaddeditmodal/{project}/{id?}', [ProjectPaymentController::class, 'getAddEditModal'])->name('project_payments.getAddEditModal');
 
 
 	Route::resource('invoices', InvoiceController::class);
@@ -72,14 +72,17 @@ Route::middleware('auth')->group(function () {
 	Route::resource('materials', MaterialController::class);
 
 	Route::get('workers/getaddeditmodal/{id?}', [WorkerController::class, 'getAddEditModal'])->name('workers.getAddEditModal');
+	Route::get('workers/getworker/{worker}', [WorkerController::class, 'getWorker'])->name('workers.getWorker');
+	
 	Route::resource('workers', WorkerController::class);
 
 	Route::get('projects/getclientinfo/{client}', [ProjectController::class, 'getClientInfo'])->name('projects.getClientInfo');
 	Route::get('projects/getaddeditmodal/{id?}', [ProjectController::class, 'getAddEditModal'])->name('projects.getAddEditModal');
 	
-	Route::get('project_workers/getaddeditmodal/{id?}', [ProjectWorkerController::class, 'getAddEditModal'])->name('project_workers.getAddEditModal');
-	Route::post('project_workers/store', [ProjectWorkerController::class, 'store'])->name('project_workers.store');
-	Route::put('project_workers/update', [ProjectWorkerController::class, 'update'])->name('project_workers.update');
+	Route::get('project_workers/getaddeditmodal/{project}/{id?}', [ProjectWorkerController::class, 'getAddEditModal'])->name('project_workers.getAddEditModal');
+	Route::post('project_workers', [ProjectWorkerController::class, 'store'])->name('project_workers.store');
+	Route::put('project_workers/{project_worker}', [ProjectWorkerController::class, 'update'])->name('project_workers.update');
+	Route::delete('project_workers/{project_worker}', [ProjectWorkerController::class, 'destroy'])->name('project_workers.destroy');
 
 
 	Route::resource('projects', ProjectController::class);

@@ -52,11 +52,28 @@ class ProjectController extends Controller
 		$routeResource = "project-workers";
 
         $heads = [
-            'ID',
+			'ID',
             'Name',
+			'Hourly Pay',
+			'Worked Hours',
+			'Total',
 			'Actions'
         ];
         return view('projects.workers-table', compact('heads', 'project', 'routeResource'));
+	}
+
+	private function getPaymentsTable(Project $project = null)
+	{
+		$routeResource = "project-payments";
+
+        $heads = [
+			'ID',
+			'Payment Type',
+			'Amount',
+			'Payment date',
+			'Actions'
+        ];
+        return view('projects.payments-table', compact('heads', 'project', 'routeResource'));
 	}
 
 	public function edit(Project $project)
@@ -67,8 +84,9 @@ class ProjectController extends Controller
 
 		$invoicesTable = $this->getInvoicesTable($project);
 		$workersTable = $this->getWorkersTable($project);
+		$paymentsTable = $this->getPaymentsTable($project);
 
-        return view('projects.edit', compact("clients", "project", "clientInfo", "invoicesTable", "workersTable"));
+        return view('projects.edit', compact("clients", "project", "clientInfo", "invoicesTable", "workersTable", "paymentsTable"));
     }
 
 	public function store(ProjectRequest $request)

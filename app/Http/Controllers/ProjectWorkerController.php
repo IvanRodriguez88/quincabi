@@ -3,66 +3,80 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ProjectWorkerRequest;
 
+use App\Models\ProjectWorker;
+use App\Models\Project;
 use App\Models\Worker;
+
 use App\Http\Helpers\Modal;
 
 class ProjectWorkerController extends Controller
 {
 	protected $routeResource = 'project_workers';
 
-	public function store(WorkerRequest $request)
+	public function store(ProjectWorkerRequest $request)
 	{
 		$status = true;
-		$worker = null;
 		try {
-            $worker = Worker::create([
-				'name' => $request->name,
-				"phone" => $request->phone,
+			$project_worker = ProjectWorker::create([
+				"project_id" => $request->project_id,
+				"worker_id" => $request->worker_id,
 				"hourly_pay" => $request->hourly_pay,
-				"email" => $request->email,
-				"created_by" => auth()->id(),
-				"updated_by" => auth()->id(),
+				"worked_hours" => $request->worked_hours,
 			]);
+			$project_worker->load('worker');
+
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
         }
 
-		return response()->json([$status, 'worker' => $worker]);
+		return response()->json([$status, 'project_worker' => $project_worker]);
 	}
 
-	public function update(WorkerRequest $request, Worker $worker)
+	public function update(ProjectWorkerRequest $request, ProjectWorker $project_worker)
 	{
 		$status = true;
 		try {
-            $worker->update([
-				'name' => $request->name,
-				"phone" => $request->phone,
+            $project_worker->update([
+				"worker_id" => $request->worker_id,
 				"hourly_pay" => $request->hourly_pay,
-				"email" => $request->email,
-				"updated_by" => auth()->id(),
-				"updated_at" => now()
+				"worked_hours" => $request->worked_hours,
 			]);
+			$project_worker->load('worker');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $status = false;
+        }
+		return response()->json([$status, 'project_worker' => $project_worker]);
+	}
+
+	public function destroy(ProjectWorker $project_worker)
+	{
+		$status = true;
+        try {
+            $project_worker->delete();
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
         }
 
-		return response()->json([$status, 'worker' => $worker]);
+		return response()->json([$status]);
 	}
 
-    public function getAddEditModal($id = null)
+    public function getAddEditModal(Project $project, $id = null)
 	{
 		if ($id !== 'undefined'){
-			$project = Project::find($id);
+			$project_worker = ProjectWorker::find($id);
             $data = [
-				"workers" => Worker::where("is_active", 1)->get()
+				"workers" => Worker::where("is_active", 1)->get(),
+				"project" => $project,
+				"project_worker" => $project_worker
             ];
-
-			$modal = new Modal($this->routeResource.'Modal', 'Edit worker', $this->routeResource, $data, ['size' => 'xl']);
+			$modal = new Modal($this->routeResource.'Modal', 'Edit worker', $this->routeResource, $data);
 			return $modal->getModalAddEdit(request()->type, $id);
 		}else{
 			$data = [
-				"workers" => Worker::where("is_active", 1)->get()
+				"workers" => Worker::where("is_active", 1)->get(),
+				"project" => $project
 			];
 			$modal = new Modal($this->routeResource.'Modal', 'Add Worker', $this->routeResource, $data);
 			return $modal->getModalAddEdit(request()->type);

@@ -24,7 +24,7 @@
 
 			<x-slot name="footerSlot">
 				<x-adminlte-button id="closeModal" theme="danger" class="mr-auto" label="Dismiss" data-dismiss="modal"/>
-				<x-adminlte-button onclick="save()"  theme="success" label="Accept"/>
+				<x-adminlte-button onclick="{{$function}}"  theme="success" label="Accept"/>
 			</x-slot>
 		</form>
 	</div>

@@ -8,6 +8,7 @@
 
 @section('content')
 	<input type="hidden" id="type" value="create">
+	<input type="hidden" id="project_id" value="{{$project->id}}">
 
 	<div id="error-messages">
 
@@ -105,6 +106,11 @@
 					</div>
 					<div class="col-md-6">
 						{!! $workersTable !!}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						{!! $paymentsTable !!}
 					</div>
 				</div>
 

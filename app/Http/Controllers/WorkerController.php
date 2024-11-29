@@ -96,4 +96,9 @@ class WorkerController extends Controller
 		}
 
 	}
+
+	public function getWorker(Worker $worker)
+	{
+		return response()->json($worker);
+	}
 }

@@ -25,8 +25,25 @@ class Project extends Model
     public function workers()
     {
         return $this->belongsToMany(Worker::class, 'project_workers')
-                    ->withPivot('hourly_pay', 'worked_hours')
+                    ->withPivot('id', 'hourly_pay', 'worked_hours')
                     ->withTimestamps();
     }
+
+    public function payments()
+    {
+        return $this->hasMany("App\Models\ProjectPayment");
+    }
+
+    public function getTotalPayments()
+    {
+        $total = 0;
+		foreach ($this->payments as $payment) {
+			$total += $payment->amount;
+		};
+
+		return $total;
+    }
+
+
 
 }
