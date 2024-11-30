@@ -84,7 +84,8 @@ Route::middleware('auth')->group(function () {
 	Route::put('project_workers/{project_worker}', [ProjectWorkerController::class, 'update'])->name('project_workers.update');
 	Route::delete('project_workers/{project_worker}', [ProjectWorkerController::class, 'destroy'])->name('project_workers.destroy');
 
-
+	Route::post('projects/uploadImage/{project}', [ProjectController::class, 'uploadImage'])->name('projects.uploadImage');
+	Route::delete('projects/deleteImage/{project_picture}', [ProjectController::class, 'deleteImage'])->name('projects.deleteImage');
 	Route::resource('projects', ProjectController::class);
 
 });

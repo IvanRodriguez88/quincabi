@@ -35,57 +35,68 @@ class ProjectPaymentController extends Controller
             $status = false;
         }
 
-		return response()->json([$status, 'payment' => $payment->load(["projectPaymentType"])]);
+		$project = Project::find($payment->project_id);
+		$data = [
+			$status,
+			'payment' => $payment->load(["projectPaymentType"]),
+			'project' => $project
+		];
+		return response()->json($data);
 	}
 
-	public function update(ProjectPaymentRequest $request, ProyectPayment $payment)
+	public function update(ProjectPaymentRequest $request, ProjectPayment $project_payment)
 	{
+
 		$status = true;
-		$invoice = Invoice::find($request->invoice_id);
 		try {
-            $payment->update([
-				"invoice_id" => $request->invoice_id,
-				'invoice_payment_type_id' => $request->invoice_payment_type_id,
+            $project_payment->update([
+				"project_id" => $request->project_id,
+				'project_payment_type_id' => $request->project_payment_type_id,
 				"amount" => $request->amount,
 				"date" => $request->date,
 				"updated_by" => auth()->id(),
 				"updated_at" => now()
 			]);
-			if ($invoice->getTotalPayments() >= $invoice->getTotal()) {
-				$invoice->update(["is_paid" => 1]);
-			}
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
         }
 
-		return response()->json([$status, 'payment' => $payment->load(["projectPaymentType"])]);
+		$project = Project::find($project_payment->project_id);
+
+		$data = [
+			$status,
+			'payment' => $project_payment->load(["projectPaymentType"]),
+			'project' => $project
+		];
+		return response()->json($data);
 	}
 
-	public function destroy(ProyectPayment $payment)
+	public function destroy(ProjectPayment $project_payment)
 	{
+		$project = Project::find($project_payment->project_id);
 		$status = true;
         try {
-            $payment->delete();
+            $project_payment->delete();
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
         }
 
-		return response()->json([$status]);
+		return response()->json([$status, "project" => $project]);
 	}
 
     public function getAddEditModal(Project $project, $id = null)
 	{
 		if ($id !== 'undefined'){
-			$payment = ProyectPayment::find($id);
+			$payment = ProjectPayment::find($id);
 			$paymentTypes = ProjectPaymentType::all();
-			$modal = new Modal($this->routeResource.'Modal', 'Edit ProyectPayment', $this->routeResource, 
+			$modal = new Modal($this->routeResource.'Modal', 'Edit Project Payment', $this->routeResource, 
 				["project" => $project, "payment" => $payment, "paymentTypes" => $paymentTypes],
 				["function" => "savePayment()"]
 			);
 			return $modal->getModalAddEdit(request()->type, $id);
 		}else{
 			$paymentTypes = ProjectPaymentType::all();
-			$modal = new Modal($this->routeResource.'Modal', 'Add ProyectPayment', $this->routeResource, 
+			$modal = new Modal($this->routeResource.'Modal', 'Add Project Payment', $this->routeResource, 
 				["project" => $project, "paymentTypes" => $paymentTypes],
 				["function" => "savePayment()"]
 			);

@@ -11,6 +11,7 @@ class Project extends Model
 
     protected $table = 'projects';
 	protected $fillable = ['client_id', 'name', 'description', 'initial_date', 'end_date', 'cost_real', 'total_real', 'profit', 'is_active', 'created_by', 'updated_by'];
+    protected $appends = ['total_payments'];
 
     public function client()
     {
@@ -34,15 +35,16 @@ class Project extends Model
         return $this->hasMany("App\Models\ProjectPayment");
     }
 
-    public function getTotalPayments()
+    public function projectPictures()
     {
-        $total = 0;
-		foreach ($this->payments as $payment) {
-			$total += $payment->amount;
-		};
-
-		return $total;
+        return $this->hasMany("App\Models\ProjectPicture");
     }
+
+     // Accessor para total_payments
+     public function getTotalPaymentsAttribute()
+     {
+         return $this->payments->sum('amount');
+     }
 
 
 

@@ -21,6 +21,13 @@
 				@foreach($invoices as $invoice)
 					<tr>
 						<td>{{ $invoice->id }}</td>
+						@if ($invoice->project)
+							<td>
+								<a href="{{route('projects.edit', $invoice->project->id)}}">{{ $invoice->project->name}}</a>
+							</td>
+						@else
+							<td>Without project</td>
+						@endif
 						<td>{{ $invoice->name }}</td>
 						<td>{{ $invoice->client->name }}</td>
 						<td>$ {{ number_format($invoice->getCost(), 2, '.', ',') }}</td>

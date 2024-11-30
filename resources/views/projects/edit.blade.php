@@ -20,7 +20,7 @@
 			</div>
 		</div>
 		<div class="card-body">
-			<form id="project-form" action="{{route('projects.update', $project->id)}}" method="POST">
+			<form id="project-form" action="{{route('projects.update', $project->id)}}" method="POST" enctype="multipart/form-data">
 				@method('put')
 				@csrf
 				<div class="row">
@@ -101,16 +101,32 @@
 
 				<hr>
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-12">
 						{!! $invoicesTable !!}
 					</div>
 					<div class="col-md-6">
 						{!! $workersTable !!}
 					</div>
-				</div>
-				<div class="row">
 					<div class="col-md-6">
 						{!! $paymentsTable !!}
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-6">
+						<h3>Project Images</h3>
+						<x-adminlte-input-file id="upload-image" name="images[]" label="Cargar imagen de Proyecto" placeholder="Seleccionar imagen" legend="Seleccionar" igroup-size="md" accept="image/*" />
+						<div id="image-preview" style="display: flex; flex-wrap: wrap;">
+
+						@foreach ($project->projectPictures as $picture)
+							@include("projects.image", [
+								"src" => $picture->path,
+								"filename" => $picture->filename(),
+								"picture_id" => $picture->id
+							])
+						@endforeach
+
+						</div>
 					</div>
 				</div>
 
@@ -130,6 +146,7 @@
 @section('css')
 	<link rel="stylesheet" href="{{asset('plugins/autocomplete/css/autoComplete.02.css')}}">
 	@vite(['resources/css/app.css'])
+	@vite(['resources/sass/projects.scss'])
 
 @stop
 

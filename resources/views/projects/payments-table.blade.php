@@ -8,7 +8,7 @@
     <div class="card-body">
 
         <p class="mb-1">Total:</b></p>
-        <p class="mb-1">Total payments: <b>${{number_format($project->getTotalPayments(), 2, '.', ',')}}</b></p>
+        <p class="mb-1">Total payments: <b id="total_payment">${{number_format($project->total_payments, 2, '.', ',')}}</b></p>
         <p class="mb-1">Rest: </b></p>
 
         <hr>
@@ -23,7 +23,7 @@
                         <a class="btn btn-primary" onclick="getAddEditModalPayment('edit', {{$project->id}}, {{$payment->id}})">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a class="btn btn-danger" onclick="showDelete({{$payment->id}}, '{{$payment->amount}}')">
+                        <a class="btn btn-danger" onclick="showDeletePayment({{$payment->id}}, '{{$payment->amount}}')">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>

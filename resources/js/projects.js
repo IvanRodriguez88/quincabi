@@ -175,6 +175,17 @@ $(function () {
         </div>`
 	}
 
+    function getButtonsPayments(project_payment_id, amount) {
+		return `<div class="text-center">
+            <a class="btn btn-primary" onclick="getAddEditModalPayment('edit', ${$("#project_id").val()} ,${project_payment_id})">
+                <i class="fas fa-edit"></i>
+            </a>
+            <a class="btn btn-danger" onclick="showDeletePayment(${project_payment_id}, '${amount}')">
+                <i class="fas fa-trash"></i>
+            </a>
+        </div>`
+	}
+
 
 
     //Payments
@@ -194,7 +205,7 @@ $(function () {
                 
                 const rowIndex = dtPayments.column(0).data().indexOf(response.payment.id.toString());
 				$("#closeModal").trigger('click')
-				console.log(response);
+                $("#total_payment").text(`$${formatNumber(response.project.total_payments)}`)
                 
 				if (method == "POST") {
 					let row = [
@@ -202,7 +213,7 @@ $(function () {
 						response.payment.project_payment_type.name,
 						"$" + formatNumber(response.payment.amount),
 						formatDate(response.payment.date),
-						getButtons(response.payment.id, response.payment.amount),
+						getButtonsPayments(response.payment.id, response.payment.amount),
 					]
 					dtPayments.row.add(row).draw(false)
 					toastr.success(`The payment has been created successfully`, 'Payment created')
@@ -224,6 +235,104 @@ $(function () {
             },
         });
 	}
+
+    window.showDeletePayment = (project_payment_id, payment_amount) => {
+		const confirm = alertYesNo('Delete payment',`Are you sure to delete the payment for $${formatNumber(payment_amount)}?`);
+		confirm.then((result) => {
+			if (result) {
+				$.ajax({
+					type: "DELETE",
+					url: `${getBaseUrl()}/project_payments/${project_payment_id}`,
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function (response) {
+						const rowIndex = dtPayments.column(0).data().indexOf(project_payment_id.toString());
+                        $("#total_payment").text(`$${formatNumber(response.project.total_payments)}`)
+						dtPayments.row(rowIndex).remove().draw(false)
+						toastr.success(`The payment has been deleted successfully`, 'Client deleted')
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+				});
+			}
+		})
+	}
+    
+    $(document).on('change', '#upload-image', function (e) {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('image', file);
+    
+        $.ajax({
+            url: `${getBaseUrl()}/projects/uploadImage/${$("#project_id").val()}`,
+            type: 'POST',
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            contentType: false,  // Esto es importante para enviar archivos
+            processData: false,  // Necesario para que jQuery no intente procesar los datos
+            success: function(data) {
+                // Mostrar vista previa con botón de eliminación
+                const img = $('<img>', {
+                    src: data.url, // URL de la imagen desde el servidor
+                    css: {
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover', // Ajusta la imagen dentro del cuadro
+                    }
+                });
+
+                const previewContainer = $('<div>', {
+                    class: 'image-preview-container position-relative d-inline-block project-picture',
+                });
+                previewContainer.attr('data-filename', data.name);
+                previewContainer.attr('data-picture_id', data.picture_id);
+                
+                const deleteButton = $('<a>', {
+                    class: 'delete-image-btn btn btn-danger btn-sm position-absolute',
+                    text: 'X',
+                    click: function () {
+                        deleteProjectPicture(data.name, data.picture_id)
+                    }
+                });
+
+                // Ensamblar y agregar al DOM
+                previewContainer.append(img).append(deleteButton);
+                $('#image-preview').append(previewContainer);
+            },
+            error: function(error) {
+                console.error('Error al subir la imagen:', error);
+            }
+        });
+    });
+
+    window.deleteProjectPicture = (filename, picture_id) => {
+        const confirm = alertYesNo('Delete image',`Are you sure to delete it?`);
+        confirm.then((result) => {
+            if (result) {
+                $.ajax({
+                    url: `${getBaseUrl()}/projects/deleteImage/${picture_id}`,
+                    method: 'DELETE',
+                    data: { name: filename },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function () {
+                        $('.image-preview-container').filter(`[data-picture_id="${picture_id}"]`).remove();
+                    },
+                    error: function () {
+                        alert('Error al eliminar la imagen.');
+                    }
+                });
+            }
+        })
+    }
+
+
+    
 
 
 })

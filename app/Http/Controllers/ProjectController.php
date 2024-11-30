@@ -7,7 +7,12 @@ use App\Http\Requests\ProjectRequest;
 
 use App\Models\Project;
 use App\Models\Client;
+
+use App\Models\ProjectPicture;
+use App\Models\ProjectTicket;
+
 use App\Http\Helpers\Modal;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -161,6 +166,54 @@ class ProjectController extends Controller
 		//Solo add
 		$modal = new Modal($this->routeResource.'Modal', 'Add Project', $this->routeResource, $data);
 		return $modal->getModalAddEdit(request()->type);
+	}
+
+	public function uploadImage(Request $request, Project $project)
+    {
+		try {
+			$request->validate([
+				'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+			]);
+		
+			// Subir la imagen
+			$image = $request->file('image');
+			$folderPath = 'projects/' . $project->id;
+			$path = $image->store($folderPath, 'public');
+			$url = Storage::url($path);
+		
+			// Obtener el nombre del archivo
+			$imageName = basename($path);
+		
+			// Registrar en la base de datos
+			$projectPicture = ProjectPicture::create([
+				"project_id" => $project->id,
+				"path" => $url
+			]);
+
+			// Responder con la URL y el nombre del archivo
+			return response()->json([
+				'url' => $url,
+				'name' => $imageName,
+				'picture_id' => $projectPicture->id
+			]);
+		
+		} catch (\Exception $e) {
+			return response()->json([
+				'error' => 'Ocurrió un error al procesar la solicitud.',
+			], 500);
+		}
+    }
+
+	public function deleteImage(Request $request, ProjectPicture $project_picture)
+	{
+		$filePath = 'projects/'.$project_picture->project->id.'/'. $request->input('name'); // Ruta relativa
+		if (Storage::disk('public')->exists($filePath)) {
+			Storage::disk('public')->delete($filePath);
+			$project_picture->delete();
+			return response()->json(['message' => 'Image deleted successfully']);
+		}
+
+		return response()->json(['message' => 'Image not found'], 404);
 	}
 
 }

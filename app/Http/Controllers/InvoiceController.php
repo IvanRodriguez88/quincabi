@@ -25,6 +25,7 @@ class InvoiceController extends Controller
 
         $heads = [
             'ID',
+			'Project',
 			'Name',
 			'Client',
 			'Cost',

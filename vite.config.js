@@ -10,6 +10,7 @@ export default defineConfig({
 				'resources/css/app.css',
 				'resources/css/categories.css',
                 'resources/sass/invoices.scss',
+                'resources/sass/projects.scss',
 
                 'resources/js/app.js',
                 'resources/js/tinymce.js',
