@@ -8,6 +8,16 @@
     position: relative;
 }
 
+.project-ticket {
+    width: 200px;
+    height: 300px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
 .delete-image-btn {
     top: 5px;
     right: 5px;
@@ -19,20 +29,6 @@
     justify-content: center;
     font-size: 12px;
     padding: 0;
-}
-
-.custom-file-upload {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    margin: 5px;
-}
-
-.custom-file-upload:hover {
-    background-color: #45a049;
 }
 
 .image-upload-wrapper {

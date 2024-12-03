@@ -16,6 +16,7 @@
 	</div>
 </div>
 
+
 @if (isset($project))
 	<input type="hidden" name="client_id" id="client_id" value="{{$project->client->id}}">
 	<div class="card p-2 mt-2">
@@ -52,7 +53,6 @@
 		@endif
 	</div>
 @endif
-
 
 
 <hr>

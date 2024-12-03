@@ -58,12 +58,15 @@ Route::middleware('auth')->group(function () {
 	Route::get('invoices/pdf/{invoice}', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
 
 	Route::get('invoices/showPayments/{invoice}', [InvoiceController::class, 'showPayments'])->name('invoices.showPayments');
+	Route::post('invoices/copyInvoice/{invoice}', [InvoiceController::class, 'copyInvoice'])->name('invoices.copyInvoice');
+
+	Route::resource('invoices', InvoiceController::class);
+
 
 	Route::resource('project_payments', ProjectPaymentController::class);
 	Route::get('project_payments/getaddeditmodal/{project}/{id?}', [ProjectPaymentController::class, 'getAddEditModal'])->name('project_payments.getAddEditModal');
 
 
-	Route::resource('invoices', InvoiceController::class);
 
 	Route::get('materials/getdataautocomplete', [MaterialController::class, 'getDataAutocomplete'])->name('materials.getDataAutocomplete');
 	Route::get('materials/getaddeditmodal/{id?}', [MaterialController::class, 'getAddEditModal'])->name('materials.getAddEditModal');
@@ -86,6 +89,10 @@ Route::middleware('auth')->group(function () {
 
 	Route::post('projects/uploadImage/{project}', [ProjectController::class, 'uploadImage'])->name('projects.uploadImage');
 	Route::delete('projects/deleteImage/{project_picture}', [ProjectController::class, 'deleteImage'])->name('projects.deleteImage');
+	
+	Route::post('projects/uploadTicket/{project}', [ProjectController::class, 'uploadTicket'])->name('projects.uploadTicket');
+	Route::delete('projects/deleteTicket/{project_ticket}', [ProjectController::class, 'deleteTicket'])->name('projects.deleteTicket');
+
 	Route::resource('projects', ProjectController::class);
 
 });

@@ -171,6 +171,7 @@ $(function () {
 			"date_due": $("#date_due").val(),
 			"client_id": $("#client_id").val(),
 			"project_id": $("#project_id").val(),
+			"in_use": $("#in_use").is(':checked') ? 1 : 0,
 			"total": getTotalInvoice()
 		}
 

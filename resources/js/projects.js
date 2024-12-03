@@ -103,6 +103,10 @@ $(function () {
 						const rowIndex = dtPW.column(0).data().indexOf(project_worker_id.toString());
                         
 						dtPW.row(rowIndex).remove().draw(false)
+						$("#total_worked_hours").text(response.project.total_worked_hours)
+						$("#total_payments_workers").text(`$${formatNumber(response.project.total_payments_workers)}`)
+						$("#average_payment_per_hour").text(`$${formatNumber(response.project.average_payment_per_hour)}`)
+
 						toastr.success(`The worker has been deleted successfully`, 'Client deleted')
 					},
 					error: function (xhr, textStatus, errorThrown) {
@@ -117,7 +121,6 @@ $(function () {
 		const formProjectWorkers = $("#project_workersModal-form")
 		const action = formProjectWorkers.attr('action')
 		const method = $("#addEditModal").find('input[name="_method"]').val().toUpperCase()
-        console.log(action);
         
         $.ajax({
             type: method,
@@ -127,19 +130,19 @@ $(function () {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
             success: function (response) {
-                
                 const rowIndex = dtPW.column(0).data().indexOf(response.project_worker.id.toString());
-                console.log(rowIndex);
 				$("#closeModal").trigger('click')
+				$("#total_worked_hours").text(response.project.total_worked_hours)
+				$("#total_payments_workers").text(`$${formatNumber(response.project.total_payments_workers)}`)
+				$("#average_payment_per_hour").text(`$${formatNumber(response.project.average_payment_per_hour)}`)
 
-                
 				
 				if (method == "POST") {
 					let row = [
                         response.project_worker.id.toString(),
 						response.project_worker.worker.name,
                         `$ ${formatNumber(response.project_worker.hourly_pay)}`,
-						`$ ${formatNumber(response.project_worker.worked_hours)}`,
+						response.project_worker.worked_hours,
                         `$ ${formatNumber(response.project_worker.hourly_pay * response.project_worker.worked_hours)}`,
 						getButtons(response.project_worker.id, response.project_worker.worker.name),
 					]
@@ -150,7 +153,7 @@ $(function () {
 					let rowData = dtPW.row(rowIndex).data();
 					rowData[1] = response.project_worker.worker.name;
 					rowData[2] = `$ ${formatNumber(response.project_worker.hourly_pay)}`;
-					rowData[3] = `$ ${formatNumber(response.project_worker.worked_hours)}`;
+					rowData[3] = response.project_worker.worked_hours;
                     rowData[4] = `$ ${formatNumber(response.project_worker.hourly_pay * response.project_worker.worked_hours)}`;
 					dtPW.row(rowIndex).data(rowData).draw(false);
 					toastr.success(`Worker has been updated successfully`, 'Worker updated')
@@ -206,7 +209,8 @@ $(function () {
                 const rowIndex = dtPayments.column(0).data().indexOf(response.payment.id.toString());
 				$("#closeModal").trigger('click')
                 $("#total_payment").text(`$${formatNumber(response.project.total_payments)}`)
-                
+				$("#rest_payments").text(`$${formatNumber(response.project.rest_payments)}`)
+
 				if (method == "POST") {
 					let row = [
 						response.payment.id.toString(),
@@ -249,6 +253,8 @@ $(function () {
 					success: function (response) {
 						const rowIndex = dtPayments.column(0).data().indexOf(project_payment_id.toString());
                         $("#total_payment").text(`$${formatNumber(response.project.total_payments)}`)
+						$("#rest_payments").text(`$${formatNumber(response.project.rest_payments)}`)
+						
 						dtPayments.row(rowIndex).remove().draw(false)
 						toastr.success(`The payment has been deleted successfully`, 'Client deleted')
 					},
@@ -260,7 +266,7 @@ $(function () {
 		})
 	}
     
-    $(document).on('change', '#upload-image', function (e) {
+    $(document).on('change', '#upload-project-picture', function (e) {
         const file = e.target.files[0];
         const formData = new FormData();
         formData.append('image', file);
@@ -303,9 +309,9 @@ $(function () {
                 previewContainer.append(img).append(deleteButton);
                 $('#image-preview').append(previewContainer);
             },
-            error: function(error) {
-                console.error('Error al subir la imagen:', error);
-            }
+           	error: function (xhr, textStatus, errorThrown) {
+				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+			},
         });
     });
 
@@ -323,13 +329,104 @@ $(function () {
                     success: function () {
                         $('.image-preview-container').filter(`[data-picture_id="${picture_id}"]`).remove();
                     },
-                    error: function () {
-                        alert('Error al eliminar la imagen.');
-                    }
+                    error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
                 });
             }
         })
     }
+
+	$(document).on('change', '#upload-project-ticket', function (e) {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('image', file);
+		
+        $.ajax({
+            url: `${getBaseUrl()}/projects/uploadTicket/${$("#project_id").val()}`,
+            type: 'POST',
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            contentType: false,  // Esto es importante para enviar archivos
+            processData: false,  // Necesario para que jQuery no intente procesar los datos
+            success: function(data) {
+                // Mostrar vista previa con botón de eliminación
+                const img = $('<img>', {
+                    src: data.url, // URL de la imagen desde el servidor
+                    css: {
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover', // Ajusta la imagen dentro del cuadro
+                    }
+                });
+
+                const previewContainer = $('<div>', {
+                    class: 'ticket-preview-container position-relative d-inline-block project-ticket',
+                });
+                previewContainer.attr('data-filename', data.name);
+                previewContainer.attr('data-ticket_id', data.ticket_id);
+                
+                const deleteButton = $('<a>', {
+                    class: 'delete-image-btn btn btn-danger btn-sm position-absolute',
+                    text: 'X',
+                    click: function () {
+                        deleteProjectTicket(data.name, data.ticket_id)
+                    }
+                });
+
+                // Ensamblar y agregar al DOM
+                previewContainer.append(img).append(deleteButton);
+                $('#image-ticket-preview').append(previewContainer);
+            },
+           	error: function (xhr, textStatus, errorThrown) {
+				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+			},
+        });
+    });
+
+    window.deleteProjectTicket = (filename, ticket_id) => {
+        const confirm = alertYesNo('Delete ticket',`Are you sure to delete it?`);
+        confirm.then((result) => {
+            if (result) {
+                $.ajax({
+                    url: `${getBaseUrl()}/projects/deleteTicket/${ticket_id}`,
+                    method: 'DELETE',
+                    data: { name: filename },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function () {
+                        $('.ticket-preview-container').filter(`[data-ticket_id="${ticket_id}"]`).remove();
+                    },
+                   error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+                });
+            }
+        })
+    }
+
+	window.copyInvoice = (invoice_id) => {
+		const confirm = alertYesNo('Copy invoice',`Are you sure to copy the invoice #${invoice_id}`);
+        confirm.then((result) => {
+            if (result) {
+                $.ajax({
+                    url: `${getBaseUrl()}/invoices/copyInvoice/${invoice_id}`,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                    },
+                   error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+                });
+            }
+        })
+	}
 
 
     

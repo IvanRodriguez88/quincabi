@@ -24,6 +24,8 @@ return new class extends Migration
             $table->smallInteger('client_id')->unsigned();            
 			$table->foreign('client_id')->references('id')->on('clients');
 
+			$table->boolean("in_use")->comment("Para tenerla en cuenta en precios y costos del proyecto");
+
            	//Datos de creación y modificación
 			$table->string('notes', 1024)->nullable()->comment('Notas');
 			$table->boolean('is_active')->default(1)->comment('Muestra si la fila está activa');

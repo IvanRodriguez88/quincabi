@@ -32,6 +32,7 @@ class InvoiceController extends Controller
 			'Total',
             'Date Issued',
             'Due Date',
+			'Using',
 			'Actions'
         ];
         return view('invoices.index', compact('heads', 'invoices', 'routeResource'));
@@ -55,16 +56,18 @@ class InvoiceController extends Controller
 		$status = true;
 		$invoice = null;
 		try {
-            $invoice = Invoice::create([
+			$params = [
 				'name' => $request->name,
+				'in_use' => $request->in_use,
 				'client_id' => $request->client_id,
 				'project_id' => $request->project_id,
 				'date_issued' => now(),
 				'date_due' => $request->date_due,
 				"created_by" => auth()->id(),
 				"updated_by" => auth()->id(),
-			]);
+			];
 
+            $invoice = Invoice::create($params);
 
 			//Crear items de subcategorias
 			foreach ($request->materials as $key => $row) {
@@ -90,8 +93,6 @@ class InvoiceController extends Controller
 
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
-			dd($e);
-
         }
 
 		return response()->json(["status" => $status, 'invoice' => $invoice]);
@@ -103,6 +104,7 @@ class InvoiceController extends Controller
 		try {
             $invoice->update([
 				'name' => $request->name,
+				'in_use' => $request->in_use,
 				'client_id' => $request->client_id,
 				'project_id' => $request->project_id,
 				'date_due' => $request->date_due,
@@ -206,5 +208,30 @@ class InvoiceController extends Controller
 		];
 		$pdf = Pdf::loadView('invoices.pdf', $data);
     	return $pdf->stream();
+	}
+
+	public function copyInvoice(Invoice $invoice)
+	{
+		$status = true;
+        try {
+			$newInvoice = $invoice->replicate();
+			$newInvoice->name = $newInvoice->name."-copy";
+			$newInvoice->created_at = now();
+    		$newInvoice->updated_at = now();
+			$newInvoice->save();
+
+			// Duplicar las líneas asociadas
+			foreach ($invoice->invoiceRows as $invoiceRow) {
+				$newRow = $invoiceRow->replicate(); // Crear una copia de cada línea
+				$newRow->invoice_id = $newInvoice->id; // Asociar al nuevo invoice
+				$newRow->save();
+			}
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            $status = false;
+        }
+
+		return response()->json([$status, "invoice" => $newInvoice]);
+
 	}
 }

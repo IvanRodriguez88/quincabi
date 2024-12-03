@@ -11,8 +11,8 @@ class Project extends Model
 
     protected $table = 'projects';
 	protected $fillable = ['client_id', 'name', 'description', 'initial_date', 'end_date', 'cost_real', 'total_real', 'profit', 'is_active', 'created_by', 'updated_by'];
-    protected $appends = ['total_payments'];
-
+    protected $appends = ['total_payments', 'rest_payments', 'total_worked_hours', 'total_payments_workers', 'average_payment_per_hour'];
+	
     public function client()
     {
         return $this->belongsTo("App\Models\Client", "client_id", "id");
@@ -40,11 +40,70 @@ class Project extends Model
         return $this->hasMany("App\Models\ProjectPicture");
     }
 
-     // Accessor para total_payments
-     public function getTotalPaymentsAttribute()
-     {
-         return $this->payments->sum('amount');
-     }
+	public function projectTickets()
+    {
+        return $this->hasMany("App\Models\ProjectTicket");
+    }
+
+	public function totalInvoicesPrices()
+	{
+		$total = 0;
+		$invoicesInUse = $this->invoices()->where("in_use", 1)->get();
+		foreach ($invoicesInUse as $invoice) {
+			$total += $invoice->getTotal();
+		}
+		return $total;
+	}
+
+	public function totalInvoicesCosts()
+	{
+		$total = 0;
+		$invoicesInUse = $this->invoices()->where("in_use", 1)->get();
+		foreach ($invoicesInUse as $invoice) {
+			$total += $invoice->getCost();
+		}
+		return $total;
+	}
+
+
+	// Accessor para total_payments
+	public function getTotalPaymentsAttribute()
+	{
+		return $this->payments->sum('amount');
+	}
+
+	// Accessor para rest_payments
+	public function getRestPaymentsAttribute()
+	{
+		return $this->totalInvoicesPrices() - $this->payments->sum('amount');
+		
+	}
+
+	// Accessor para total_worked_hours
+	public function getTotalWorkedHoursAttribute()
+	{
+		$total_hours = 0;
+		foreach ($this->workers as $worker) {
+			$total_hours += $worker->pivot->worked_hours;
+		}
+		return $total_hours;
+	}
+
+	// Accessor para total_payments_workers
+	public function getTotalPaymentsWorkersAttribute()
+	{
+		$total_payments = 0;
+		foreach ($this->workers as $worker) {
+			$total_payments += $worker->pivot->worked_hours * $worker->pivot->hourly_pay;
+		}
+		return $total_payments;
+	}
+
+	// Accessor para average_payment_per_hour
+	public function getAveragePaymentPerHourAttribute()
+	{
+		return $this->getTotalPaymentsWorkersAttribute() / $this->getTotalWorkedHoursAttribute();
+	}
 
 
 

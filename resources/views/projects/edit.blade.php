@@ -70,7 +70,7 @@
 						</div>
 						<div class="row">
 							<x-adminlte-input 
-								value="{{($project->cost_real) ?? ''}}" 
+								value="{{($project->totalInvoicesCosts()) ?? ''}}" 
 								name="cost_real" 
 								label="Real Cost" 
 								placeholder="Real cost of the proyect"
@@ -79,13 +79,14 @@
 								type="number"
 							/>
 							<x-adminlte-input 
-								value="{{($project->total_real) ?? ''}}" 
+								value="{{($project->totalInvoicesPrices()) ?? ''}}" 
 								name="total_real" 
 								label="Real total price" 
 								placeholder="Real total price"
 								fgroup-class="col-md-6" 
 								disable-feedback
 								type="number"
+								disabled
 							/>
 						</div>
 
@@ -115,17 +116,30 @@
 				<div class="row">
 					<div class="col-md-6">
 						<h3>Project Images</h3>
-						<x-adminlte-input-file id="upload-image" name="images[]" label="Cargar imagen de Proyecto" placeholder="Seleccionar imagen" legend="Seleccionar" igroup-size="md" accept="image/*" />
+						<x-adminlte-input-file id="upload-project-picture" name="images[]" label="Cargar imagen de Proyecto" placeholder="Seleccionar imagen" legend="Seleccionar" igroup-size="md" accept="image/*" />
 						<div id="image-preview" style="display: flex; flex-wrap: wrap;">
 
-						@foreach ($project->projectPictures as $picture)
-							@include("projects.image", [
-								"src" => $picture->path,
-								"filename" => $picture->filename(),
-								"picture_id" => $picture->id
-							])
-						@endforeach
+							@foreach ($project->projectPictures as $picture)
+								@include("projects.image", [
+									"src" => $picture->path,
+									"filename" => $picture->filename(),
+									"picture_id" => $picture->id
+								])
+							@endforeach
 
+						</div>
+					</div>
+					<div class="col-md-6">
+						<h3>Project Tickets</h3>
+						<x-adminlte-input-file id="upload-project-ticket" name="images[]" label="Cargar ticket" placeholder="Seleccionar imagen" legend="Seleccionar" igroup-size="md" accept="image/*" />
+						<div id="image-ticket-preview" style="display: flex; flex-wrap: wrap;">
+							@foreach ($project->projectTickets as $ticket)
+								@include("projects.ticket", [
+									"src" => $ticket->path,
+									"filename" => $ticket->filename(),
+									"ticket_id" => $ticket->id
+								])
+							@endforeach
 						</div>
 					</div>
 				</div>

@@ -17,6 +17,7 @@ class ProjectWorkerController extends Controller
 
 	public function store(ProjectWorkerRequest $request)
 	{
+		$project = Project::find($request->project_id);
 		$status = true;
 		try {
 			$project_worker = ProjectWorker::create([
@@ -31,11 +32,12 @@ class ProjectWorkerController extends Controller
             $status = false;
         }
 
-		return response()->json([$status, 'project_worker' => $project_worker]);
+		return response()->json([$status, 'project_worker' => $project_worker, 'project' => $project]);
 	}
 
 	public function update(ProjectWorkerRequest $request, ProjectWorker $project_worker)
 	{
+		$project = Project::find($project_worker->project_id);
 		$status = true;
 		try {
             $project_worker->update([
@@ -47,11 +49,12 @@ class ProjectWorkerController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
         }
-		return response()->json([$status, 'project_worker' => $project_worker]);
+		return response()->json([$status, 'project_worker' => $project_worker, 'project' => $project]);
 	}
 
 	public function destroy(ProjectWorker $project_worker)
 	{
+		$project = Project::find($project_worker->project_id);
 		$status = true;
         try {
             $project_worker->delete();
@@ -59,7 +62,7 @@ class ProjectWorkerController extends Controller
             $status = false;
         }
 
-		return response()->json([$status]);
+		return response()->json([$status, 'project' => $project]);
 	}
 
     public function getAddEditModal(Project $project, $id = null)

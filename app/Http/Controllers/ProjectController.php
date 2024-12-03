@@ -46,7 +46,10 @@ class ProjectController extends Controller
         $heads = [
             'ID',
             'Name',
+			'Cost',
+			'Price',
 			'Due Date',
+			'Using',
 			'Actions'
         ];
         return view('projects.invoices-table', compact('heads', 'project', 'routeResource'));
@@ -214,6 +217,54 @@ class ProjectController extends Controller
 		}
 
 		return response()->json(['message' => 'Image not found'], 404);
+	}
+
+	public function uploadTicket(Request $request, Project $project)
+    {
+		try {
+			$request->validate([
+				'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+			]);
+		
+			// Subir la imagen
+			$image = $request->file('image');
+			$folderPath = 'projects/' . $project->id;
+			$path = $image->store($folderPath, 'public');
+			$url = Storage::url($path);
+		
+			// Obtener el nombre del archivo
+			$imageName = basename($path);
+		
+			// Registrar en la base de datos
+			$projectTicket = ProjectTicket::create([
+				"project_id" => $project->id,
+				"path" => $url
+			]);
+
+			// Responder con la URL y el nombre del archivo
+			return response()->json([
+				'url' => $url,
+				'name' => $imageName,
+				'ticket_id' => $projectTicket->id
+			]);
+		
+		} catch (\Exception $e) {
+			return response()->json([
+				'error' => 'Ocurrió un error al procesar la solicitud.',
+			], 500);
+		}
+    }
+
+	public function deleteTicket(Request $request, ProjectTicket $project_ticket)
+	{
+		$filePath = 'projects/'.$project_ticket->project->id.'/'. $request->input('name'); // Ruta relativa
+		if (Storage::disk('public')->exists($filePath)) {
+			Storage::disk('public')->delete($filePath);
+			$project_ticket->delete();
+			return response()->json(['message' => 'Ticket deleted successfully']);
+		}
+
+		return response()->json(['message' => 'Ticket not found'], 404);
 	}
 
 }

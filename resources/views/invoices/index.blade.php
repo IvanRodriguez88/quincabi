@@ -34,6 +34,8 @@
 						<td>$ {{ number_format($invoice->getTotal(), 2, '.', ',') }}</td>
 						<td>{{ date("m/d/Y", strtotime($invoice->date_issued)) }}</td>
 						<td>{{ date("m/d/Y", strtotime($invoice->date_due)) }}</td>
+						<td>{{ $invoice->in_use ? "Yes" : "No"}}</td>
+
 						<td class="text-center">
 							@include("invoices.buttons")
 						</td>

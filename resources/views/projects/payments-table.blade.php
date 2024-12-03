@@ -7,9 +7,9 @@
     </div>
     <div class="card-body">
 
-        <p class="mb-1">Total:</b></p>
+        <p class="mb-1">Total: <b>${{number_format($project->totalInvoicesPrices(), 2, '.', ',')}}</b></p>
         <p class="mb-1">Total payments: <b id="total_payment">${{number_format($project->total_payments, 2, '.', ',')}}</b></p>
-        <p class="mb-1">Rest: </b></p>
+        <p class="mb-1">Rest: <b id="rest_payments">${{number_format($project->totalInvoicesPrices() - $project->total_payments, 2, '.', ',')}}</b></p>
 
         <hr>
         <x-adminlte-datatable id="project_payments-table" :heads="$heads" striped hoverable>

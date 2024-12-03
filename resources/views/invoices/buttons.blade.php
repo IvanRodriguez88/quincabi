@@ -9,6 +9,7 @@
     <a class="btn btn-danger" style="width: 40px" href="{{route('invoices.pdf', $invoice->id)}}" target="_blank">
         <i class="fas fa-file-pdf"></i>
     </a>
+	
 @else
     @if($invoice->project)
         <a class="btn btn-primary" style="width: 40px" href="{{route('invoices.editInProject', [$invoice->id, $invoice->project->id])}}">
@@ -28,3 +29,7 @@
     </a>
 
 @endif
+
+<a class="btn btn-secondary" style="width: 40px" onclick="copyInvoice({{$invoice->id}})">
+	<i class="fas fa-copy"></i>
+</a>

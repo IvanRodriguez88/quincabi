@@ -25,7 +25,15 @@
 			</div>
 		</div>
 		<div class="card-body">
-            <h4>Invoice #{{$lastIdInvoice + 1}}</h4>
+            <div class="d-flex justify-content-between">
+				<h4>Invoice #{{$lastIdInvoice + 1}}</h4>
+				<label class="checkbox-container">
+					<input type="checkbox" id="in_use" name="in_use" {{isset($invoice) ? ($invoice->in_use ? "checked" : "") : "checked"}}>
+					<span class="checkmark"></span>
+					In Use
+				</label>
+			</div>
+
 			@include("invoices.fields")
 			<div class="d-flex mt-3 justify-content-end">
 				<x-adminlte-button onclick="saveInvoice()"  theme="success" label="Save Invoice"/>
@@ -40,6 +48,7 @@
 	<link rel="stylesheet" href="{{asset('plugins/autocomplete/css/autoComplete.02.css')}}">
 	@vite(['resources/css/app.css'])
 	@vite(['resources/sass/invoices.scss'])
+	@vite(['resources/sass/utilities.scss'])
 
 @stop
 
