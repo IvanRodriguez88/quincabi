@@ -11,7 +11,7 @@ class Project extends Model
 
     protected $table = 'projects';
 	protected $fillable = ['client_id', 'name', 'description', 'initial_date', 'end_date', 'cost_real', 'total_real', 'profit', 'is_active', 'created_by', 'updated_by'];
-    protected $appends = ['total_payments', 'rest_payments', 'total_worked_hours', 'total_payments_workers', 'average_payment_per_hour'];
+    protected $appends = ['total_invoice_prices','total_invoice_costs','total_payments', 'rest_payments', 'total_worked_hours', 'total_payments_workers', 'average_payment_per_hour'];
 	
     public function client()
     {
@@ -65,6 +65,17 @@ class Project extends Model
 		return $total;
 	}
 
+	public function getTotalInvoiceCostsAttribute()
+	{
+		return $this->totalInvoicesCosts();
+	}
+
+	public function getTotalInvoicePricesAttribute()
+	{
+		return $this->totalInvoicesPrices();
+		
+	}
+
 
 	// Accessor para total_payments
 	public function getTotalPaymentsAttribute()
@@ -102,7 +113,8 @@ class Project extends Model
 	// Accessor para average_payment_per_hour
 	public function getAveragePaymentPerHourAttribute()
 	{
-		return $this->getTotalPaymentsWorkersAttribute() / $this->getTotalWorkedHoursAttribute();
+		$totalWorkedHours = $this->getTotalWorkedHoursAttribute() == 0 ? 1 : $this->getTotalWorkedHoursAttribute();
+		return $this->getTotalPaymentsWorkersAttribute() / $totalWorkedHours;
 	}
 
 

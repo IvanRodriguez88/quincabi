@@ -21,11 +21,14 @@ class MaterialController extends Controller
     {
         $routeResource = $this->routeResource;
 
-        $materials = Material::all();
+        $materials = Material::where("is_active", 1)->get();
 
         $heads = [
             'ID',
             'Name',
+			'Ex.Name',
+			'Cost',
+			'Price',
 			'Actions'
         ];
         return view('materials.index', compact('heads', 'materials', 'routeResource'));
@@ -114,13 +117,38 @@ class MaterialController extends Controller
 	{
 		$status = true;
         try {
-            $material->delete();
+            $material->update(["is_active" => 0]);
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
-
         }
 
 		return response()->json([$status]);
+	}
+
+	public function copyMaterial(Material $material)
+	{
+		$status = true;
+        try {
+			$newMaterial = $material->replicate();
+			$newMaterial->created_at = now();
+    		$newMaterial->updated_at = now();
+			$newMaterial->save();
+
+			foreach ($material->categoryMaterials as $materialRow) {
+				$newRow = $materialRow->replicate(); // Crear una copia de cada línea
+				$newRow->material_id = $newMaterial->id; // Asociar al nuevo invoice
+				$newRow->save();
+			}
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            $status = false;
+        }
+
+		$material = $newMaterial;
+		$buttons = view("materials.buttons", compact("material"))->render();
+
+		return response()->json([$status, "material" => $newMaterial, "buttons" => $buttons]);
+
 	}
 
     public function getAddEditModal($id = null)
@@ -150,7 +178,7 @@ class MaterialController extends Controller
         $materials = Material::select(
             "id",
             DB::raw("materials.name as name")
-        )->get();
+        )->where("is_active", 1)->get();
 
         $formattedMaterials = $materials->map(function ($material) {
             return [

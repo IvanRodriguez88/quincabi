@@ -361,6 +361,11 @@ return [
 				],
 			],
 		],
+        [
+            'text' => 'Calendar',
+            'url'  => 'calendar',
+            'icon' => 'fas fa-box',
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

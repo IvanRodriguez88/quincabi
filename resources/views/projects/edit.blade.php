@@ -69,24 +69,27 @@
 							</div>
 						</div>
 						<div class="row">
+							<div class="col-md-6">
+								<x-adminlte-input 
+									value="{{$project->cost_real}}" 
+									name="cost_real" 
+									label="Real Cost" 
+									placeholder="Real cost of the proyect"
+									fgroup-class="mb-1" 
+									disable-feedback
+									type="number"
+								/>
+								<p >Proyected cost <b id="cost_proyected">${{number_format($project->totalInvoicesCosts() ?? 0, 2, ".", ",")}}</b></p>
+							</div>
 							<x-adminlte-input 
-								value="{{($project->totalInvoicesCosts()) ?? ''}}" 
-								name="cost_real" 
-								label="Real Cost" 
-								placeholder="Real cost of the proyect"
-								fgroup-class="col-md-6" 
-								disable-feedback
-								type="number"
-							/>
-							<x-adminlte-input 
-								value="{{($project->totalInvoicesPrices()) ?? ''}}" 
+								value="{{($project->total_real == $project->totalInvoicesPrices() ? $project->total_real : $project->totalInvoicesPrices())}}" 
 								name="total_real" 
 								label="Real total price" 
 								placeholder="Real total price"
 								fgroup-class="col-md-6" 
 								disable-feedback
 								type="number"
-								disabled
+								readonly
 							/>
 						</div>
 
@@ -99,20 +102,28 @@
 						</textarea>
 					</div>
 				</div>
+				
+				<hr>
+
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item" role="presentation">
+						<button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Invoices</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Workers</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="contact-tab" data-toggle="tab" data-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Payments</button>
+					</li>
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">{!! $invoicesTable !!}</div>
+					<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">{!! $workersTable !!}</div>
+					<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">{!! $paymentsTable !!}</div>
+				</div>
 
 				<hr>
-				<div class="row">
-					<div class="col-md-12">
-						{!! $invoicesTable !!}
-					</div>
-					<div class="col-md-6">
-						{!! $workersTable !!}
-					</div>
-					<div class="col-md-6">
-						{!! $paymentsTable !!}
-					</div>
-				</div>
-				<hr>
+
 				<div class="row">
 					<div class="col-md-6">
 						<h3>Project Images</h3>

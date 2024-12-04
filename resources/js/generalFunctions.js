@@ -35,7 +35,7 @@ window.formatDate = (inputDate) => {
     const [year, month, day] = inputDate.split('-');
     
     // Crear una nueva fecha como cadena en el formato deseado
-    const formattedDate = `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+    const formattedDate = `${month.padStart(2, '0')}/${day.padStart(2, '0')}/${year}`;
     
     return formattedDate;
 }

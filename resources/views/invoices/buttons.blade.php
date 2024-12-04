@@ -33,3 +33,6 @@
 <a class="btn btn-secondary" style="width: 40px" onclick="copyInvoice({{$invoice->id}})">
 	<i class="fas fa-copy"></i>
 </a>
+<a class="btn btn-danger" onclick="showDeleteInvoice({{$invoice->id}})">
+    <i class="fas fa-trash"></i>
+</a>

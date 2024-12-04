@@ -104,9 +104,9 @@
 		});
 	})
 
-	$(document).on("change", "select:not(#category_id, #supplier_id)", function() {
+	$(document).on("change", "#addEditModal select:not(#category_id, #supplier_id)", function() {
 		let completeName = ""
-        $("select").each(function() {
+		$("#addEditModal select:not(#supplier_id)").each(function() {
 			if ($(this).attr("id") !== "supplier_id") {
 				const selectedText = $(this).find("option:selected").text();
 				if (selectedText != "Select an option...") {
@@ -114,8 +114,6 @@
 				}
 			}
         });
-
         $("#name").val(completeName)
-
     });
 </script>

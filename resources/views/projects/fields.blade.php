@@ -26,25 +26,6 @@
 	</x-adminlte-select>
 
 	
-
-	<x-adminlte-input 
-		value="{{($data->cost_real) ?? ''}}" 
-		name="cost_real" 
-		label="Real Cost" 
-		placeholder="Real cost of the proyect"
-		fgroup-class="col-md-4" 
-		disable-feedback
-		type="number"
-	/>
-	<x-adminlte-input 
-		value="{{($data->total_real) ?? ''}}" 
-		name="total_real" 
-		label="Real total price" 
-		placeholder="Real total price"
-		fgroup-class="col-md-4" 
-		disable-feedback
-		type="number"
-	/>
 </div>
 <div id="client_info">
 </div>	

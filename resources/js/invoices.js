@@ -221,6 +221,29 @@ $(function () {
 		}
 	}
 
+	window.showDeleteInvoice = (invoice_id) => {
+		const confirm = alertYesNo('Delete invoice',`Are you sure to delete the invoice #${invoice_id} PERMANENTLY?`);
+		confirm.then((result) => {
+			if (result) {
+				$.ajax({
+					type: "DELETE",
+					url: `${getBaseUrl()}/invoices/${invoice_id}`,
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function (response) {
+						const rowIndex = dt.column(0).data().indexOf(invoice_id.toString());
+						dt.row(rowIndex).remove().draw(false)
+						toastr.success(`The invoice has been deleted successfully`, 'Invoice deleted')
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+				});
+			}
+		})
+	}
+
 	$("#free_check").on("change", function() {
 		if ($(this).prop("checked")) {
 			$("#free_material").removeClass("d-none")

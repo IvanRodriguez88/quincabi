@@ -99,9 +99,14 @@ $(function () {
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 					},
 					success: function (response) {
-						const rowIndex = dt.column(0).data().indexOf(category_id.toString());
-						dt.row(rowIndex).remove().draw(false)
-						toastr.success(`The category has been deleted successfully`, 'Category deleted')
+						
+						if (response.status) {
+							const rowIndex = dt.column(0).data().indexOf(category_id.toString());
+							dt.row(rowIndex).remove().draw(false)
+							toastr.success(response.message, 'Category deleted')
+						}else{
+							toastr.error(response.message, 'Error')
+						}
 					},
 					error: function (xhr, textStatus, errorThrown) {
 						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)

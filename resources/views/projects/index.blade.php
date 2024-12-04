@@ -21,9 +21,11 @@
 						<td>{{ $project->id }}</td>
 						<td>{{ $project->name }}</td>
 						<td>{{ $project->client->name }}</td>
-						<td>{{ $project->cost_real }}</td>
-						<td>{{ $project->total_real }}</td>
-						<td>{{ $project->profit }}</td>
+						<td>{{ $project->initial_date != null ? date("m/d/Y", strtotime($project->initial_date)) : "" }}</td>
+						<td>{{ $project->end_date != null ? date("m/d/Y", strtotime($project->end_date)) : "" }}</td>
+						<td>${{ number_format( $project->cost_real ?? 0, 2, ".", ",") }}</td>
+						<td>${{ number_format( $project->total_real ?? 0, 2, ".", ",") }}</td>
+						<td>${{ number_format( $project->profit ?? 0, 2, ".", ",") }}</td>
 						<td class="text-center">
 							@include("projects.buttons")
 						</td>

@@ -170,15 +170,17 @@ class InvoiceController extends Controller
 
 	public function destroy(Invoice $invoice)
 	{
+		$copyInvoice = $invoice;
 		$status = true;
         try {
-			$invoice->invoiceRows()->delete();
             $invoice->delete();
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
         }
 
-		return response()->json([$status]);
+		$copyInvoice->load("project");
+
+		return response()->json([$status, "invoice" => $copyInvoice]);
 	}
 
 
@@ -231,7 +233,12 @@ class InvoiceController extends Controller
             $status = false;
         }
 
-		return response()->json([$status, "invoice" => $newInvoice]);
+		$newInvoice->load("project");
+		$invoice = $newInvoice;
+		
+
+		$buttons = view("invoices.buttons", compact("invoice"))->render();
+		return response()->json([$status, "invoice" => $newInvoice, "buttons" => $buttons]);
 
 	}
 }

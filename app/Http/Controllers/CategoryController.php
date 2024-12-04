@@ -75,14 +75,16 @@ class CategoryController extends Controller
 
 	public function destroy(Category $category)
 	{
+		$message = "The category has been deleted successfully";
 		$status = true;
         try {
             $category->delete();
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
+			$message = $e->getMessage();
         }
 
-		return response()->json([$status]);
+		return response()->json(["status" => $status, "message" => $message]);
 	}
 
 	public function getAddEditModal($id = null)

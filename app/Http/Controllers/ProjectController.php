@@ -31,6 +31,8 @@ class ProjectController extends Controller
             'ID',
             'Name',
 			'Client',
+			'Initial Date',
+			'End Date',
 			'Cost',
 			'Total',
 			'Profit',
@@ -175,7 +177,7 @@ class ProjectController extends Controller
     {
 		try {
 			$request->validate([
-				'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+				'image' => 'required|image|mimes:jpg,jpeg,png',
 			]);
 		
 			// Subir la imagen
@@ -223,7 +225,7 @@ class ProjectController extends Controller
     {
 		try {
 			$request->validate([
-				'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+				'image' => 'required|image|mimes:jpg,jpeg,png',
 			]);
 		
 			// Subir la imagen

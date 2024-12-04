@@ -1,0 +1,90 @@
+/* Aplica estilos solo a FullCalendar */
+.fc {
+    font-family: Arial, sans-serif; /* Fuente simple y limpia */
+    font-size: 14px;
+}
+
+.fc .fc-daygrid-day-number {
+    color: #3b1617;
+}
+
+a {
+    color: #3b1617;
+}
+
+/* Bordes de la tabla */
+.fc .fc-scrollgrid {
+    border: 1px solid #ddd; /* Borde gris claro */
+    border-radius: 4px; /* Esquinas redondeadas */
+    overflow: hidden; /* Evita desbordes */
+}
+
+/* Celdas del calendario */
+.fc .fc-daygrid-day {
+    border: 1px solid #f0f0f0; /* Bordes de celdas ligeros */
+    background-color: #ffffff; /* Fondo blanco */
+    transition: background-color 0.2s ease; /* Efecto al pasar el mouse */
+}
+
+.fc .fc-daygrid-day:hover {
+    background-color: #f9f9f9; /* Fondo más claro al pasar el mouse */
+}
+
+/* Eventos en las celdas */
+.fc .fc-event {
+    background-color: #875c5d; /* Azul claro para eventos */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin bordes para eventos */
+    border-radius: 4px; /* Esquinas redondeadas */
+    padding: 2px 4px; /* Espaciado interno */
+    font-size: 12px; /* Tamaño de texto reducido */
+    text-align: center; /* Centrado del texto */
+    cursor: pointer; /* Cursor de mano */
+}
+
+/* Eventos al pasar el mouse */
+.fc .fc-event:hover {
+    background-color: #54393a; /* Azul más oscuro */
+}
+
+/* Encabezados de los días (nombres como Lunes, Martes) */
+.fc .fc-col-header-cell {
+    background-color: #f8f9fa; /* Fondo gris claro */
+    color: #333; /* Texto oscuro */
+    font-weight: bold; /* Texto en negrita */
+    text-align: center; /* Centrado del texto */
+    border: 1px solid #ddd; /* Bordes */
+    padding: 8px 0; /* Espaciado */
+}
+
+/* Días actuales (hoy) */
+.fc .fc-day-today {
+    background-color: #e7f3ff; /* Fondo azul claro */
+    border: 1px solid #dadbdc; /* Borde azul */
+}
+
+/* Estilos para celdas fuera del mes actual */
+.fc .fc-day-other {
+    background-color: #f9f9f9; /* Fondo gris claro */
+    color: #bbb; /* Texto gris tenue */
+}
+
+/* Botones de navegación */
+.fc .fc-toolbar button {
+    background-color: #3b1617; /* Azul para botones */
+    color: #fff; /* Texto blanco */
+    border: none; /* Sin bordes */
+    border-radius: 4px; /* Esquinas redondeadas */
+    padding: 5px 10px; /* Espaciado interno */
+    font-size: 14px; /* Tamaño del texto */
+    cursor: pointer; /* Cursor de mano */
+    transition: background-color 0.2s ease; /* Efecto al pasar el mouse */
+}
+
+/* Estilos de la barra de herramientas */
+.fc .fc-toolbar-title {
+    font-size: 18px; /* Título más grande */
+    font-weight: bold; /* Título en negrita */
+    color: #333; /* Texto oscuro */
+    text-align: center; /* Centrado */
+}

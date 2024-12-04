@@ -11,6 +11,7 @@ class Invoice extends Model
 
     protected $table = 'invoices';
 	protected $fillable = ['name', 'project_id', 'client_id',  'date_issued', 'date_due', 'in_use', 'is_active', 'created_by', 'updated_by'];
+    protected $appends = ['total', 'cost'];
 
     public function client()
     {
@@ -45,5 +46,18 @@ class Invoice extends Model
 		};
 
 		return $cost;
+	}
+
+	// Accessor para total_payments
+	public function getTotalAttribute()
+	{
+		return $this->getTotal();
+	}
+
+	// Accessor para rest_payments
+	public function getCostAttribute()
+	{
+		return $this->getCost();
+		
 	}
 }

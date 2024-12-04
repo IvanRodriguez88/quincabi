@@ -1,5 +1,14 @@
 $(function () {
-	const dt = $('#materials-table').DataTable();
+	const dt = $('#materials-table').DataTable({
+        destroy: true, 
+        columnDefs: [
+            {
+                targets: 0,
+                visible: false,
+                searchable: false
+            }
+        ]
+    });
 
     window.getAddEditModal = (type, id) => {
 		let url = `${getBaseUrl()}/materials/getaddeditmodal`
@@ -43,6 +52,9 @@ $(function () {
 					let row = [
 						response.material.id.toString(),
 						response.material.name,
+						response.material.extra_name,
+						"$" + formatNumber(response.material.cost),
+						"$" + formatNumber(response.material.price),
 						getButtons(response.material.id, response.material.name),
 					]
 					dt.row.add(row).draw(false)
@@ -50,6 +62,9 @@ $(function () {
 				}else{
 					let rowData = dt.row(rowIndex).data();
 					rowData[1] = response.material.name;
+					rowData[2] = response.material.extra_name;
+					rowData[3] = "$" + formatNumber(response.material.cost)
+					rowData[4] = "$" + formatNumber(response.material.price)
 					dt.row(rowIndex).data(rowData).draw(false);
 					toastr.success(`The material has been updated successfully`, 'Category created')
 				}
@@ -86,11 +101,44 @@ $(function () {
 		})
 	}
 
+	window.copyMaterial = (material_id, material_name) => {
+		const confirm = alertYesNo('Copy material',`Are you sure to copy the material '${material_name}'`);
+        confirm.then((result) => {
+            if (result) {
+                $.ajax({
+                    url: `${getBaseUrl()}/materials/copyMaterial/${material_id}`,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        let row = [
+                            response.material.id.toString(),
+                            response.material.name,
+							response.material.extra_name,
+                            "$" + formatNumber(response.material.cost),
+                            "$" + formatNumber(response.material.price),
+                            response.buttons,
+                        ]
+                        dt.row.add(row).draw(false)
+                        toastr.success(`The material has been copied successfully`, 'Material copied')
+                    },
+                   error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+                });
+            }
+        })
+	}
+
 	function getButtons(material_id, material_name) {
 		return `<div class="text-center">
 					<a class="btn btn-primary" onclick="getAddEditModal('edit', ${material_id})">
 						<i class="fas fa-edit"></i>
 					</a>
+					<a class="btn btn-secondary" onclick="copyMaterial(${material_id}, '${material_name}')">
+								<i class="fas fa-copy"></i>
+							</a>
 					<a class="btn btn-danger" onclick="showDelete(${material_id}, '${material_name}')">
 						<i class="fas fa-trash"></i>
 					</a>

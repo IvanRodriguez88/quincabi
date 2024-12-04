@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
 			$table->bigInteger('invoice_id')->unsigned();            
-			$table->foreign('invoice_id')->references('id')->on('invoices');
+			$table->foreign('invoice_id')->references('id')->on('invoices')->onDelete("cascade");
 
 			$table->bigInteger('material_id')
 				->unsigned()

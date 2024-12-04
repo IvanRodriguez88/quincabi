@@ -34,7 +34,7 @@
 						<td>$ {{ number_format($invoice->getTotal(), 2, '.', ',') }}</td>
 						<td>{{ date("m/d/Y", strtotime($invoice->date_issued)) }}</td>
 						<td>{{ date("m/d/Y", strtotime($invoice->date_due)) }}</td>
-						<td>{{ $invoice->in_use ? "Yes" : "No"}}</td>
+						<td>{!! $invoice->in_use ? "<span class='badge badge-success'>Yes</span>" : "<span class='badge badge-danger'>No</span>"!!}</td>
 
 						<td class="text-center">
 							@include("invoices.buttons")

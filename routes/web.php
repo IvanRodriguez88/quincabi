@@ -11,6 +11,7 @@ use App\Http\Controllers\ProjectPaymentController;
 use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectWorkerController;
+use App\Http\Controllers\CalendarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +72,7 @@ Route::middleware('auth')->group(function () {
 	Route::get('materials/getdataautocomplete', [MaterialController::class, 'getDataAutocomplete'])->name('materials.getDataAutocomplete');
 	Route::get('materials/getaddeditmodal/{id?}', [MaterialController::class, 'getAddEditModal'])->name('materials.getAddEditModal');
 	Route::get('materials/getbyid/{material}', [MaterialController::class, 'getById'])->name('materials.getById');
+	Route::post('materials/copyMaterial/{material}', [MaterialController::class, 'copyMaterial'])->name('materials.copyMaterial');
 
 	Route::resource('materials', MaterialController::class);
 
@@ -94,6 +96,9 @@ Route::middleware('auth')->group(function () {
 	Route::delete('projects/deleteTicket/{project_ticket}', [ProjectController::class, 'deleteTicket'])->name('projects.deleteTicket');
 
 	Route::resource('projects', ProjectController::class);
+
+	Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');
+
 
 });
 

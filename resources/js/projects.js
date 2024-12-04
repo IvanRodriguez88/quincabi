@@ -21,6 +21,8 @@ $(function () {
         ]
     })
 
+    const dtInvoices = $("#project-invoices-table").DataTable()
+
     $("#client_id").on("change", function(){
         $.ajax({
             url: `${getBaseUrl()}/projects/getclientinfo/${$(this).val()}`,
@@ -188,7 +190,6 @@ $(function () {
             </a>
         </div>`
 	}
-
 
 
     //Payments
@@ -419,6 +420,21 @@ $(function () {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
+                        console.log(response);
+                        
+                        let row = [
+                            response.invoice.id.toString(),
+                            response.invoice.name,
+                            "$" + formatNumber(response.invoice.cost),
+                            "$" + formatNumber(response.invoice.total),
+                            formatDate(response.invoice.date_due),
+                            getUsing(response.invoice.in_use),
+                            response.buttons,
+                        ]
+                        dtInvoices.row.add(row).draw(false)
+                        $("#cost_proyected").text("$" + formatNumber(response.invoice.project.total_invoice_costs))
+                        $("#total_real").val(response.invoice.project.total_invoice_prices)
+                        toastr.success(`The invoice has been copied successfully`, 'Invoice copied')
                     },
                    error: function (xhr, textStatus, errorThrown) {
 						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
@@ -427,6 +443,41 @@ $(function () {
             }
         })
 	}
+
+    window.showDeleteInvoice = (invoice_id) => {
+		const confirm = alertYesNo('Delete invoice',`Are you sure to delete the invoice #${invoice_id} PERMANENTLY?`);
+		confirm.then((result) => {
+			if (result) {
+				$.ajax({
+					type: "DELETE",
+					url: `${getBaseUrl()}/invoices/${invoice_id}`,
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function (response) {
+                        console.log(response);
+                        
+						const rowIndex = dtInvoices.column(0).data().indexOf(invoice_id.toString());
+						dtInvoices.row(rowIndex).remove().draw(false)
+                        $("#cost_proyected").text("$" + formatNumber(response.invoice.project.total_invoice_costs))
+                        $("#total_real").val(response.invoice.project.total_invoice_prices)
+						toastr.success(`The invoice has been deleted successfully`, 'Invoice deleted')
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+				});
+			}
+		})
+	}
+
+    function getUsing(in_use){
+        if (in_use) {
+            return '<span class="badge badge-success">Yes</span>'
+        }else{
+            return '<span class="badge badge-danger">No</span>'
+        }
+    }
 
 
     

@@ -20,13 +20,11 @@
 					<tr>
 						<td>{{ $material->id }}</td>
 						<td>{{ $material->name }}</td>
-						<td class="text-center">
-							<a class="btn btn-primary" onclick="getAddEditModal('edit', {{$material->id}})">
-								<i class="fas fa-edit"></i>
-							</a>
-							<a class="btn btn-danger" onclick="showDelete({{$material->id}}, '{{$material->name}}')">
-								<i class="fas fa-trash"></i>
-							</a>
+						<td>{{ $material->extra_name }}</td>
+						<td>${{ number_format($material->cost, 2, ".",",") }}</td>
+						<td>${{ number_format($material->price, 2, ".",",") }}</td>
+						<td >
+							@include("materials.buttons")
 						</td>
 					</tr>
 				@endforeach
