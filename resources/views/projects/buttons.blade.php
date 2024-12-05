@@ -4,3 +4,6 @@
 <a class="btn btn-secondary" style="width: 40px" href="{{route('projects.show', $project->id)}}">
     <i class="far fa-eye"></i>
 </a>
+<a class="btn btn-danger" onclick="showDelete({{$project->id}}, '{{$project->name}}')">
+    <i class="fas fa-trash"></i>
+</a>

@@ -21,38 +21,50 @@ $(function () {
         });
     }
     
-    window.payInvoice = (invoice_id) => {
-        const confirm = alertYesNo('Pay invoice', `Are you sure to pay the invoice #${invoice_id}?`);
+    window.copyInvoice = (invoice_id) => {
+		const confirm = alertYesNo('Copy invoice',`Are you sure to copy the invoice #${invoice_id}`);
         confirm.then((result) => {
             if (result) {
-                // Obtener los botones antes de proceder con el pago
                 $.ajax({
-                    url: `${getBaseUrl()}/invoices/payinvoice/${invoice_id}`,
-                    type: "PUT",
+                    url: `${getBaseUrl()}/invoices/copyInvoice/${invoice_id}`,
+                    method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function(response) {
-                        getButtons(invoice_id).then(buttonsData => {
-                            const rowIndex = dt.column(0).data().indexOf(response.invoice.id.toString());
-                            let rowData = dt.row(rowIndex).data();
-                            rowData[7] = "<span class='badge badge-success p-2 px-3'>Yes</span>";
-                            rowData[8] = buttonsData;
-                            dt.row(rowIndex).data(rowData).draw(false);
-                        }).catch(error => {
-                            $("#error-messages").hide();
-                            $("#error-messages").empty().append(`<p>${error}</p>`);
-                            $("#error-messages").slideDown("fast");
-                        });
+                    success: function (response) {
+                        console.log(response);
+                        
+                        let row = [
+                            response.invoice.id.toString(),
+                            response.invoice.project == null ? "Without project" : `<a href="${getBaseUrl()}/projects/${response.invoice.project.id}/edit">${response.invoice.project.name}</a>`,
+                            response.invoice.name,
+                            response.invoice.client.name,
+                            "$" + formatNumber(response.invoice.cost),
+                            "$" + formatNumber(response.invoice.total),
+                            formatDate(response.invoice.date_issued),
+                            formatDate(response.invoice.date_due),
+                            getUsing(response.invoice.in_use),
+                            response.buttons,
+                        ]
+                        dt.row.add(row).draw(false)
+                        $("#cost_proyected").text("$" + formatNumber(response.invoice.project.total_invoice_costs))
+                        $("#total_real").val(response.invoice.project.total_invoice_prices)
+                        toastr.success(`The invoice has been copied successfully`, 'Invoice copied')
                     },
-                    error: function(xhr, textStatus, errorThrown) {
-                        $("#error-messages").hide();
-                        $("#error-messages").empty().append(getErrorMessages(xhr.responseJSON.errors));
-                        $("#error-messages").slideDown("fast");
-                    }
+                   error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
                 });
             }
-        });
+        })
+	}
+
+    function getUsing(in_use){
+        if (in_use) {
+            return '<span class="badge badge-success">Yes</span>'
+        }else{
+            return '<span class="badge badge-danger">No</span>'
+        }
     }
 
     window.showDelete = (invoice_id) => {

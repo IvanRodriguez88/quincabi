@@ -7,9 +7,8 @@
 @stop
 
 @section('content')
-	<h1>Este es el calendario</h1>
     <div class="card">
-    <div id="calendar"></div>
+     <div id="calendar"></div>
     </div>
     <div id="addEditModal">
 		{{-- Aquí se llena el modal por ajax --}}

@@ -233,7 +233,7 @@ class InvoiceController extends Controller
             $status = false;
         }
 
-		$newInvoice->load("project");
+		$newInvoice->load(["project", "client"]);
 		$invoice = $newInvoice;
 		
 

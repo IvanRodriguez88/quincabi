@@ -36,7 +36,7 @@
 						<td>{{ date("m/d/Y", strtotime($invoice->date_due)) }}</td>
 						<td>{!! $invoice->in_use ? "<span class='badge badge-success'>Yes</span>" : "<span class='badge badge-danger'>No</span>"!!}</td>
 
-						<td class="text-center">
+						<td>
 							@include("invoices.buttons")
 						</td>
 					</tr>

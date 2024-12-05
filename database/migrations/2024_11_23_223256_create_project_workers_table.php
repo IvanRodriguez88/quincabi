@@ -18,7 +18,7 @@ return new class extends Migration
 			$table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
 
             $table->smallInteger('worker_id')->unsigned();            
-			$table->foreign('worker_id')->references('id')->on('workers')->onDelete('cascade');
+			$table->foreign('worker_id')->references('id')->on('workers')->onDelete('restrict');
 
             $table->float("hourly_pay");
             $table->float("worked_hours")->default(0);

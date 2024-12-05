@@ -1,4 +1,6 @@
 $(function () {
+    const dt = $('#projects-table').DataTable();
+
     $("#client_id").on("change", function(){
         $.ajax({
             url: `${getBaseUrl()}/projects/getclientinfo/${$(this).val()}`,
@@ -59,6 +61,30 @@ $(function () {
 				$("#error-messages").slideDown("fast");
             },
         });
+	}
+
+    window.showDelete = (project_id, project_name) => {
+		
+		const confirm = alertYesNo('Delete project',`Are you sure to delete the project '${project_name}' PERMANENTLY?`);
+		confirm.then((result) => {
+			if (result) {
+				$.ajax({
+					type: "DELETE",
+					url: `${getBaseUrl()}/projects/${project_id}`,
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function (response) {
+						const rowIndex = dt.column(0).data().indexOf(project_id.toString());
+						dt.row(rowIndex).remove().draw(false)
+						toastr.success(`The project has been deleted successfully`, 'Project deleted')
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+				});
+			}
+		})
 	}
 
 })

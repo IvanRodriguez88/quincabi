@@ -19,7 +19,7 @@ return new class extends Migration
 			$table->date('date_due')->nullable()->comment('Fecha de entrega');
 
             $table->bigInteger('project_id')->nullable()->unsigned();            
-			$table->foreign('project_id')->references('id')->on('projects');
+			$table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
 
             $table->smallInteger('client_id')->unsigned();            
 			$table->foreign('client_id')->references('id')->on('clients');

@@ -143,13 +143,14 @@ class ProjectController extends Controller
             $status = false;
         }
 
-		return response()->json([$status, 'project' => $project]);
+		return redirect()->route('projects.index');
 	}
 
 	public function destroy(Project $project)
 	{
 		$status = true;
         try {
+			Storage::disk('public')->deleteDirectory("projects/".$project->id);
             $project->delete();
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
