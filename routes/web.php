@@ -12,6 +12,7 @@ use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectWorkerController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\BillTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +99,9 @@ Route::middleware('auth')->group(function () {
 	Route::resource('projects', ProjectController::class);
 
 	Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');
+
+	Route::get('bill_types/getaddeditmodal/{id?}', [BillTypeController::class, 'getAddEditModal'])->name('bill_types.getAddEditModal');
+	Route::resource('bill_types', BillTypeController::class);
 
 
 });

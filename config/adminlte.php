@@ -366,6 +366,26 @@ return [
             'url'  => 'calendar',
             'icon' => 'fas fa-box',
         ],
+        [
+			'text'    => 'Bills',
+			'icon' => 'fas fa-tools',
+			'submenu' => [
+				[
+					'text'    => 'Bill Types',
+					'shift'   => 'ml-3',
+					'route' => 'bill_types.index',
+					'icon' => 'fas fa-tools',
+
+				],
+				[
+					'text'    => 'categories',
+					'shift'   => 'ml-3',
+					'route' => 'categories.index',
+					'icon' => 'fas fa-stream',
+
+				],
+			],
+		],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

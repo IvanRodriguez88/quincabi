@@ -35,6 +35,11 @@ class Project extends Model
         return $this->hasMany("App\Models\ProjectPayment");
     }
 
+	public function bills()
+    {
+        return $this->hasMany("App\Models\Bill");
+    }
+
     public function projectPictures()
     {
         return $this->hasMany("App\Models\ProjectPicture");
