@@ -26,6 +26,8 @@ export default defineConfig({
                 'resources/js/materials.js',
                 'resources/js/workers.js',
                 'resources/js/projectsIndex.js',
+                'resources/js/bill_types.js',
+                'resources/js/bills.js',
 
 				'resources/js/jquery-sortable.js',
 

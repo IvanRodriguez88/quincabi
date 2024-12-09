@@ -86,6 +86,22 @@ class ProjectController extends Controller
         return view('projects.payments-table', compact('heads', 'project', 'routeResource'));
 	}
 
+	private function getBillsTable(Project $project = null)
+	{
+		$routeResource = "bills";
+
+        $heads = [
+			'ID',
+            'Bill Type',
+			'Type',
+			'Amount',
+			'Date',
+			'Description',
+			'Actions'
+        ];
+        return view('projects.bills-table', compact('heads', 'project', 'routeResource'));
+	}
+
 	public function edit(Project $project)
 	{
         $clients = Client::where("is_active", 1)->get();
@@ -95,8 +111,9 @@ class ProjectController extends Controller
 		$invoicesTable = $this->getInvoicesTable($project);
 		$workersTable = $this->getWorkersTable($project);
 		$paymentsTable = $this->getPaymentsTable($project);
+		$billsTable = $this->getBillsTable($project);
 
-        return view('projects.edit', compact("clients", "project", "clientInfo", "invoicesTable", "workersTable", "paymentsTable"));
+        return view('projects.edit', compact("clients", "project", "clientInfo", "invoicesTable", "workersTable", "paymentsTable", "billsTable"));
     }
 
 	public function store(ProjectRequest $request)

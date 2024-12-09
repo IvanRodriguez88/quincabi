@@ -25,8 +25,9 @@ class BillRequest extends FormRequest
 	{
 		return [
 			'amount' => 'required|numeric',
-			'bill_type_id',
-			'project_payment_type_id',
+			'bill_type_id' => 'required',
+			'project_payment_type_id' => 'required',
+			'date' => 'required',
 		];
 	}
 }

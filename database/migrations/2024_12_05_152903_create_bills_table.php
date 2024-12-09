@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
 
-            $table->string("description")->comment("descripcion del gasto");
+            $table->string("description")->nullable()->comment("descripcion del gasto");
 			
             $table->smallInteger('bill_type_id')->unsigned();            
 			$table->foreign('bill_type_id')->references('id')->on('bill_types');

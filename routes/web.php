@@ -13,6 +13,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectWorkerController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\BillTypeController;
+use App\Http\Controllers\BillController;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +104,10 @@ Route::middleware('auth')->group(function () {
 	Route::get('bill_types/getaddeditmodal/{id?}', [BillTypeController::class, 'getAddEditModal'])->name('bill_types.getAddEditModal');
 	Route::resource('bill_types', BillTypeController::class);
 
+	Route::get('bills/getaddeditmodal/{id?}', [BillController::class, 'getAddEditModal'])->name('bills.getAddEditModal');
+	Route::get('bills/getaddeditmodalproject/{project}/{id?}', [BillController::class, 'getAddEditModalProject'])->name('bills.getAddEditModalProject');
+
+	Route::resource('bills', BillController::class);
 
 });
 

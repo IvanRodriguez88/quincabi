@@ -19,15 +19,23 @@
 				@foreach($bills as $bill)
 					<tr>
 						<td>{{ $bill->id }}</td>
+						@if ($bill->project)
+							<td>
+								<a href="{{route('projects.edit', $bill->project->id)}}">{{ $bill->project->name}}</a>
+							</td>
+						@else
+							<td>Without project</td>
+						@endif
 						<td>{{ $bill->billType->name }}</td>
 						<td>{{ $bill->projectPaymentType->name }}</td>
-						<td>{{ $bill->project->name }}</td>
-						<td>{{ $bill->address }}</td>
+						<td>${{ number_format( $bill->amount ?? 0, 2, ".", ",") }}</td>
+						<td>{{ date("m/d/Y", strtotime($bill->date)) }}</td>
+						<td>{{ $bill->description }}</td>
 						<td class="text-center">
 							<a class="btn btn-primary" onclick="getAddEditModal('edit', {{$bill->id}})">
 								<i class="fas fa-edit"></i>
 							</a>
-							<a class="btn btn-danger" onclick="showDelete({{$bill->id}}, '{{$bill->description}}')">
+							<a class="btn btn-danger" onclick="showDelete({{$bill->id}}, '{{$bill->amount}}')">
 								<i class="fas fa-trash"></i>
 							</a>
 						</td>
@@ -47,6 +55,6 @@
 @stop
 
 @section('js')
-	@vite(['resources/js/generalFunctions.js', 'resources/js/sweetAlert.js', 'resources/js/clients.js'])
+	@vite(['resources/js/generalFunctions.js', 'resources/js/sweetAlert.js', 'resources/js/bills.js'])
 @stop
 

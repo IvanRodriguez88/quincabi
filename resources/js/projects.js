@@ -21,6 +21,17 @@ $(function () {
         ]
     })
 
+	const dtBills = $("#bills-table").DataTable({
+        destroy: true, // Permite reinicializar
+        columnDefs: [
+            {
+                targets: 0,
+                visible: false,
+                searchable: false 
+            }
+        ]
+    })
+
     const dtInvoices = $("#project-invoices-table").DataTable()
 
     $("#client_id").on("change", function(){
@@ -75,6 +86,26 @@ $(function () {
 			},
 		});
 	}
+
+	window.getAddEditModalBill = (type, project_id, id) => {
+		let url = `${getBaseUrl()}/bills/getaddeditmodalproject/${project_id}`
+		if (id !== null){
+			url = `${getBaseUrl()}/bills/getaddeditmodalproject/${project_id}/${id}`
+		}
+		$.ajax({
+			type: "GET",
+			url: url,
+			data: {type: type},
+			success: function (response) {
+				$("#addEditModal").empty().append(response)
+				$("#billsModal").modal('show')
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+			},
+		});
+	}
+	
 
     $("#worker_id").on("change", function(){
         $.ajax({
@@ -258,6 +289,119 @@ $(function () {
 						
 						dtPayments.row(rowIndex).remove().draw(false)
 						toastr.success(`The payment has been deleted successfully`, 'Client deleted')
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+				});
+			}
+		})
+	}
+
+	window.saveBill = () => {
+		const formProjectBills = $("#billsModal-form")
+		const action = formProjectBills.attr('action')
+		const method = $("#addEditModal").find('input[name="_method"]').val().toUpperCase()
+        
+        $.ajax({
+            type: method,
+            url: action,
+            data: formProjectBills.serialize(),
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+            success: function (response) {
+                const rowIndex = dtBills.column(0).data().indexOf(response.bill.id.toString());
+				$("#total_bills").text(`$${formatNumber(response.bill.project.total_bills)}`)
+
+				$("#closeModal").trigger('click')
+
+				if (method == "POST") {
+					let row = [
+						response.bill.id.toString(),
+						response.bill.bill_type.name,
+						response.bill.project_payment_type.name,
+						`$${formatNumber(response.bill.amount)}`,
+						formatDate(response.bill.date),
+						response.bill.description,
+						getButtonsBills(response.bill.id, response.bill.amount, response.bill.project.id),
+					]
+					dtBills.row.add(row).draw(false)
+					toastr.success(`The bill has been created successfully`, 'Bill created')
+				}else{
+					let rowData = dtBills.row(rowIndex).data();
+                    
+					rowData[1] = response.bill.bill_type.name,
+					rowData[2] = response.bill.project_payment_type.name,
+					rowData[3] = `$${formatNumber(response.bill.amount)}`,
+					rowData[4] = formatDate(response.bill.date),
+					rowData[5] = response.bill.description,
+					dtBills.row(rowIndex).data(rowData).draw(false);
+					toastr.success(`The bill has been updated successfully`, 'Bill updated')
+				}
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $("#error-messages").hide();
+				$("#error-messages").empty().append(getErrorMessages(xhr.responseJSON.errors));
+				$("#error-messages").slideDown("fast");
+            },
+        });
+	}
+
+    window.showDeletePayment = (project_payment_id, payment_amount) => {
+		const confirm = alertYesNo('Delete payment',`Are you sure to delete the payment for $${formatNumber(payment_amount)}?`);
+		confirm.then((result) => {
+			if (result) {
+				$.ajax({
+					type: "DELETE",
+					url: `${getBaseUrl()}/project_payments/${project_payment_id}`,
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function (response) {
+						const rowIndex = dtPayments.column(0).data().indexOf(project_payment_id.toString());
+                        $("#total_payment").text(`$${formatNumber(response.project.total_payments)}`)
+						$("#rest_payments").text(`$${formatNumber(response.project.rest_payments)}`)
+						
+						dtPayments.row(rowIndex).remove().draw(false)
+						toastr.success(`The payment has been deleted successfully`, 'Client deleted')
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+				});
+			}
+		})
+	}
+
+	function getButtonsBills(bill_id, amount, project_id) {
+		return `<div class="text-center">
+					<a class="btn btn-primary" onclick="getAddEditModalBill('edit',${project_id},${bill_id})">
+						<i class="fas fa-edit"></i>
+					</a>
+					<a class="btn btn-danger" onclick="showDeleteBill(${bill_id}, '${amount}')">
+						<i class="fas fa-trash"></i>
+					</a>
+				</div>`
+	}
+
+	window.showDeleteBill = (bill_id, amount) => {
+		
+		const confirm = alertYesNo('Delete bill',`Are you sure to delete the bill for an amount of $${formatNumber(amount)}?`);
+		confirm.then((result) => {
+			if (result) {
+				$.ajax({
+					type: "DELETE",
+					url: `${getBaseUrl()}/bills/${bill_id}`,
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function (response) {
+						const rowIndex = dtBills.column(0).data().indexOf(bill_id.toString());
+						dtBills.row(rowIndex).remove().draw(false)
+						$("#total_bills").text(`$${formatNumber(response.bill.project.total_bills)}`)
+
+						toastr.success(`The bill has been deleted successfully`, 'Bill deleted')
 					},
 					error: function (xhr, textStatus, errorThrown) {
 						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)

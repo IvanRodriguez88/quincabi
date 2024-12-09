@@ -371,17 +371,17 @@ return [
 			'icon' => 'fas fa-tools',
 			'submenu' => [
 				[
+					'text'    => 'Bills',
+					'shift'   => 'ml-3',
+					'route' => 'bills.index',
+					'icon' => 'fas fa-stream',
+
+				],
+				[
 					'text'    => 'Bill Types',
 					'shift'   => 'ml-3',
 					'route' => 'bill_types.index',
 					'icon' => 'fas fa-tools',
-
-				],
-				[
-					'text'    => 'categories',
-					'shift'   => 'ml-3',
-					'route' => 'categories.index',
-					'icon' => 'fas fa-stream',
 
 				],
 			],

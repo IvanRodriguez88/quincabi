@@ -115,11 +115,16 @@
 					<li class="nav-item" role="presentation">
 						<button class="nav-link" id="contact-tab" data-toggle="tab" data-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Payments</button>
 					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="bills-tab" data-toggle="tab" data-target="#bills" type="button" role="tab" aria-controls="bills" aria-selected="false">Bills</button>
+					</li>
 				</ul>
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">{!! $invoicesTable !!}</div>
 					<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">{!! $workersTable !!}</div>
 					<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">{!! $paymentsTable !!}</div>
+					<div class="tab-pane fade" id="bills" role="tabpanel" aria-labelledby="bills-tab">{!! $billsTable !!}</div>
+
 				</div>
 
 				<hr>
