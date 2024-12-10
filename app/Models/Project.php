@@ -30,6 +30,13 @@ class Project extends Model
                     ->withTimestamps();
     }
 
+	public function partners()
+    {
+        return $this->belongsToMany(Partner::class, 'project_partners')
+                    ->withPivot('id', 'percentage', 'amount')
+                    ->withTimestamps();
+    }
+
     public function payments()
     {
         return $this->hasMany("App\Models\ProjectPayment");

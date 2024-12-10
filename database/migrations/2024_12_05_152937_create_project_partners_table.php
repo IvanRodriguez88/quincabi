@@ -11,11 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('partners', function (Blueprint $table) {
+        Schema::create('project_partners', function (Blueprint $table) {
             $table->id();
 
-            $table->string("name")->comment("Nombre del socio");
+            $table->bigInteger('project_id')->unsigned();            
+			$table->foreign('project_id')->references('id')->on('projects');
+
+            $table->bigInteger('partner_id')->unsigned();            
+			$table->foreign('partner_id')->references('id')->on('partners');
+
             $table->float("percentage")->comment("Porcentaje que se lleva de las ganancias");
+            $table->float("amount")->nullable()->comment("Cantidad que corresponde el %");
 
             //Datos de creación y modificación
 			$table->string('notes', 1024)->nullable()->comment('Notas');
@@ -26,6 +32,7 @@ return new class extends Migration
 			$table->foreign('updated_by')->references('id')->on('users');
 			$table->timestamp('created_at', 0)->useCurrent()->comment('Fecha de creación');
 			$table->timestamp('updated_at', 0)->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))->comment('Última fecha de modificación');
+            
         });
     }
 
@@ -34,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('partners');
+        Schema::dropIfExists('project_partners');
     }
 };

@@ -118,12 +118,16 @@
 					<li class="nav-item" role="presentation">
 						<button class="nav-link" id="bills-tab" data-toggle="tab" data-target="#bills" type="button" role="tab" aria-controls="bills" aria-selected="false">Bills</button>
 					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="partners-tab" data-toggle="tab" data-target="#partners" type="button" role="tab" aria-controls="partners" aria-selected="false">Partners</button>
+					</li>
 				</ul>
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">{!! $invoicesTable !!}</div>
 					<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">{!! $workersTable !!}</div>
 					<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">{!! $paymentsTable !!}</div>
 					<div class="tab-pane fade" id="bills" role="tabpanel" aria-labelledby="bills-tab">{!! $billsTable !!}</div>
+					<div class="tab-pane fade" id="partners" role="tabpanel" aria-labelledby="partners-tab">{!! $partnersTable !!}</div>
 
 				</div>
 

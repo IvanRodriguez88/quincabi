@@ -14,6 +14,8 @@ use App\Http\Controllers\ProjectWorkerController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\BillTypeController;
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\ProjectPartnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +111,15 @@ Route::middleware('auth')->group(function () {
 
 	Route::resource('bills', BillController::class);
 
+	Route::get('project_partners/getaddeditmodal/{project}/{id?}', [ProjectPartnerController::class, 'getAddEditModal'])->name('project_partners.getAddEditModal');
+	Route::post('project_partners', [ProjectPartnerController::class, 'store'])->name('project_partners.store');
+	Route::put('project_partners/{project_partner}', [ProjectPartnerController::class, 'update'])->name('project_partners.update');
+	Route::delete('project_partners/{project_partner}', [ProjectPartnerController::class, 'destroy'])->name('project_partners.destroy');
+
+	Route::get('partners/getpartner/{partner}', [PartnerController::class, 'getPartner'])->name('partners.getWorker');
+	Route::get('partners/getaddeditmodal/{id?}', [PartnerController::class, 'getAddEditModal'])->name('partners.getAddEditModal');
+	Route::resource('partners', PartnerController::class);
+	
 });
 
 

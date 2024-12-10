@@ -10,6 +10,17 @@ $(function () {
         ]
     });
 
+	const dtPP = $('#project-partners-table').DataTable({
+        destroy: true, 
+        columnDefs: [
+            {
+                targets: 0,
+                visible: false,
+                searchable: false
+            }
+        ]
+    });
+
     const dtPayments = $("#project_payments-table").DataTable({
         destroy: true, // Permite reinicializar
         columnDefs: [
@@ -80,6 +91,25 @@ $(function () {
 			success: function (response) {
 				$("#addEditModal").empty().append(response)
 				$("#project_paymentsModal").modal('show')
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+			},
+		});
+	}
+
+	window.getAddEditModalPartner = (type, project_id, id) => {
+		let url = `${getBaseUrl()}/project_partners/getaddeditmodal/${project_id}`
+		if (id !== null){
+			url = `${getBaseUrl()}/project_partners/getaddeditmodal/${project_id}/${id}`
+		}
+		$.ajax({
+			type: "GET",
+			url: url,
+			data: {type: type},
+			success: function (response) {
+				$("#addEditModal").empty().append(response)
+				$("#project_partnersModal").modal('show')
 			},
 			error: function (xhr, textStatus, errorThrown) {
 				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
@@ -200,6 +230,49 @@ $(function () {
         });
 	}
 
+	window.savePartner = () => {
+		const formProjectPartners = $("#project_partnersModal-form")
+		const action = formProjectPartners.attr('action')
+		const method = $("#addEditModal").find('input[name="_method"]').val().toUpperCase()
+        
+        $.ajax({
+            type: method,
+            url: action,
+            data: formProjectPartners.serialize(),
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+            success: function (response) {
+                const rowIndex = dtPP.column(0).data().indexOf(response.project_partner.id.toString());
+				$("#closeModal").trigger('click')
+				console.log(response);
+				
+				if (method == "POST") {
+					let row = [
+                        response.project_partner.id.toString(),
+						response.project_partner.partner.name,
+                        `${(response.project_partner.percentage)}%`,
+						getButtonsPartners(response.project_partner.id, response.project_partner.partner.name),
+					]
+                    
+					dtPP.row.add(row).draw(false)
+					toastr.success(`Partner ${response.project_partner.name} has been added successfully`, 'Partner added')
+				}else{
+					let rowData = dtPP.row(rowIndex).data();
+					rowData[1] = response.project_partner.partner.name;
+					rowData[2] = `${(response.project_partner.percentage)}%`;
+					dtPP.row(rowIndex).data(rowData).draw(false);
+					toastr.success(`Partner has been updated successfully`, 'Partner updated')
+				}
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $("#error-messages").hide();
+				$("#error-messages").empty().append(getErrorMessages(xhr.responseJSON.errors));
+				$("#error-messages").slideDown("fast");
+            },
+        });
+	}
+
 	function getButtons(project_worker_id, worker_name) {
 		return `<div class="text-center">
             <a class="btn btn-primary" onclick="getAddEditModal('edit', ${$("#project_id").val()} ,${project_worker_id})">
@@ -217,6 +290,17 @@ $(function () {
                 <i class="fas fa-edit"></i>
             </a>
             <a class="btn btn-danger" onclick="showDeletePayment(${project_payment_id}, '${amount}')">
+                <i class="fas fa-trash"></i>
+            </a>
+        </div>`
+	}
+
+	function getButtonsPayments(project_partner_id, amount) {
+		return `<div class="text-center">
+            <a class="btn btn-primary" onclick="getAddEditModalPartner('edit', ${$("#project_id").val()} ,${project_partner_id})">
+                <i class="fas fa-edit"></i>
+            </a>
+            <a class="btn btn-danger" onclick="showDeletePartner(${project_partner_id}, '${amount}')">
                 <i class="fas fa-trash"></i>
             </a>
         </div>`
@@ -289,6 +373,29 @@ $(function () {
 						
 						dtPayments.row(rowIndex).remove().draw(false)
 						toastr.success(`The payment has been deleted successfully`, 'Client deleted')
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+				});
+			}
+		})
+	}
+
+	window.showDeletePartner = (project_partner_id, name) => {
+		const confirm = alertYesNo('Delete partner',`Are you sure to delete the partner ${name}?`);
+		confirm.then((result) => {
+			if (result) {
+				$.ajax({
+					type: "DELETE",
+					url: `${getBaseUrl()}/project_partners/${project_partner_id}`,
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function (response) {
+						const rowIndex = dtPP.column(0).data().indexOf(project_partner_id.toString());
+						dtPP.row(rowIndex).remove().draw(false)
+						toastr.success(`The partner has been deleted successfully`, 'Partner deleted')
 					},
 					error: function (xhr, textStatus, errorThrown) {
 						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)

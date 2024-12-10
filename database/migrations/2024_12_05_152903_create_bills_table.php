@@ -28,8 +28,6 @@ return new class extends Migration
 			$table->date('date')->nullable()->comment('Fecha del gasto');
 			$table->float('amount')->comment('gasto');
 
-
-
            	//Datos de creación y modificación
 			$table->string('notes', 1024)->nullable()->comment('Notas');
 			$table->boolean('is_active')->default(1)->comment('Muestra si la fila está activa');

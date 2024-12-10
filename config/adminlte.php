@@ -341,6 +341,11 @@ return [
             'url'  => 'workers',
             'icon' => 'fas fa-hard-hat',
         ],
+        [
+            'text' => 'Partners',
+            'url'  => 'partners',
+            'icon' => 'fas fa-hard-hat',
+        ],
 		[
 			'text'    => 'materials',
 			'icon' => 'fas fa-tools',
