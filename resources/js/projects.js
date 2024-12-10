@@ -295,7 +295,7 @@ $(function () {
         </div>`
 	}
 
-	function getButtonsPayments(project_partner_id, amount) {
+	function getButtonsPartners(project_partner_id, amount) {
 		return `<div class="text-center">
             <a class="btn btn-primary" onclick="getAddEditModalPartner('edit', ${$("#project_id").val()} ,${project_partner_id})">
                 <i class="fas fa-edit"></i>

@@ -34,7 +34,10 @@ class ProjectController extends Controller
 			'Initial Date',
 			'End Date',
 			'Cost',
-			'Total',
+			'Price',
+			'Bills',
+			'Workers',
+			'Partenrs',
 			'Profit',
 			'Actions'
         ];
@@ -163,12 +166,14 @@ class ProjectController extends Controller
 				'end_date' => $request->end_date,
 				'cost_real' => $request->cost_real,
 				'total_real' => $request->total_real,
-				'profit' => $request->total_real - $request->cost_real,
 				'description' => $request->description,
 				"updated_by" => auth()->id(),
 				"updated_at" => now()
 			]);
 
+			$project->update([
+				'profit' => $project->getProfit()
+			]);
 			$project->invoices()->update(["client_id" => $request->client_id]);
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;

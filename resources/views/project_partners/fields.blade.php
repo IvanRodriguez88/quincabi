@@ -2,14 +2,14 @@
     <input type="hidden" name="project_id" value="{{$data['project']->id}}">
 
     @if (isset($data["project_partner"]))
-     <x-adminlte-select id="partner_id" name="partner_id" label="Partner" required fgroup-class="col-md-4">
+     <x-adminlte-select id="partner_id" name="partner_id" label="Partner" required fgroup-class="col-md-6">
             <option disabled>Select a partner...</option>
             @foreach ($data["partners"] as $partner)
                 <option value="{{$partner->id}}" {{$partner->id == $data["project_partner"]->id ? 'selected' : ''}}>{{$partner->name}}</option>
             @endforeach
         </x-adminlte-select>
     @else
-        <x-adminlte-select id="partner_id" name="partner_id" label="Partner" required fgroup-class="col-md-4">
+        <x-adminlte-select id="partner_id" name="partner_id" label="Partner" required fgroup-class="col-md-6">
             <option disabled selected>Select a partner...</option>
             @foreach ($data["partners"] as $partner)
                 <option value="{{$partner->id}}">{{$partner->name}}</option>
@@ -23,7 +23,7 @@
         name="percentage" 
         label="Percentage" 
         placeholder="Precentage"
-        fgroup-class="col-md-4" 
+        fgroup-class="col-md-6" 
         disable-feedback
         type="number"
     />

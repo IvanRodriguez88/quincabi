@@ -57,6 +57,26 @@ class Project extends Model
         return $this->hasMany("App\Models\ProjectTicket");
     }
 
+	public function getTotalGains()
+	{
+		return $this->total_real - ($this->cost_real + $this->total_bills + $this->total_payments_workers);
+	}
+
+	public function getPartnersGain()
+	{
+		$percentagesSum = 0;
+		foreach ($this->partners as $key => $partner) {
+			$percentagesSum += $partner->pivot->percentage;
+		}
+		return ($this->getTotalGains() * $percentagesSum) / 100;
+		
+	}
+
+	public function getProfit()
+	{
+		return $this->getTotalGains() - $this->getPartnersGain();
+	}
+
 	public function totalInvoicesPrices()
 	{
 		$total = 0;

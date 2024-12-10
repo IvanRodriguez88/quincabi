@@ -307,11 +307,6 @@ return [
             'text' => 'search',
         ],
 		[
-            'text' => 'clients',
-            'url'  => 'clients',
-            'icon' => 'fas fa-users',
-        ],
-		[
 			'text'    => 'Projects',
 			'icon' => 'fas fa-tools',
 			'submenu' => [
@@ -319,7 +314,7 @@ return [
 					'text'    => 'Projects',
 					'shift'   => 'ml-3',
 					'route' => 'projects.index',
-					'icon' => 'fas fa-tools',
+					'icon' => 'fas fa-hammer',
 
 				],
 				[
@@ -331,6 +326,11 @@ return [
 				],
 			],
 		],
+		[
+            'text' => 'clients',
+            'url'  => 'clients',
+            'icon' => 'fas fa-users',
+        ],
 		[
             'text' => 'suppliers',
             'url'  => 'suppliers',
@@ -344,7 +344,7 @@ return [
         [
             'text' => 'Partners',
             'url'  => 'partners',
-            'icon' => 'fas fa-hard-hat',
+            'icon' => 'fas fa-hands-helping',
         ],
 		[
 			'text'    => 'materials',
@@ -367,30 +367,30 @@ return [
 			],
 		],
         [
-            'text' => 'Calendar',
-            'url'  => 'calendar',
-            'icon' => 'fas fa-box',
-        ],
-        [
 			'text'    => 'Bills',
-			'icon' => 'fas fa-tools',
+			'icon' => 'fas fa-wallet',
 			'submenu' => [
 				[
 					'text'    => 'Bills',
 					'shift'   => 'ml-3',
 					'route' => 'bills.index',
-					'icon' => 'fas fa-stream',
+					'icon' => 'fas fa-money-bill',
 
 				],
 				[
 					'text'    => 'Bill Types',
 					'shift'   => 'ml-3',
 					'route' => 'bill_types.index',
-					'icon' => 'fas fa-tools',
+					'icon' => 'fas fa-gas-pump',
 
 				],
 			],
 		],
+		[
+            'text' => 'Calendar',
+            'url'  => 'calendar',
+            'icon' => 'fas fa-calendar',
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

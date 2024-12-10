@@ -8,7 +8,6 @@
         </div>
     </div>
     <div class="card-body">
-		<hr>
         <x-adminlte-datatable id="{{$routeResource}}-table" :heads="$heads" striped hoverable>
             @foreach($project->partners as $partner)
                 <tr>
