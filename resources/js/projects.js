@@ -135,6 +135,43 @@ $(function () {
 			},
 		});
 	}
+
+	window.addExistingInvoiceModal = (project_id) => {
+		let url = `${getBaseUrl()}/projects/addExistingInvoiceModal/${project_id}`
+		$.ajax({
+			type: "GET",
+			url: url,
+			data: {type: 'add'},
+			success: function (response) {
+				$("#addEditModal").empty().append(response)
+				$("#invoiceModal").modal('show')
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+			},
+		});
+	}
+
+	window.addExistingInvoice = () => {
+		let url = `${getBaseUrl()}/projects/addExistingInvoice`
+		const formInvoices = $("#invoiceModal-form")
+
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: formInvoices.serialize(),
+			headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
+			success: function (response) {
+				$("#addEditModal").empty().append(response)
+				$("#invoiceModal").modal('show')
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+			},
+		});
+	}
 	
 
     $("#worker_id").on("change", function(){

@@ -10,6 +10,7 @@ use App\Models\Client;
 
 use App\Models\ProjectPicture;
 use App\Models\ProjectTicket;
+use App\Models\Invoice;
 
 use App\Http\Helpers\Modal;
 use Illuminate\Support\Facades\Storage;
@@ -208,6 +209,31 @@ class ProjectController extends Controller
 		//Solo add
 		$modal = new Modal($this->routeResource.'Modal', 'Add Project', $this->routeResource, $data);
 		return $modal->getModalAddEdit(request()->type);
+	}
+
+	public function addExistingInvoiceModal(Project $project)
+	{
+		$data = [
+			"project" => $project,
+			"invoices" => Invoice::whereNull("project_id")->get()
+		];
+		$config = [
+			"route" => "projects.addExistingInvoice",
+			"view" => "projects.addExistingInvoiceFields",
+			"function" => "addExistingInvoice()"
+		];
+		$modal = new Modal('invoiceModal', 'Add existing invoice', $this->routeResource, $data, $config);
+		return $modal->getModalAddEdit('add');
+	}
+
+	public function addExistingInvoice(Request $request)
+	{
+		$project = Project::find($request->project_id);
+		$invoice = Invoice::find($request->invoice_id);
+		$invoice->update([
+			"project_id" => $project->id
+		]);
+		
 	}
 
 	public function uploadImage(Request $request, Project $project)

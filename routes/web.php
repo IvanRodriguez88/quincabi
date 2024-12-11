@@ -87,7 +87,9 @@ Route::middleware('auth')->group(function () {
 
 	Route::get('projects/getclientinfo/{client}', [ProjectController::class, 'getClientInfo'])->name('projects.getClientInfo');
 	Route::get('projects/getaddeditmodal/{id?}', [ProjectController::class, 'getAddEditModal'])->name('projects.getAddEditModal');
-	
+	Route::get('projects/addExistingInvoiceModal/{project}', [ProjectController::class, 'addExistingInvoiceModal'])->name('projects.addExistingInvoiceModal');
+	Route::post('projects/addExistingInvoice', [ProjectController::class, 'addExistingInvoice'])->name('projects.addExistingInvoice');
+
 	Route::get('project_workers/getaddeditmodal/{project}/{id?}', [ProjectWorkerController::class, 'getAddEditModal'])->name('project_workers.getAddEditModal');
 	Route::post('project_workers', [ProjectWorkerController::class, 'store'])->name('project_workers.store');
 	Route::put('project_workers/{project_worker}', [ProjectWorkerController::class, 'update'])->name('project_workers.update');

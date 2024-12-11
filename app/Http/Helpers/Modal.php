@@ -29,10 +29,17 @@ class Modal
 		$data = $this->data ?? "";
 		$action =  $this->route.".store"; //Por default tiene el action de store
 		$method =  "post";
+        $view = view($this->route.'.'.$nameViewFields, compact('data'));
+
 		if ($type == 'edit') {
 			$action =  $this->route.".update";
 		}
-
+        if (isset($this->config["route"])) {
+            $action = $this->config["route"];
+        }
+        if (isset($this->config["view"])) {
+            $view = view($this->config["view"], compact('data'));
+        }
         return View::make('modals.modal-add-edit', [
 			'id' => $this->id,
 			'title' => $this->title,
@@ -42,7 +49,7 @@ class Modal
 			'method' => $method,
 			'idEdit' => $idEdit,
 			'config' => $this->config,
-			'fields' => view($this->route.'.'.$nameViewFields, compact('data'))->render()
+			'fields' => $view->render()
 		])->render();
     }
 
