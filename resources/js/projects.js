@@ -164,8 +164,7 @@ $(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             },
 			success: function (response) {
-				$("#addEditModal").empty().append(response)
-				$("#invoiceModal").modal('show')
+				window.location.reload()
 			},
 			error: function (xhr, textStatus, errorThrown) {
 				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)

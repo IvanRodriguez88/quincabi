@@ -228,11 +228,18 @@ class ProjectController extends Controller
 
 	public function addExistingInvoice(Request $request)
 	{
-		$project = Project::find($request->project_id);
-		$invoice = Invoice::find($request->invoice_id);
-		$invoice->update([
-			"project_id" => $project->id
-		]);
+		$status = true;
+        try {
+			$project = Project::find($request->project_id);
+			$invoice = Invoice::find($request->invoice_id);
+			$invoice->update([
+				"project_id" => $project->id
+			]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $status = false;
+        }
+
+		return response()->json([$status]);
 		
 	}
 
