@@ -23,7 +23,6 @@ class InvoiceRequest extends FormRequest
     {
         return [
             'date_due' => 'required',
-			'name' => 'required',
             'client_id' => 'required',
 		];
     }

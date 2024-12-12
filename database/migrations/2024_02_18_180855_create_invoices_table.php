@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
 
-			$table->string("name")->comment("nombre del invoice");
+			$table->string("name")->nullable()->comment("nombre del invoice");
 			$table->date('date_issued')->useCurrent()->comment('Fecha emitida');
 			$table->date('date_due')->nullable()->comment('Fecha de entrega');
 

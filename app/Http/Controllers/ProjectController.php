@@ -119,6 +119,11 @@ class ProjectController extends Controller
         return view('projects.partners-table', compact('heads', 'project', 'routeResource'));
 	}
 
+	public function show(Project $project)
+	{
+        return view('projects.show', compact("project"));
+    }
+
 	public function edit(Project $project)
 	{
         $clients = Client::where("is_active", 1)->get();

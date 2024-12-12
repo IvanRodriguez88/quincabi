@@ -17,7 +17,19 @@ class ProjectPaymentTypeSeeder extends Seeder
             "name" => "Cash",
         ]);
         ProjectPaymentType::create([
-            "name" => "Card",
+            "name" => "Zelle",
+        ]);
+		ProjectPaymentType::create([
+            "name" => "Check",
+        ]);
+		ProjectPaymentType::create([
+            "name" => "Credit Card",
+        ]);
+		ProjectPaymentType::create([
+            "name" => "Debit Card",
+        ]);
+		ProjectPaymentType::create([
+            "name" => "Other",
         ]);
     }
 }
