@@ -8,7 +8,7 @@ class ProjectWorker extends Pivot
 {
     protected $table = 'project_workers';
 
-    protected $fillable = ['project_id', 'worker_id', 'hourly_pay', 'worked_hours']; 
+    protected $fillable = ['project_id', 'worker_id', 'hourly_pay', 'worked_hours', 'date']; 
 
     protected $primaryKey = 'id';
     public $incrementing = true;

@@ -11,7 +11,7 @@ class Project extends Model
 
     protected $table = 'projects';
 	protected $fillable = ['client_id', 'name', 'description', 'initial_date', 'end_date', 'cost_real', 'total_real', 'profit', 'is_active', 'created_by', 'updated_by'];
-    protected $appends = ['total_bills','total_invoice_prices','total_invoice_costs','total_payments', 'rest_payments', 'total_worked_hours', 'total_payments_workers', 'average_payment_per_hour'];
+    protected $appends = ['total_bills','total_invoice_prices','total_invoice_costs','total_payments', 'total_suppliers', 'rest_payments', 'total_worked_hours', 'total_payments_workers', 'average_payment_per_hour', 'total_cost'];
 	
     public function client()
     {
@@ -26,7 +26,14 @@ class Project extends Model
     public function workers()
     {
         return $this->belongsToMany(Worker::class, 'project_workers')
-                    ->withPivot('id', 'hourly_pay', 'worked_hours')
+                    ->withPivot('id', 'hourly_pay', 'worked_hours', 'date')
+                    ->withTimestamps();
+    }
+
+	public function suppliers()
+    {
+        return $this->belongsToMany(Supplier::class, 'project_suppliers')
+                    ->withPivot('id', 'amount')
                     ->withTimestamps();
     }
 
@@ -97,6 +104,11 @@ class Project extends Model
 		return $total;
 	}
 
+	public function getTotalCostAttribute()
+	{
+		return $this->total_bills + $this->total_payments_workers + $this->total_suppliers;
+	}
+
 	public function getTotalInvoiceCostsAttribute()
 	{
 		return $this->totalInvoicesCosts();
@@ -119,6 +131,17 @@ class Project extends Model
 	public function getTotalBillsAttribute()
 	{
 		return $this->bills->sum('amount');
+	}
+
+
+	// Accessor para total_payments_workers
+	public function getTotalSuppliersAttribute()
+	{
+		$total_payments = 0;
+		foreach ($this->suppliers as $supplier) {
+			$total_payments += $supplier->pivot->amount;
+		}
+		return $total_payments;
 	}
 
 	// Accessor para rest_payments

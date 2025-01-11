@@ -7,9 +7,9 @@
     </div>
     <div class="card-body">
 
-        <p class="mb-1">Total: <b>${{number_format($project->totalInvoicesPrices(), 2, '.', ',')}}</b></p>
-        <p class="mb-1">Total payments: <b id="total_payment">${{number_format($project->total_payments, 2, '.', ',')}}</b></p>
-        <p class="mb-1">Rest: <b id="rest_payments">${{number_format($project->totalInvoicesPrices() - $project->total_payments, 2, '.', ',')}}</b></p>
+        <p class="mb-1">Total: <b>${{number_format($project->totalInvoicesPrices(), 4, '.', ',')}}</b></p>
+        <p class="mb-1">Total payments: <b id="total_payment">${{number_format($project->total_payments, 4, '.', ',')}}</b></p>
+        <p class="mb-1">Rest: <b id="rest_payments">${{number_format($project->totalInvoicesPrices() - $project->total_payments, 4, '.', ',')}}</b></p>
 
         <hr>
         <x-adminlte-datatable id="project_payments-table" :heads="$heads" striped hoverable>
@@ -17,8 +17,8 @@
                 <tr>
                     <td>{{ $payment->id }}</td>
                     <td>{{ $payment->projectPaymentType->name }}</td>
-                    <td>$ {{ number_format($payment->amount, 2, '.', ',') }}</td>
-                    <td>{{ date("d/m/Y", strtotime($payment->date)) }}</td>
+                    <td>$ {{ number_format($payment->amount, 4, '.', ',') }}</td>
+                    <td>{{ date("m/d/Y", strtotime($payment->date)) }}</td>
                     <td class="text-center">
                         <a class="btn btn-primary" onclick="getAddEditModalPayment('edit', {{$project->id}}, {{$payment->id}})">
                             <i class="fas fa-edit"></i>

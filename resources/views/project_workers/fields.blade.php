@@ -2,14 +2,14 @@
     <input type="hidden" name="project_id" value="{{$data['project']->id}}">
 
     @if (isset($data["project_worker"]))
-     <x-adminlte-select id="worker_id" name="worker_id" label="Worker" required fgroup-class="col-md-4">
+     <x-adminlte-select id="worker_id" name="worker_id" label="Worker" required fgroup-class="col-md-6">
             <option disabled>Select a worker...</option>
             @foreach ($data["workers"] as $worker)
-                <option value="{{$worker->id}}" {{$worker->id == $data["project_worker"]->id ? 'selected' : ''}}>{{$worker->name}}</option>
+                <option value="{{$worker->id}}" {{$worker->id == $data["project_worker"]->worker->id ? 'selected' : ''}}>{{$worker->name}}</option>
             @endforeach
         </x-adminlte-select>
     @else
-        <x-adminlte-select id="worker_id" name="worker_id" label="Worker" required fgroup-class="col-md-4">
+        <x-adminlte-select id="worker_id" name="worker_id" label="Worker" required fgroup-class="col-md-6">
             <option disabled selected>Select a worker...</option>
             @foreach ($data["workers"] as $worker)
                 <option value="{{$worker->id}}">{{$worker->name}}</option>
@@ -19,11 +19,24 @@
   
 
     <x-adminlte-input 
+        value="{{($data['project_worker']->date) ?? ''}}" 
+        name="date" 
+        label="Date" 
+        placeholder="Date"
+        fgroup-class="col-md-6" 
+        disable-feedback
+        type="date"
+    />
+    
+</div>
+
+<div class="row">
+    <x-adminlte-input 
         value="{{($data['project_worker']->hourly_pay) ?? ''}}" 
         name="hourly_pay" 
         label="Hourly Pay" 
         placeholder="Hourly pay"
-        fgroup-class="col-md-4" 
+        fgroup-class="col-md-6" 
         disable-feedback
         type="number"
     />
@@ -32,7 +45,7 @@
         name="worked_hours" 
         label="Worked Hours" 
         placeholder="Worked hours"
-        fgroup-class="col-md-4" 
+        fgroup-class="col-md-6" 
         disable-feedback
         type="number"
     />

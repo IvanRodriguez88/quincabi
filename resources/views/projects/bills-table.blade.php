@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="card-body">
-        <p class="mb-1">Total bills: <b id="total_bills">${{number_format($project->total_bills, 2, '.', ',')}}</b></p>
+        <p class="mb-1">Total bills: <b id="total_bills">${{number_format($project->total_bills, 4, '.', ',')}}</b></p>
 
 		<hr>
         <x-adminlte-datatable id="{{$routeResource}}-table" :heads="$heads" striped hoverable>
@@ -17,7 +17,7 @@
                     <td>{{ $bill->id }}</td>
 					<td>{{ $bill->billType->name }}</td>
 					<td>{{ $bill->projectPaymentType->name }}</td>
-					<td>${{ number_format( $bill->amount ?? 0, 2, ".", ",") }}</td>
+					<td>${{ number_format( $bill->amount ?? 0, 4, ".", ",") }}</td>
 					<td>{{ date("m/d/Y", strtotime($bill->date)) }}</td>
 					<td>{{ $bill->description }}</td>
 					<td class="text-center">

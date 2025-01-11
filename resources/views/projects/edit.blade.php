@@ -71,15 +71,16 @@
 						<div class="row">
 							<div class="col-md-6">
 								<x-adminlte-input 
-									value="{{$project->cost_real}}" 
+									value="{{$project->total_cost}}" 
 									name="cost_real" 
 									label="Real Cost" 
 									placeholder="Real cost of the proyect"
 									fgroup-class="mb-1" 
 									disable-feedback
 									type="number"
+									readonly
 								/>
-								<p >Proyected cost <b id="cost_proyected">${{number_format($project->totalInvoicesCosts() ?? 0, 2, ".", ",")}}</b></p>
+								<p >Proyected cost <b id="cost_proyected">${{number_format($project->totalInvoicesCosts() ?? 0, 4, ".", ",")}}</b></p>
 							</div>
 							<x-adminlte-input 
 								value="{{($project->total_real == $project->totalInvoicesPrices() ? $project->total_real : $project->totalInvoicesPrices())}}" 
@@ -121,6 +122,9 @@
 					<li class="nav-item" role="presentation">
 						<button class="nav-link" id="partners-tab" data-toggle="tab" data-target="#partners" type="button" role="tab" aria-controls="partners" aria-selected="false">Partners</button>
 					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="suppliers-tab" data-toggle="tab" data-target="#suppliers" type="button" role="tab" aria-controls="suppliers" aria-selected="false">Suppliers</button>
+					</li>
 				</ul>
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">{!! $invoicesTable !!}</div>
@@ -128,6 +132,7 @@
 					<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">{!! $paymentsTable !!}</div>
 					<div class="tab-pane fade" id="bills" role="tabpanel" aria-labelledby="bills-tab">{!! $billsTable !!}</div>
 					<div class="tab-pane fade" id="partners" role="tabpanel" aria-labelledby="partners-tab">{!! $partnersTable !!}</div>
+					<div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="suppliers-tab">{!! $suppliersTable !!}</div>
 
 				</div>
 

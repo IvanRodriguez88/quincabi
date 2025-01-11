@@ -38,7 +38,7 @@ class ProjectController extends Controller
 			'Price',
 			'Bills',
 			'Workers',
-			'Partenrs',
+			'Partners',
 			'Profit',
 			'Actions'
         ];
@@ -68,6 +68,7 @@ class ProjectController extends Controller
         $heads = [
 			'ID',
             'Name',
+			'Date',
 			'Hourly Pay',
 			'Worked Hours',
 			'Total',
@@ -88,6 +89,19 @@ class ProjectController extends Controller
 			'Actions'
         ];
         return view('projects.payments-table', compact('heads', 'project', 'routeResource'));
+	}
+
+	private function getSuppliersTable(Project $project = null)
+	{
+		$routeResource = "project-suppliers";
+
+        $heads = [
+			'ID',
+			'Supplier',
+			'Amount',
+			'Actions'
+        ];
+        return view('projects.suppliers-table', compact('heads', 'project', 'routeResource'));
 	}
 
 	private function getBillsTable(Project $project = null)
@@ -135,8 +149,9 @@ class ProjectController extends Controller
 		$paymentsTable = $this->getPaymentsTable($project);
 		$billsTable = $this->getBillsTable($project);
 		$partnersTable = $this->getPartnersTable($project);
+		$suppliersTable = $this->getSuppliersTable($project);
 
-        return view('projects.edit', compact("clients", "project", "clientInfo", "invoicesTable", "workersTable", "partnersTable", "paymentsTable", "billsTable"));
+        return view('projects.edit', compact("clients", "project", "clientInfo", "invoicesTable", "workersTable", "partnersTable", "paymentsTable", "billsTable", "suppliersTable"));
     }
 
 	public function store(ProjectRequest $request)

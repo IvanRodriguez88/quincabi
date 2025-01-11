@@ -51,15 +51,15 @@
 						<tr>
 							<td>{{$invoiceRow->name}}</td>
 							<td>{{$invoiceRow->amount}}</td>
-							<td class="text-right">${{number_format($invoiceRow->unit_price, 2, '.', ',')}}</td>
-							<td class="total text-right">${{number_format($invoiceRow->unit_price * $invoiceRow->amount, 2, '.', ',')}}</td>
+							<td class="text-right">${{number_format($invoiceRow->unit_price, 4, '.', ',')}}</td>
+							<td class="total text-right">${{number_format($invoiceRow->unit_price * $invoiceRow->amount, 4, '.', ',')}}</td>
 						</tr>
 					@endforeach
 				</tbody>
 				
 			</table>
 			<div class="d-flex justify-content-end mt-3">
-				<h4>BALANCE DUE: ${{number_format($invoice->getTotal(), 2, '.', ',') ?? ""}}</h4>
+				<h4>BALANCE DUE: ${{number_format($invoice->getTotal(), 4, '.', ',') ?? ""}}</h4>
 			</div>
 			<p class="mt-2 text-center">Thank you for your business!</p>
 		</div>

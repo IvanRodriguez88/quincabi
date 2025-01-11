@@ -16,6 +16,7 @@ use App\Http\Controllers\BillTypeController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProjectPartnerController;
+use App\Http\Controllers\ProjectSupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,7 +72,8 @@ Route::middleware('auth')->group(function () {
 	Route::resource('project_payments', ProjectPaymentController::class);
 	Route::get('project_payments/getaddeditmodal/{project}/{id?}', [ProjectPaymentController::class, 'getAddEditModal'])->name('project_payments.getAddEditModal');
 
-
+	Route::resource('project_suppliers', ProjectSupplierController::class);
+	Route::get('project_suppliers/getaddeditmodal/{project}/{id?}', [ProjectSupplierController::class, 'getAddEditModal'])->name('project_suppliers.getAddEditModal');
 
 	Route::get('materials/getdataautocomplete', [MaterialController::class, 'getDataAutocomplete'])->name('materials.getDataAutocomplete');
 	Route::get('materials/getaddeditmodal/{id?}', [MaterialController::class, 'getAddEditModal'])->name('materials.getAddEditModal');

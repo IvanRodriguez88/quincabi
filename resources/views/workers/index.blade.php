@@ -20,7 +20,7 @@
 					<tr>
 						<td>{{ $worker->id }}</td>
 						<td>{{ $worker->name }}</td>
-						<td>$ {{ number_format($worker->hourly_pay, 2, '.', ',') }}</td>
+						<td>$ {{ number_format($worker->hourly_pay, 4, '.', ',') }}</td>
 						<td>{{ $worker->phone }}</td>
 						<td>{{ $worker->email }}</td>
 						<td class="text-center">

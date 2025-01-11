@@ -18,8 +18,8 @@
                 <tr>
                     <td>{{ $invoice->id }}</td>
                     <td>{{ $invoice->name }}</td>
-					<td>$ {{ number_format($invoice->getCost(), 2, '.', ',') }}</td>
-					<td>$ {{ number_format($invoice->getTotal(), 2, '.', ',') }}</td>
+					<td>$ {{ number_format($invoice->getCost(), 4, '.', ',') }}</td>
+					<td>$ {{ number_format($invoice->getTotal(), 4, '.', ',') }}</td>
                     <td>{{ date("m/d/Y", strtotime($invoice->date_due)) }}</td>
 					<td>{!! $invoice->in_use ? "<span class='badge badge-success'>Yes</span>" : "<span class='badge badge-danger'>No</span>"!!}</td>
                     <td>

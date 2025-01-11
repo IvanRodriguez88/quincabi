@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProjectWorkerRequest extends FormRequest
+class ProjectSupplierRequest extends FormRequest
 {
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -24,10 +24,8 @@ class ProjectWorkerRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'worker_id' => 'required',
-			'hourly_pay' => 'required',
-			'worked_hours' => 'required',
-			'date' => 'required'
+			'supplier_id' => 'required',
+			'amount' => 'required',
 		];
 	}
 }

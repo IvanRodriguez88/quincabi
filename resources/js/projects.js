@@ -43,6 +43,17 @@ $(function () {
         ]
     })
 
+	const dtSuppliers = $("#project_suppliers-table").DataTable({
+        destroy: true, // Permite reinicializar
+        columnDefs: [
+            {
+                targets: 0,
+                visible: false,
+                searchable: false 
+            }
+        ]
+    })
+
     const dtInvoices = $("#project-invoices-table").DataTable()
 
     $("#client_id").on("change", function(){
@@ -129,6 +140,25 @@ $(function () {
 			success: function (response) {
 				$("#addEditModal").empty().append(response)
 				$("#billsModal").modal('show')
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+			},
+		});
+	}
+
+	window.getAddEditModalSupplier = (type, project_id, id) => {
+		let url = `${getBaseUrl()}/project_suppliers/getaddeditmodal/${project_id}`
+		if (id !== null){
+			url = `${getBaseUrl()}/project_suppliers/getaddeditmodal/${project_id}/${id}`
+		}
+		$.ajax({
+			type: "GET",
+			url: url,
+			data: {type: type},
+			success: function (response) {
+				$("#addEditModal").empty().append(response)
+				$("#project_suppliersModal").modal('show')
 			},
 			error: function (xhr, textStatus, errorThrown) {
 				toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
@@ -234,14 +264,16 @@ $(function () {
 				$("#total_worked_hours").text(response.project.total_worked_hours)
 				$("#total_payments_workers").text(`$${formatNumber(response.project.total_payments_workers)}`)
 				$("#average_payment_per_hour").text(`$${formatNumber(response.project.average_payment_per_hour)}`)
+				$("#cost_real").val(response.project.total_cost)
 
 				
 				if (method == "POST") {
 					let row = [
                         response.project_worker.id.toString(),
 						response.project_worker.worker.name,
+						formatDate(response.project_worker.date),
                         `$ ${formatNumber(response.project_worker.hourly_pay)}`,
-						response.project_worker.worked_hours,
+						formatNumber(response.project_worker.worked_hours),
                         `$ ${formatNumber(response.project_worker.hourly_pay * response.project_worker.worked_hours)}`,
 						getButtons(response.project_worker.id, response.project_worker.worker.name),
 					]
@@ -251,9 +283,10 @@ $(function () {
 				}else{
 					let rowData = dtPW.row(rowIndex).data();
 					rowData[1] = response.project_worker.worker.name;
-					rowData[2] = `$ ${formatNumber(response.project_worker.hourly_pay)}`;
-					rowData[3] = response.project_worker.worked_hours;
-                    rowData[4] = `$ ${formatNumber(response.project_worker.hourly_pay * response.project_worker.worked_hours)}`;
+					rowData[2] = formatDate(response.project_worker.date),
+					rowData[3] = `$ ${formatNumber(response.project_worker.hourly_pay)}`;
+					rowData[4] = formatNumber(response.project_worker.worked_hours);
+                    rowData[5] = `$ ${formatNumber(response.project_worker.hourly_pay * response.project_worker.worked_hours)}`;
 					dtPW.row(rowIndex).data(rowData).draw(false);
 					toastr.success(`Worker has been updated successfully`, 'Worker updated')
 				}
@@ -342,6 +375,17 @@ $(function () {
         </div>`
 	}
 
+	function getButtonsSuppliers(project_supplier_id, amount) {
+		return `<div class="text-center">
+            <a class="btn btn-primary" onclick="getAddEditModalSupplier('edit', ${$("#project_id").val()} ,${project_supplier_id})">
+                <i class="fas fa-edit"></i>
+            </a>
+            <a class="btn btn-danger" onclick="showDeleteSupplier(${project_supplier_id}, '${amount}')">
+                <i class="fas fa-trash"></i>
+            </a>
+        </div>`
+	}
+
 
     //Payments
     window.savePayment = () => {
@@ -392,6 +436,54 @@ $(function () {
         });
 	}
 
+	window.saveSupplier = () => {
+		const formProjectSuppliers = $("#project_suppliersModal-form")
+		const action = formProjectSuppliers.attr('action')
+		const method = $("#addEditModal").find('input[name="_method"]').val().toUpperCase()
+        
+        $.ajax({
+            type: method,
+            url: action,
+            data: formProjectSuppliers.serialize(),
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+            success: function (response) {
+                
+                const rowIndex = dtSuppliers.column(0).data().indexOf(response.supplier.id.toString());
+				$("#closeModal").trigger('click')
+				console.log(response.project);
+				
+                $("#total_suppliers").text(`$${formatNumber(response.project.total_suppliers)}`)
+				$("#cost_real").val(response.project.total_cost)
+
+				if (method == "POST") {
+					let row = [
+						response.supplier.id.toString(),
+						response.supplier.supplier.name,
+						"$" + formatNumber(response.supplier.amount),
+						getButtonsSuppliers(response.supplier.id, response.supplier.amount),
+					]
+					dtSuppliers.row.add(row).draw(false)
+					toastr.success(`The supplier has been added successfully`, 'Supplier added')
+				}else{
+					let rowData = dtSuppliers.row(rowIndex).data();
+					
+					rowData[1] = response.supplier.supplier.name;
+					rowData[2] = "$" + formatNumber(response.supplier.amount),
+                    
+					dtSuppliers.row(rowIndex).data(rowData).draw(false);
+					toastr.success(`The supplier has been updated successfully`, 'Supplier updated')
+				}
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $("#error-messages").hide();
+				$("#error-messages").empty().append(getErrorMessages(xhr.responseJSON.errors));
+				$("#error-messages").slideDown("fast");
+            },
+        });
+	}
+
     window.showDeletePayment = (project_payment_id, payment_amount) => {
 		const confirm = alertYesNo('Delete payment',`Are you sure to delete the payment for $${formatNumber(payment_amount)}?`);
 		confirm.then((result) => {
@@ -409,6 +501,31 @@ $(function () {
 						
 						dtPayments.row(rowIndex).remove().draw(false)
 						toastr.success(`The payment has been deleted successfully`, 'Client deleted')
+					},
+					error: function (xhr, textStatus, errorThrown) {
+						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
+					},
+				});
+			}
+		})
+	}
+
+	window.showDeleteSupplier = (supplier_id, amount) => {
+		const confirm = alertYesNo('Delete supplier',`Are you sure to delete the supplier for $${formatNumber(amount)}?`);
+		confirm.then((result) => {
+			if (result) {
+				$.ajax({
+					type: "DELETE",
+					url: `${getBaseUrl()}/project_suppliers/${supplier_id}`,
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function (response) {
+						const rowIndex = dtSuppliers.column(0).data().indexOf(supplier_id.toString());
+                        $("#total_suppliers").text(`$${formatNumber(response.project.total_suppliers)}`)
+						
+						dtSuppliers.row(rowIndex).remove().draw(false)
+						toastr.success(`The supplier has been deleted successfully`, 'Supplier deleted')
 					},
 					error: function (xhr, textStatus, errorThrown) {
 						toastr.error(xhr.responseJSON.message, `Error ${xhr.status}`)
@@ -456,6 +573,7 @@ $(function () {
             success: function (response) {
                 const rowIndex = dtBills.column(0).data().indexOf(response.bill.id.toString());
 				$("#total_bills").text(`$${formatNumber(response.bill.project.total_bills)}`)
+				$("#cost_real").val(response.project.total_cost)
 
 				$("#closeModal").trigger('click')
 
@@ -719,6 +837,7 @@ $(function () {
                         ]
                         dtInvoices.row.add(row).draw(false)
                         $("#cost_proyected").text("$" + formatNumber(response.invoice.project.total_invoice_costs))
+
                         $("#total_real").val(response.invoice.project.total_invoice_prices)
                         toastr.success(`The invoice has been copied successfully`, 'Invoice copied')
                     },

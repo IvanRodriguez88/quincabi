@@ -23,6 +23,7 @@ class ProjectWorkerController extends Controller
 			$project_worker = ProjectWorker::create([
 				"project_id" => $request->project_id,
 				"worker_id" => $request->worker_id,
+				"date" => $request->date,
 				"hourly_pay" => $request->hourly_pay,
 				"worked_hours" => $request->worked_hours,
 			]);
@@ -42,6 +43,7 @@ class ProjectWorkerController extends Controller
 		try {
             $project_worker->update([
 				"worker_id" => $request->worker_id,
+				"date" => $request->date,
 				"hourly_pay" => $request->hourly_pay,
 				"worked_hours" => $request->worked_hours,
 			]);

@@ -27,7 +27,7 @@ window.getBaseUrl = function () {
 }
 
 window.formatNumber = (value) => {
-	return parseFloat(value).toFixed(2);
+	return parseFloat(value).toFixed(4);
 }
 
 window.formatDate = (inputDate) => {

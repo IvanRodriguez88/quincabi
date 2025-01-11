@@ -19,9 +19,9 @@
 		<div class="card-body">
             <h4>Invoice #{{$invoice->id}}</h4>
 
-            <p class="mb-1">Total: <b>${{number_format($invoice->getTotal(), 2, '.', ',')}}</b></p>
-            <p class="mb-1">Total payments: <b>${{number_format($invoice->getTotalPayments(), 2, '.', ',')}}</b></p>
-            <p class="mb-1">Rest: <b>${{number_format($invoice->getTotal() - $invoice->getTotalPayments() , 2, '.', ',')}}</b></p>
+            <p class="mb-1">Total: <b>${{number_format($invoice->getTotal(), 4, '.', ',')}}</b></p>
+            <p class="mb-1">Total payments: <b>${{number_format($invoice->getTotalPayments(), 4, '.', ',')}}</b></p>
+            <p class="mb-1">Rest: <b>${{number_format($invoice->getTotal() - $invoice->getTotalPayments() , 4, '.', ',')}}</b></p>
 
             <hr>
             <x-adminlte-datatable id="payments-table" :heads="$heads" striped hoverable with-buttons>
@@ -29,7 +29,7 @@
 					<tr>
 						<td>{{ $payment->id }}</td>
 						<td>{{ $payment->projectPaymentType->name }}</td>
-						<td>$ {{ number_format($payment->amount, 2, '.', ',') }}</td>
+						<td>$ {{ number_format($payment->amount, 4, '.', ',') }}</td>
 						<td>{{ date("d/m/Y", strtotime($payment->date)) }}</td>
                         <td class="text-center">
 							<a class="btn btn-primary" onclick="getAddEditModal({{$invoice->id}}, 'edit', {{$payment->id}})">

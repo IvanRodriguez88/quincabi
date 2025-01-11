@@ -28,7 +28,7 @@
 						@endif
 						<td>{{ $bill->billType->name }}</td>
 						<td>{{ $bill->projectPaymentType->name }}</td>
-						<td>${{ number_format( $bill->amount ?? 0, 2, ".", ",") }}</td>
+						<td>${{ number_format( $bill->amount ?? 0, 4, ".", ",") }}</td>
 						<td>{{ date("m/d/Y", strtotime($bill->date)) }}</td>
 						<td>{{ $bill->description }}</td>
 						<td class="text-center">
