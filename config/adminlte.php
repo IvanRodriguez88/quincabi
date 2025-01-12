@@ -391,6 +391,19 @@ return [
             'url'  => 'calendar',
             'icon' => 'fas fa-calendar',
         ],
+		[
+			'text'    => 'Reports',
+			'icon' => 'fas fa-wallet',
+			'submenu' => [
+				[
+					'text'    => 'Report by Worker',
+					'shift'   => 'ml-3',
+					'route' => 'report_by_workers.index',
+					'icon' => 'fas fa-money-bill',
+
+				],
+			],
+		],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

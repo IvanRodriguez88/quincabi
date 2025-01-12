@@ -158,9 +158,9 @@
 		<tr>
 			<td colspan="3"></td>
 			@if (isset($invoice))
-				<td><b id="total_invoice" style="font-size:18px">${{number_format($invoice->getTotal(), 4, '.', ',')}}</b></td>
+				<td><b id="total_invoice" style="font-size:18px">${{formatNumber($invoice->getTotal())}}</b></td>
 			@else
-				<td><b id="total_invoice" style="font-size:18px">${{number_format(0, 4, '.', ',')}}</b></td>
+				<td><b id="total_invoice" style="font-size:18px">${{formatNumber(0)}}</b></td>
 			@endif
 
 		</tr>

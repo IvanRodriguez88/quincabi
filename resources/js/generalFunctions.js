@@ -27,8 +27,12 @@ window.getBaseUrl = function () {
 }
 
 window.formatNumber = (value) => {
-	return parseFloat(value).toFixed(4);
-}
+    const formatted = parseFloat(value).toFixed(4); // Formatea a 4 decimales
+    const trimmed = parseFloat(formatted).toString(); // Elimina ceros innecesarios
+    return trimmed.includes('.') && trimmed.split('.')[1].length > 2
+        ? trimmed
+        : parseFloat(value).toFixed(2);
+};
 
 window.formatDate = (inputDate) => {
     // Dividir la fecha de entrada en componentes

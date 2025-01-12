@@ -171,6 +171,8 @@ class ProjectController extends Controller
 			]);
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
+		dd($e);
+
         }
 
 		return response()->json([$status, 'project' => $project]);

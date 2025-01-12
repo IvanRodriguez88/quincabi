@@ -29,8 +29,8 @@
 					<p class="mb-0">916 Woodland St Channelview, TX 77530</p>
 					<p class="mb-0">quincabinetry.com</p>
 					<p class="mb-0">(832) 530-8388</p>
-					<p class="mb-0 mt-2">Cost: {{number_format($project->real_cost, 4, ".", ",")}}</p>
-					<p class="mb-0">Price: {{number_format($project->real_total, 4, ".", ",")}}</p>
+					<p class="mb-0 mt-2">Cost: {{formatNumber($project->real_cost)}}</p>
+					<p class="mb-0">Price: {{formatNumber($project->real_total)}}</p>
 				</div>
 				<div>
 					<p class="mb-0"><b>BILL TO</b></p>

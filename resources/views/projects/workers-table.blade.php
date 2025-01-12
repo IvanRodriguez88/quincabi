@@ -9,8 +9,8 @@
     </div>
     <div class="card-body">
 		<p class="mb-1">Total Worked Hours: <b id="total_worked_hours">{{$project->total_worked_hours}}</b></p>
-        <p class="mb-1">Total payments: <b id="total_payments_workers">${{number_format($project->total_payments_workers, 4, '.', ',')}}</b></p>
-        <p class="mb-1">Average payment per hour: <b id="average_payment_per_hour">${{number_format($project->average_payment_per_hour, 4, '.', ',')}}</b></p>
+        <p class="mb-1">Total payments: <b id="total_payments_workers">${{formatNumber($project->total_payments_workers)}}</b></p>
+        <p class="mb-1">Average payment per hour: <b id="average_payment_per_hour">${{formatNumber($project->average_payment_per_hour)}}</b></p>
 
 		<hr>
         <x-adminlte-datatable id="{{$routeResource}}-table" :heads="$heads" striped hoverable>
@@ -19,9 +19,9 @@
                     <td>{{$worker->pivot->id}}</td>
                     <td>{{ $worker->name }}</td>
                     <td>{{ $worker->pivot->date != null ? date("m/d/Y", strtotime($worker->pivot->date)) : ""  }}</td>
-                    <td>${{ number_format($worker->pivot->hourly_pay, 4, ".", ",") }}</td>
+                    <td>${{ formatNumber($worker->pivot->hourly_pay) }}</td>
                     <td>{{$worker->pivot->worked_hours}}</td>
-                    <td>${{ number_format($worker->pivot->hourly_pay * $worker->pivot->worked_hours, 4, ".", ",") }}</td>
+                    <td>${{ formatNumber($worker->pivot->hourly_pay * $worker->pivot->worked_hours) }}</td>
                     <td class="text-center">
                         <div class="text-center">
                             <a class="btn btn-primary" onclick="getAddEditModal('edit', {{$project->id}}, {{$worker->pivot->id}})">

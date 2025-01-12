@@ -235,6 +235,7 @@ $(function () {
 						$("#total_worked_hours").text(response.project.total_worked_hours)
 						$("#total_payments_workers").text(`$${formatNumber(response.project.total_payments_workers)}`)
 						$("#average_payment_per_hour").text(`$${formatNumber(response.project.average_payment_per_hour)}`)
+						$("#cost_real").val(response.project.total_cost)
 
 						toastr.success(`The worker has been deleted successfully`, 'Client deleted')
 					},
@@ -498,7 +499,8 @@ $(function () {
 						const rowIndex = dtPayments.column(0).data().indexOf(project_payment_id.toString());
                         $("#total_payment").text(`$${formatNumber(response.project.total_payments)}`)
 						$("#rest_payments").text(`$${formatNumber(response.project.rest_payments)}`)
-						
+						$("#cost_real").val(response.bill.project.total_cost)
+
 						dtPayments.row(rowIndex).remove().draw(false)
 						toastr.success(`The payment has been deleted successfully`, 'Client deleted')
 					},
@@ -573,8 +575,7 @@ $(function () {
             success: function (response) {
                 const rowIndex = dtBills.column(0).data().indexOf(response.bill.id.toString());
 				$("#total_bills").text(`$${formatNumber(response.bill.project.total_bills)}`)
-				$("#cost_real").val(response.project.total_cost)
-
+				$("#cost_real").val(response.bill.project.total_cost)
 				$("#closeModal").trigger('click')
 
 				if (method == "POST") {
@@ -623,7 +624,8 @@ $(function () {
 						const rowIndex = dtPayments.column(0).data().indexOf(project_payment_id.toString());
                         $("#total_payment").text(`$${formatNumber(response.project.total_payments)}`)
 						$("#rest_payments").text(`$${formatNumber(response.project.rest_payments)}`)
-						
+						$("#cost_real").val(response.project.total_cost)
+
 						dtPayments.row(rowIndex).remove().draw(false)
 						toastr.success(`The payment has been deleted successfully`, 'Client deleted')
 					},
@@ -661,6 +663,8 @@ $(function () {
 						const rowIndex = dtBills.column(0).data().indexOf(bill_id.toString());
 						dtBills.row(rowIndex).remove().draw(false)
 						$("#total_bills").text(`$${formatNumber(response.bill.project.total_bills)}`)
+						$("#cost_real").val(response.bill.project.total_cost)
+
 
 						toastr.success(`The bill has been deleted successfully`, 'Bill deleted')
 					},

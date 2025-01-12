@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
 
-        <p class="mb-1">Total: <b id="total_suppliers">${{number_format($project->total_suppliers, 4, '.', ',')}}</b></p>
+        <p class="mb-1">Total: <b id="total_suppliers">${{formatNumber($project->total_suppliers)}}</b></p>
 
         <hr>
         <x-adminlte-datatable id="project_suppliers-table" :heads="$heads" striped hoverable>
@@ -15,7 +15,7 @@
                 <tr>
                     <td>{{ $supplier->pivot->id }}</td>
                     <td>{{ $supplier->name }}</td>
-                    <td>$ {{ number_format($supplier->pivot->amount, 4, '.', ',') }}</td>
+                    <td>$ {{ formatNumber($supplier->pivot->amount) }}</td>
                     <td class="text-center">
                         <a class="btn btn-primary" onclick="getAddEditModalSupplier('edit', {{$project->id}}, {{$supplier->pivot->id}})">
                             <i class="fas fa-edit"></i>

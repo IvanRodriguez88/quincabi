@@ -14,15 +14,15 @@
     </td>
     <td>
         <input type="hidden" value="{{$unit_cost}}" class="unit_cost">
-        ${{number_format($unit_cost, 4, '.', ',')}}
+        ${{formatNumber($unit_cost)}}
     </td>
     <td>
         <input type="hidden" value="{{$unit_price}}" class="unit_price">
-        ${{number_format($unit_price, 4, '.', ',')}}
+        ${{formatNumber($unit_price)}}
     </td>
     <input type="hidden" value="{{$total}}" class="total_input">
     <td class="total">
-        ${{number_format($total, 4, '.', ',')}}
+        ${{formatNumber($total)}}
     </td>
     <td>
         <a class="btn btn-danger" onclick="deleteMaterial(this, '{{$material->name ?? $free_material}}')">

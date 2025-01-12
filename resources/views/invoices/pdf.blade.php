@@ -85,14 +85,14 @@
                     <tr>
                         <td>{{$invoiceRow->name}}</td>
                         <td style="text-align: center">{{$invoiceRow->amount}}</td>
-                        <td style="text-align: right">$ {{number_format($invoiceRow->unit_price, 4, '.', ',')}}</td>
-                        <td style="text-align: right">$ {{number_format($invoiceRow->unit_price * $invoiceRow->amount, 4, '.', ',')}}</td>
+                        <td style="text-align: right">$ {{formatNumber($invoiceRow->unit_price)}}</td>
+                        <td style="text-align: right">$ {{formatNumber($invoiceRow->unit_price * $invoiceRow->amount)}}</td>
                     </tr>
                 @endforeach
             </tbody>
             
         </table>
-        <h3 style="text-align: right; margin-top: 10px">BALANCE DUE: ${{number_format($invoice->getTotal(), 4, '.', ',') ?? ""}}</h3>
+        <h3 style="text-align: right; margin-top: 10px">BALANCE DUE: ${{formatNumber($invoice->getTotal()) ?? ""}}</h3>
         <p style="text-align: center">Thank you for your business!</p>
     </div>
 

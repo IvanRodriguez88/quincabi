@@ -17,6 +17,8 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProjectPartnerController;
 use App\Http\Controllers\ProjectSupplierController;
+use App\Http\Controllers\ReportByWorkerController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -123,6 +125,10 @@ Route::middleware('auth')->group(function () {
 	Route::get('partners/getpartner/{partner}', [PartnerController::class, 'getPartner'])->name('partners.getWorker');
 	Route::get('partners/getaddeditmodal/{id?}', [PartnerController::class, 'getAddEditModal'])->name('partners.getAddEditModal');
 	Route::resource('partners', PartnerController::class);
+
+	Route::get('report_by_workers', [ReportByWorkerController::class, 'index'])->name('report_by_workers.index');
+	Route::get('report_by_workers/filterDT', [ReportByWorkerController::class, 'filterDT'])->name('report_by_workers.filterDT');
+
 	
 });
 

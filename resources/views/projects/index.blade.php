@@ -23,12 +23,12 @@
 						<td>{{ $project->client->name }}</td>
 						<td>{{ $project->initial_date != null ? date("m/d/Y", strtotime($project->initial_date)) : "" }}</td>
 						<td>{{ $project->end_date != null ? date("m/d/Y", strtotime($project->end_date)) : "" }}</td>
-						<td>${{ number_format( $project->cost_real ?? 0, 4, ".", ",") }}</td>
-						<td>${{ number_format( $project->total_real ?? 0, 4, ".", ",") }}</td>
-						<td>${{ number_format( $project->total_bills ?? 0, 4, ".", ",") }}</td>
-						<td>${{ number_format( $project->total_payments_workers ?? 0, 4, ".", ",") }}</td>
-						<td>${{ number_format( $project->getPartnersGain() ?? 0, 4, ".", ",") }}</td>
-						<td>${{ number_format( $project->getProfit() ?? 0, 4, ".", ",") }}</td>
+						<td>${{ formatNumber( $project->cost_real ?? 0) }}</td>
+						<td>${{ formatNumber( $project->total_real ?? 0) }}</td>
+						<td>${{ formatNumber( $project->total_bills ?? 0) }}</td>
+						<td>${{ formatNumber( $project->total_payments_workers ?? 0) }}</td>
+						<td>${{ formatNumber( $project->getPartnersGain() ?? 0) }}</td>
+						<td>${{ formatNumber( $project->getProfit() ?? 0) }}</td>
 						<td class="text-center">
 							@include("projects.buttons")
 						</td>

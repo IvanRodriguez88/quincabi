@@ -63,6 +63,7 @@ class BillController extends Controller
 
         } catch (\Illuminate\Database\QueryException $e) {
             $status = false;
+
         }
 		$bill->load(["project", "billType", "projectPaymentType"]);
 		return response()->json(["status" => $status, 'bill' => $bill]);

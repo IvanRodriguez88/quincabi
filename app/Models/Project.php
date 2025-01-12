@@ -66,7 +66,7 @@ class Project extends Model
 
 	public function getTotalGains()
 	{
-		return $this->total_real - ($this->cost_real + $this->total_bills + $this->total_payments_workers);
+		return $this->total_real - $this->cost_real;
 	}
 
 	public function getPartnersGain()

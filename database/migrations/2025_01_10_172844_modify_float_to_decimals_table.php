@@ -20,9 +20,9 @@ return new class extends Migration
         });
 
         Schema::table('projects', function (Blueprint $table) {
-            $table->decimal('cost_real', 13, 4)->change(); 
-            $table->decimal('total_real', 13, 4)->change(); 
-            $table->decimal('profit', 13, 4)->change(); 
+            $table->decimal('cost_real', 13, 4)->nullable()->change(); 
+            $table->decimal('total_real', 13, 4)->nullable()->change(); 
+            $table->decimal('profit', 13, 4)->nullable()->change(); 
         });
 
         Schema::table('invoice_rows', function (Blueprint $table) {
@@ -49,7 +49,7 @@ return new class extends Migration
 
         Schema::table('project_partners', function (Blueprint $table) {
             $table->decimal('percentage', 13, 4)->change(); 
-            $table->decimal('amount', 13, 4)->change(); 
+            $table->decimal('amount', 13, 4)->nullable()->change(); 
         });
     }
 

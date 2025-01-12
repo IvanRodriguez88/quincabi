@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
 			CategoryItemSeeder::class,
       		ProjectPaymentTypeSeeder::class,
 			InvoiceSeeder::class,
+			WorkerSeeder::class,
+
 		]);
     }
 }

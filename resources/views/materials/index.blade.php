@@ -21,8 +21,8 @@
 						<td>{{ $material->id }}</td>
 						<td>{{ $material->name }}</td>
 						<td>{{ $material->extra_name }}</td>
-						<td>${{ number_format($material->cost, 4, ".",",") }}</td>
-						<td>${{ number_format($material->price, 4, ".",",") }}</td>
+						<td>${{ formatNumber($material->cost) }}</td>
+						<td>${{ formatNumber($material->price) }}</td>
 						<td >
 							@include("materials.buttons")
 						</td>

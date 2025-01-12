@@ -80,7 +80,7 @@
 									type="number"
 									readonly
 								/>
-								<p >Proyected cost <b id="cost_proyected">${{number_format($project->totalInvoicesCosts() ?? 0, 4, ".", ",")}}</b></p>
+								<p >Proyected cost <b id="cost_proyected">${{formatNumber($project->totalInvoicesCosts() ?? 0)}}</b></p>
 							</div>
 							<x-adminlte-input 
 								value="{{($project->total_real == $project->totalInvoicesPrices() ? $project->total_real : $project->totalInvoicesPrices())}}" 

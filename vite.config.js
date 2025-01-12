@@ -30,6 +30,7 @@ export default defineConfig({
                 'resources/js/bill_types.js',
                 'resources/js/bills.js',
                 'resources/js/partners.js',
+                'resources/js/report_by_workers.js',
 
 				'resources/js/jquery-sortable.js',
 
