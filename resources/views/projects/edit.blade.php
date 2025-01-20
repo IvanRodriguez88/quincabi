@@ -17,6 +17,9 @@
 		<div class="card-header">
 			<div class="d-flex justify-content-between">
 				<h3>Edit Project</h3>
+				<a class="btn btn-secondary" href="{{route('projects.getReceiptPdf', $project->id)}}" target="_blank">
+					<i class="fas fa-file-pdf"></i> Get Receipt
+				</a>
 			</div>
 		</div>
 		<div class="card-body">

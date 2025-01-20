@@ -14,6 +14,7 @@ use App\Models\Invoice;
 
 use App\Http\Helpers\Modal;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProjectController extends Controller
 {
@@ -36,8 +37,6 @@ class ProjectController extends Controller
 			'End Date',
 			'Cost',
 			'Price',
-			'Bills',
-			'Workers',
 			'Partners',
 			'Profit',
 			'Actions'
@@ -359,6 +358,15 @@ class ProjectController extends Controller
 		}
 
 		return response()->json(['message' => 'Ticket not found'], 404);
+	}
+
+	public function getReceiptPdf(Project $project)
+	{
+		$data = [
+			"project" => $project
+		];
+		$pdf = Pdf::loadView('projects.receiptPdf', $data);
+    	return $pdf->stream();
 	}
 
 }

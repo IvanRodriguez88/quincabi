@@ -25,8 +25,6 @@
 						<td>{{ $project->end_date != null ? date("m/d/Y", strtotime($project->end_date)) : "" }}</td>
 						<td>${{ formatNumber( $project->cost_real ?? 0) }}</td>
 						<td>${{ formatNumber( $project->total_real ?? 0) }}</td>
-						<td>${{ formatNumber( $project->total_bills ?? 0) }}</td>
-						<td>${{ formatNumber( $project->total_payments_workers ?? 0) }}</td>
 						<td>${{ formatNumber( $project->getPartnersGain() ?? 0) }}</td>
 						<td>${{ formatNumber( $project->getProfit() ?? 0) }}</td>
 						<td class="text-center">

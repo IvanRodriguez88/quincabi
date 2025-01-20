@@ -89,6 +89,7 @@ Route::middleware('auth')->group(function () {
 	
 	Route::resource('workers', WorkerController::class);
 
+	Route::get('projects/getReceiptPdf/{project}', [ProjectController::class, 'getReceiptPdf'])->name('projects.getReceiptPdf');
 	Route::get('projects/getclientinfo/{client}', [ProjectController::class, 'getClientInfo'])->name('projects.getClientInfo');
 	Route::get('projects/getaddeditmodal/{id?}', [ProjectController::class, 'getAddEditModal'])->name('projects.getAddEditModal');
 	Route::get('projects/addExistingInvoiceModal/{project}', [ProjectController::class, 'addExistingInvoiceModal'])->name('projects.addExistingInvoiceModal');
